@@ -167,7 +167,7 @@ UPDATE creature_template SET ScriptName='spell_dummy_npc' WHERE entry IN (
 -- kalimdor
 9299,12296,12298,
 -- outland
-16880,16518,16847,17157,17326,17654,18879,22105,24918,24922,25084,25085,
+16880,16518,16847,17157,17326,17654,18879,21729,22105,24918,24922,25084,25085,
 -- northrend
 23678,25752,25753,25758,25792,25793,26268,26270,26421,26616,26643,26841,26924,27122,27263,27264,27265,27808,28053,28054,28068,28093,28465,28600,29319,29327,29329,29330,29338,30146,32149);
 
@@ -1173,6 +1173,8 @@ UPDATE instance_template SET ScriptName='instance_halls_of_stone' WHERE map=599;
 UPDATE creature_template SET ScriptName='boss_maiden_of_grief' WHERE entry=27975;
 UPDATE creature_template SET ScriptName='boss_sjonnir' WHERE entry=27978;
 UPDATE creature_template SET ScriptName='npc_brann_hos' WHERE entry=28070;
+UPDATE creature_template SET ScriptName='npc_dark_matter' WHERE entry=28235;
+UPDATE creature_template SET ScriptName='npc_searing_gaze' WHERE entry=28265;
 
 /* ULDUAR */
 UPDATE instance_template SET ScriptName='instance_ulduar' WHERE map=603;

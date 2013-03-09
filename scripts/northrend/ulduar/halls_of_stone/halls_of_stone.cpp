@@ -95,27 +95,25 @@ enum
 
     SAY_ENTRANCE_MEET                   = -1599064,
 
+    GOSSIP_ITEM_ID_START                = -3599000,
+    GOSSIP_ITEM_ID_PROGRESS             = -3599001,
+
     TEXT_ID_START                       = 13100,
     TEXT_ID_PROGRESS                    = 13101,
 
-    SPELL_STEALTH                      = 58506,
+    SPELL_SUMMON_PROTECTOR              = 51780,                // all spells are casted by stalker npcs 28130
+    SPELL_SUMMON_STORMCALLER            = 51050,
+    SPELL_SUMMON_CUSTODIAN              = 51051,
 
-    SPELL_ACHIEVEMENT_CHECK            = 59046,             // Doesn't exist in client dbc
+    SPELL_STEALTH                       = 58506,
 
-    NPC_DARK_RUNE_PROTECTOR            = 27983,
-    NPC_DARK_RUNE_STORMCALLER          = 27984,
-    NPC_IRON_GOLEM_CUSTODIAN           = 27985,
+    SPELL_ACHIEVEMENT_CHECK             = 59046,                // Doesn't exist in client dbc
 
-    QUEST_HALLS_OF_STONE               = 13207,
-};
+    NPC_DARK_RUNE_PROTECTOR             = 27983,
+    NPC_DARK_RUNE_STORMCALLER           = 27984,
+    NPC_IRON_GOLEM_CUSTODIAN            = 27985,
 
-#define GOSSIP_ITEM_START               "Brann, it would be our honor!"
-#define GOSSIP_ITEM_PROGRESS            "Let's move Brann, enough of the history lessons!"
-
-static LOCATION SpawnLoc[]=
-{
-    {946.992f, 397.016f, 208.374f},
-    {960.748f, 382.944f, 208.374f},
+    QUEST_HALLS_OF_STONE                = 13207,
 };
 
 /*######
@@ -244,23 +242,43 @@ struct MANGOS_DLL_DECL npc_brann_hosAI : public npc_escortAI
 
     void SpawnDwarf(uint32 uEntry)
     {
+        if (!m_pInstance)
+            return;
+
+        // each case has an individual spawn stalker
         switch (uEntry)
         {
             case NPC_DARK_RUNE_PROTECTOR:
             {
+                Creature* pStalker = m_creature->GetMap()->GetCreature(m_pInstance->GetProtectorStalkerGuid());
+                if (!pStalker)
+                    return;
+
                 uint32 uiSpawnNumber = (m_bIsRegularMode ? 2 : 3);
                 for (uint8 i = 0; i < uiSpawnNumber; ++i)
-                    m_creature->SummonCreature(NPC_DARK_RUNE_PROTECTOR, SpawnLoc[0].x, SpawnLoc[0].y, SpawnLoc[0].z, 0.0f, TEMPSUMMON_DEAD_DESPAWN, 30000);
-                m_creature->SummonCreature(NPC_DARK_RUNE_STORMCALLER, SpawnLoc[0].x, SpawnLoc[0].y, SpawnLoc[0].z, 0.0f, TEMPSUMMON_DEAD_DESPAWN, 30000);
+                    pStalker->CastSpell(pStalker, SPELL_SUMMON_PROTECTOR, true, NULL, NULL, m_creature->GetObjectGuid());
+                pStalker->CastSpell(pStalker, SPELL_SUMMON_STORMCALLER, true, NULL, NULL, m_creature->GetObjectGuid());
                 break;
             }
             case NPC_DARK_RUNE_STORMCALLER:
+            {
+                Creature* pStalker = m_creature->GetMap()->GetCreature(m_pInstance->GeStormcallerStalkerGuid());
+                if (!pStalker)
+                    return;
+
                 for (uint8 i = 0; i < 2; ++i)
-                    m_creature->SummonCreature(NPC_DARK_RUNE_STORMCALLER, SpawnLoc[1].x, SpawnLoc[1].y, SpawnLoc[1].z, 0.0f, TEMPSUMMON_DEAD_DESPAWN, 30000);
+                    pStalker->CastSpell(pStalker, SPELL_SUMMON_STORMCALLER, true, NULL, NULL, m_creature->GetObjectGuid());
                 break;
+            }
             case NPC_IRON_GOLEM_CUSTODIAN:
-                m_creature->SummonCreature(NPC_IRON_GOLEM_CUSTODIAN, SpawnLoc[1].x, SpawnLoc[1].y, SpawnLoc[1].z, 0.0f, TEMPSUMMON_DEAD_DESPAWN, 30000);
+            {
+                Creature* pStalker = m_creature->GetMap()->GetCreature(m_pInstance->GetCustodianStalkerGuid());
+                if (!pStalker)
+                    return;
+
+                pStalker->CastSpell(pStalker, SPELL_SUMMON_CUSTODIAN, true, NULL, NULL, m_creature->GetObjectGuid());
                 break;
+            }
         }
     }
 
@@ -600,12 +618,12 @@ bool GossipHello_npc_brann_hos(Player* pPlayer, Creature* pCreature)
     {
         if (pInstance->GetData(TYPE_TRIBUNAL) == NOT_STARTED || pInstance->GetData(TYPE_TRIBUNAL) == FAIL)
         {
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_ITEM_START, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+            pPlayer->ADD_GOSSIP_ITEM_ID(GOSSIP_ICON_CHAT, GOSSIP_ITEM_ID_START, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
             pPlayer->SEND_GOSSIP_MENU(TEXT_ID_START, pCreature->GetObjectGuid());
         }
         else if (pInstance->GetData(TYPE_TRIBUNAL) == IN_PROGRESS)
         {
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_ITEM_PROGRESS, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
+            pPlayer->ADD_GOSSIP_ITEM_ID(GOSSIP_ICON_CHAT, GOSSIP_ITEM_ID_PROGRESS, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
             pPlayer->SEND_GOSSIP_MENU(TEXT_ID_PROGRESS, pCreature->GetObjectGuid());
         }
     }
@@ -636,6 +654,119 @@ CreatureAI* GetAI_npc_brann_hos(Creature* pCreature)
     return new npc_brann_hosAI(pCreature);
 }
 
+enum
+{
+    SPELL_SUMMON_DARK_MATTER_TARGET     = 51003,
+    SPELL_DARK_MATTER                   = 51012,
+    SPELL_DARK_MATTER_H                 = 59868,
+    NPC_DARK_MATTER_TARGET              = 28237,
+
+    SPELL_SEARING_GAZE                  = 51136,
+    SPELL_SEARING_GAZE_H                = 59867,
+    // NPC_SEARING_GAZE_TARGET          = 28265,
+};
+
+/*######
+## npc_dark_matter
+######*/
+
+struct MANGOS_DLL_DECL npc_dark_matterAI : public ScriptedAI
+{
+    npc_dark_matterAI(Creature* pCreature) : ScriptedAI(pCreature)
+    {
+        m_bIsRegularMode = pCreature->GetMap()->IsRegularDifficulty();
+        Reset();
+    }
+
+    bool m_bIsRegularMode;
+
+    uint32 m_uiSummonTimer;
+
+    void Reset() override
+    {
+        m_uiSummonTimer = 0;
+    }
+
+    void AttackStart(Unit* pWho) override { }
+    void MoveInLineOfSight(Unit* pWho) override { }
+
+    void SpellHit(Unit* pCaster, const SpellEntry* pSpell) override
+    {
+        if (pSpell->Id == SPELL_DARK_MATTER_START)
+            m_uiSummonTimer = 5000;
+    }
+
+    void JustSummoned(Creature* pSummoned) override
+    {
+        if (pSummoned->GetEntry() == NPC_DARK_MATTER_TARGET)
+            m_creature->GetMotionMaster()->MovePoint(1, pSummoned->GetPositionX(), pSummoned->GetPositionY(), pSummoned->GetPositionZ());
+    }
+
+    void MovementInform(uint32 uiMoveType, uint32 uiPointId) override
+    {
+        if (uiMoveType != POINT_MOTION_TYPE || !uiPointId)
+            return;
+
+        // Cast the Dark Matter spell and despawn for reset
+        if (DoCastSpellIfCan(m_creature,  m_bIsRegularMode ? SPELL_DARK_MATTER : SPELL_DARK_MATTER_H) == CAST_OK)
+        {
+            m_creature->SetRespawnDelay(3);
+            m_creature->ForcedDespawn(1000);
+        }
+    }
+
+    void UpdateAI(const uint32 uiDiff) override
+    {
+        if (m_uiSummonTimer)
+        {
+            if (m_uiSummonTimer <= uiDiff)
+            {
+                if (DoCastSpellIfCan(m_creature, SPELL_SUMMON_DARK_MATTER_TARGET) == CAST_OK)
+                    m_uiSummonTimer = 0;
+            }
+            else
+                m_uiSummonTimer -= uiDiff;
+        }
+    }
+};
+
+CreatureAI* GetAI_npc_dark_matter(Creature* pCreature)
+{
+    return new npc_dark_matterAI(pCreature);
+}
+
+/*######
+## npc_searing_gaze
+######*/
+
+// TODO Move this 'script' to eventAI when combat can be proper prevented from core-side
+struct MANGOS_DLL_DECL npc_searing_gazeAI : public Scripted_NoMovementAI
+{
+    npc_searing_gazeAI(Creature* pCreature) : Scripted_NoMovementAI(pCreature)
+    {
+        m_bIsRegularMode = pCreature->GetMap()->IsRegularDifficulty();
+        Reset();
+    }
+
+    bool m_bIsRegularMode;
+
+    void Reset() override
+    {
+        DoCastSpellIfCan(m_creature, m_bIsRegularMode ? SPELL_SEARING_GAZE : SPELL_SEARING_GAZE_H);
+        // despawn manually because of combat bug
+        m_creature->ForcedDespawn(30000);
+    }
+
+    void AttackStart(Unit* pWho) override { }
+    void MoveInLineOfSight(Unit* pWho) override { }
+    void UpdateAI(const uint32 uiDiff) override { }
+};
+
+CreatureAI* GetAI_npc_searing_gaze(Creature* pCreature)
+{
+    return new npc_searing_gazeAI(pCreature);
+}
+
 void AddSC_halls_of_stone()
 {
     Script* pNewScript;
@@ -645,5 +776,15 @@ void AddSC_halls_of_stone()
     pNewScript->GetAI = &GetAI_npc_brann_hos;
     pNewScript->pGossipHello = &GossipHello_npc_brann_hos;
     pNewScript->pGossipSelect = &GossipSelect_npc_brann_hos;
+    pNewScript->RegisterSelf();
+
+    pNewScript = new Script;
+    pNewScript->Name = "npc_dark_matter";
+    pNewScript->GetAI = &GetAI_npc_dark_matter;
+    pNewScript->RegisterSelf();
+
+    pNewScript = new Script;
+    pNewScript->Name = "npc_searing_gaze";
+    pNewScript->GetAI = &GetAI_npc_searing_gaze;
     pNewScript->RegisterSelf();
 }
