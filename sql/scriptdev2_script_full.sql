@@ -3,7 +3,7 @@
 --
 
 DELETE FROM sd2_db_version;
-INSERT INTO sd2_db_version (version) VALUES ('ScriptDev2 (for MangosR2 2694+ / C-MaNGOS 12361+) ');
+INSERT INTO sd2_db_version (version) VALUES ('ScriptDev2 (for MangosR2 2754+ / C-MaNGOS 12409+) ');
 
 --
 -- Below contains data for table `script_texts` mainly used in C++ parts.
@@ -4529,6 +4529,10 @@ INSERT INTO gossip_texts (entry,content_default,comment) VALUES
 (-3564000,'I\'m with you, Akama.','akama(shade) GOSSIP_ITEM_START_ENCOUNTER'),
 (-3564001,'I\'m ready, Akama.','akama(illidan) GOSSIP_ITEM_PREPARE'),
 (-3564002,'We\'re ready to face Illidan.','akama(illidan) GOSSIP_ITEM_START_EVENT');
+
+-- -3 568 000 ZUL'AMAN
+INSERT INTO gossip_texts (entry,content_default,comment) VALUES
+(-3568000,'Thanks for the concern, but we intend to explore Zul\'Aman.','harrison jones GOSSIP_ITEM_BEGIN');
 
 -- -3 595 000 CULLING OF STRATHOLME
 INSERT INTO gossip_texts (entry,content_default,comment) VALUES
