@@ -245,6 +245,7 @@ UPDATE instance_template SET ScriptName='instance_ahnkahet' WHERE map=619;
 
 /* AZJOL-NERUB */
 UPDATE creature_template SET ScriptName='boss_anubarak' WHERE entry=29120;
+UPDATE creature_template SET ScriptName='npc_impale_target' WHERE entry=29184;
 UPDATE creature_template SET ScriptName='boss_hadronox' WHERE entry=28921;
 UPDATE creature_template SET ScriptName='boss_krikthir' WHERE entry=28684;
 UPDATE instance_template SET ScriptName='instance_azjol-nerub' WHERE map=601;
@@ -339,6 +340,7 @@ UPDATE creature_template SET ScriptName='boss_pyroguard_emberseer' WHERE entry=9
 DELETE FROM scripted_event_id WHERE id=4884;
 INSERT INTO scripted_event_id VALUES
 (4884,'event_spell_altar_emberseer');
+UPDATE gameobject_template SET ScriptName='go_father_flame' WHERE entry=175245;
 
 /* BLACKWING LAIR */
 UPDATE instance_template SET ScriptName='instance_blackwing_lair' WHERE map=469;
