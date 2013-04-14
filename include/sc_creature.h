@@ -70,8 +70,8 @@ struct MANGOS_DLL_DECL ScriptedAI : public CreatureAI
         // Called when reached home after MoveTargetHome (in evade)
         void JustReachedHome() override {}
 
-        // Called at any heal cast/item used (call non implemented in mangos)
-        // void HealBy(Unit* pHealer, uint32 uiAmountHealed) override {}
+        // Called at any Heal received
+        void HealedBy(Unit * /*pHealer*/, uint32& /*uiHealedAmount*/) override {}
 
         // Called at any Damage to any victim (before damage apply)
         void DamageDeal(Unit* pDoneTo, uint32& uiDamage) override {}
@@ -212,10 +212,6 @@ struct MANGOS_DLL_DECL ScriptedAI : public CreatureAI
         bool CanCast(Unit* pTarget, SpellEntry const* pSpell, bool bTriggered = false);
 
         void SetEquipmentSlots(bool bLoadDefault, int32 iMainHand = EQUIP_NO_CHANGE, int32 iOffHand = EQUIP_NO_CHANGE, int32 iRanged = EQUIP_NO_CHANGE);
-
-        // Generally used to control if MoveChase() is to be used or not in AttackStart(). Some creatures do not chase victims
-        void SetCombatMovement(bool bCombatMove);
-        bool IsCombatMovement() { return m_bCombatMovement; }
 
         bool EnterEvadeIfOutOfCombatArea(const uint32 uiDiff);
 

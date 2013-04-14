@@ -3,7 +3,7 @@
 --
 
 DELETE FROM sd2_db_version;
-INSERT INTO sd2_db_version (version) VALUES ('ScriptDev2 (for MangosR2 2754+ / C-MaNGOS 12409+) ');
+INSERT INTO sd2_db_version (version) VALUES ('ScriptDev2 (for MangosR2 2776+ / for C-MaNGOS 12458+) ');
 
 --
 -- Below contains data for table `script_texts` mainly used in C++ parts.
@@ -971,7 +971,10 @@ INSERT INTO script_texts (entry,content_default,sound,type,language,emote,commen
 (-1000901,'Thanks, friend. Will you help me get out of here?',0,0,0,1,'vanguard SAY_VANGUARD_INTRO'),
 (-1000902,'We\'re not too far from the Protectorate Watch Post, $N. This way!',0,0,0,1,'vanguard SAY_VANGUARD_START'),
 (-1000903,'Commander! This fleshling rescued me!',0,0,0,0,'vanguard SAY_VANGUARD_FINISH'),
-(-1000904,'%s salutes $N.',0,2,0,0,'vanguard EMOTE_VANGUARD_FINISH');
+(-1000904,'%s salutes $N.',0,2,0,0,'vanguard EMOTE_VANGUARD_FINISH'),
+
+(-1000905,'Ok, let\'s go!!',0,0,0,1,'therylune SAY_THERYLUNE_START'),
+(-1000906,'I can make it the rest of the way. $N. THANKS!',0,0,0,1,'therylune SAY_THERYLUNE_START');
 
 -- -1 033 000 SHADOWFANG KEEP
 INSERT INTO script_texts (entry,content_default,sound,type,language,emote,comment) VALUES
@@ -1063,7 +1066,8 @@ INSERT INTO script_texts (entry,content_default,sound,type,language,emote,commen
 (-1070001,'Who dares awaken Archaedas? Who dares the wrath of the makers!',5855,1,0,0,'archaedas SAY_AGGRO'),
 (-1070002,'Awake ye servants, defend the discs!',5856,1,0,0,'archaedas SAY_AWAKE_GUARDIANS'),
 (-1070003,'To my side, brothers. For the makers!',5857,1,0,0,'archaedas SAY_AWAKE_WARDERS'),
-(-1070004,'Reckless mortal.',5858,1,0,0,'archaedas SAY_UNIT_SLAIN');
+(-1070004,'Reckless mortal.',5858,1,0,0,'archaedas SAY_UNIT_SLAIN'),
+(-1070005,'%s breaks free from his stone slumber!',0,2,0,0,'archaedas EMOTE_BREAK_FREE');
 
 -- -1 090 000 GNOMEREGAN
 INSERT INTO script_texts (entry,content_default,sound,type,language,emote,comment) VALUES
@@ -1453,7 +1457,9 @@ INSERT INTO script_texts (entry,content_default,sound,type,language,emote,commen
 
 (-1469033,'%s flee as the controlling power of the orb is drained.',0,2,0,0,'razorgore EMOTE_TROOPS_FLEE'),
 
-(-1469034,'Run! They are coming.',0,1,0,0,'blackwing technician SAY_TECHNICIAN_RUN');
+(-1469034,'Run! They are coming.',0,1,0,0,'blackwing technician SAY_TECHNICIAN_RUN'),
+
+(-1469035,'Orb of Domination loses power and shuts off!',0,2,0,0,'razorgore EMOTE_ORB_SHUT_OFF');
 
 -- -1 509 000 RUINS OF AHN'QIRAJ
 INSERT INTO script_texts (entry,content_default,sound,type,language,emote,comment) VALUES
@@ -7189,5 +7195,29 @@ INSERT INTO script_waypoint VALUES
 (23089, 28, 766.49, 371.79, 353.63, 0, ''),
 (23089, 29, 749.64, 378.69, 352.99, 0, ''),
 (23089, 30, 737.92, 368.15, 352.99, 0, 'escort paused');
+
+DELETE FROM script_waypoint WHERE entry=3584;
+INSERT INTO script_waypoint VALUES
+(3584, 0, 4520.4, 420.235, 33.5284, 2000, ''),
+(3584, 1, 4512.26, 408.881, 32.9308, 0, ''),
+(3584, 2, 4507.94, 396.47, 32.9476, 0, ''),
+(3584, 3, 4507.53, 383.781, 32.995, 0, ''),
+(3584, 4, 4512.1, 374.02, 33.166, 0, ''),
+(3584, 5, 4519.75, 373.241, 33.1574, 0, ''),
+(3584, 6, 4592.41, 369.127, 31.4893, 0, ''),
+(3584, 7, 4598.55, 364.801, 31.4947, 0, ''),
+(3584, 8, 4602.76, 357.649, 32.9265, 0, ''),
+(3584, 9, 4597.88, 352.629, 34.0317, 0, ''),
+(3584, 10, 4590.23, 350.9, 36.2977, 0, ''),
+(3584, 11, 4581.5, 348.254, 38.3878, 0, ''),
+(3584, 12, 4572.05, 348.059, 42.3539, 0, ''),
+(3584, 13, 4564.75, 344.041, 44.2463, 0, ''),
+(3584, 14, 4556.63, 341.003, 47.6755, 0, ''),
+(3584, 15, 4554.38, 334.968, 48.8003, 0, ''),
+(3584, 16, 4557.63, 329.783, 49.9532, 0, ''),
+(3584, 17, 4563.32, 316.829, 53.2409, 0, ''),
+(3584, 18, 4566.09, 303.127, 55.0396, 0, ''),
+(3584, 19, 4561.65, 295.456, 57.0984, 4000, 'SAY_THERYLUNE_FINISH'),
+(3584, 20, 4551.03, 293.333, 57.1534, 2000, '');
 
 -- EOF

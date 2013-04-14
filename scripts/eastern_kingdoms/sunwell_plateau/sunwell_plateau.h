@@ -20,7 +20,7 @@ enum
     NPC_KALECGOS_DRAGON         = 24850,            // kalecgos blue dragon hostile
     NPC_KALECGOS_HUMAN          = 24891,            // kalecgos human form in spectral realm
     NPC_SATHROVARR              = 24892,
-    NPC_MADRIGOSA               = 25160,
+    NPC_MADRIGOSA               = 24895,
     NPC_FLIGHT_TRIGGER_LEFT     = 25357,            // Related to Felmyst flight path. Also the anchor to summon Madrigosa
     // NPC_FLIGHT_TRIGGER_RIGHT = 25358,            // related to Felmyst flight path
     NPC_BRUTALLUS               = 24882,
@@ -48,6 +48,11 @@ enum
     GO_MURU_EXIT_GATE           = 188118,
     GO_THIRD_GATE               = 187765,           // door after muru; why another?
     GO_ORB_OF_THE_BLUE_FLIGHT   = 188415,
+
+    GO_ORB_BLUE_FLIGHT_1        = 187869,           // orbs used in the Kil'jaeden fight
+    GO_ORB_BLUE_FLIGHT_2        = 188114,
+    GO_ORB_BLUE_FLIGHT_3        = 188115,
+    GO_ORB_BLUE_FLIGHT_4        = 188116,
 
     SAY_KALECGOS_OUTRO          = -1580043,
     SAY_TWINS_INTRO             = -1580044,

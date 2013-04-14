@@ -88,9 +88,7 @@ UPDATE creature_template SET ScriptName='npc_spirit_guide' WHERE entry IN (13116
 UPDATE creature_template SET ScriptName='boss_ysondre' WHERE entry=14887;
 UPDATE creature_template SET ScriptName='boss_emeriss' WHERE entry=14889;
 UPDATE creature_template SET ScriptName='boss_taerar' WHERE entry=14890;
-UPDATE creature_template SET ScriptName='boss_shade_of_taerar' WHERE entry=15302;
 UPDATE creature_template SET ScriptName='boss_azuregos' WHERE entry=6109;
-UPDATE creature_template SET ScriptName='mob_dementeddruids' WHERE entry=15260;
 UPDATE creature_template SET ScriptName='boss_lethon' WHERE entry=14888;
 UPDATE creature_template SET ScriptName='npc_spirit_shade' WHERE entry=15261;
 
@@ -145,15 +143,11 @@ UPDATE creature_template SET ScriptName='npc_chicken_cluck' WHERE entry=620;
 UPDATE creature_template SET ScriptName='npc_dancing_flames' WHERE entry=25305;
 UPDATE creature_template SET ScriptName='npc_garments_of_quests' WHERE entry IN (12429,12423,12427,12430,12428);
 UPDATE creature_template SET ScriptName='npc_guardian' WHERE entry=5764;
-UPDATE creature_template SET ScriptName='npc_mount_vendor' WHERE entry IN (384,1261,1460,2357,3362,3685,4730,4731,4885,7952,7955,16264,17584);
 UPDATE creature_template SET ScriptName='npc_doctor' WHERE entry IN (12939,12920);
 UPDATE creature_template SET ScriptName='npc_injured_patient' WHERE entry IN (12936,12937,12938,12923,12924,12925);
-UPDATE creature_template SET ScriptName='npc_prof_alchemy' WHERE entry IN (17909,19052,22427);
 UPDATE creature_template SET ScriptName='npc_prof_blacksmith' WHERE entry IN (5164,11145,11146,11176,11177,11178,11191,11192,11193);
 UPDATE creature_template SET ScriptName='npc_prof_leather' WHERE entry IN (7866,7867,7868,7869,7870,7871);
 UPDATE creature_template SET ScriptName='npc_prof_tailor' WHERE entry IN (22208,22212,22213);
-UPDATE creature_template SET ScriptName='npc_sayge' WHERE entry=14822;
-UPDATE creature_template SET ScriptName='npc_tabard_vendor' WHERE entry=28776;
 -- disabled, but can be used for custom
 -- UPDATE creature_template SET ScriptName='' WHERE npcflag!=npcflag|65536 AND ScriptName='npc_innkeeper';
 -- UPDATE creature_template SET ScriptName='npc_innkeeper' WHERE npcflag=npcflag|65536;
@@ -345,6 +339,7 @@ UPDATE gameobject_template SET ScriptName='go_father_flame' WHERE entry=175245;
 /* BLACKWING LAIR */
 UPDATE instance_template SET ScriptName='instance_blackwing_lair' WHERE map=469;
 UPDATE creature_template SET ScriptName='boss_razorgore' WHERE entry=12435;
+UPDATE gameobject_template SET ScriptName='go_black_dragon_egg' WHERE entry=177807;
 UPDATE creature_template SET ScriptName='boss_vaelastrasz' WHERE entry=13020;
 UPDATE creature_template SET ScriptName='boss_broodlord' WHERE entry=12017;
 UPDATE creature_template SET ScriptName='boss_firemaw' WHERE entry=11983;
@@ -479,6 +474,7 @@ UPDATE creature_template SET ScriptName='npc_kerlonian' WHERE entry=11218;
 UPDATE creature_template SET ScriptName='npc_prospector_remtravel' WHERE entry=2917;
 UPDATE creature_template SET ScriptName='npc_threshwackonator' WHERE entry=6669;
 UPDATE creature_template SET ScriptName='npc_volcor' WHERE entry=3692;
+UPDATE creature_template SET ScriptName='npc_therylune' WHERE entry=3584;
 
 /* DARNASSUS */
 
@@ -876,6 +872,7 @@ UPDATE creature_template SET ScriptName='npc_belnistrasz' WHERE entry=8516;
 /* RAZORFEN KRAUL */
 UPDATE instance_template SET ScriptName='instance_razorfen_kraul' WHERE map=47;
 UPDATE creature_template SET ScriptName='npc_willix_the_importer' WHERE entry=4508;
+UPDATE creature_template SET ScriptName='npc_snufflenose_gopher' WHERE entry=4781;
 
 /* REDRIDGE MOUNTAINS */
 UPDATE creature_template SET ScriptName='npc_corporal_keeshan' WHERE entry=349;
@@ -1040,6 +1037,8 @@ UPDATE creature_template SET ScriptName='boss_kiljaeden' WHERE entry=25315;
 UPDATE creature_template SET ScriptName='npc_kiljaeden_controller' WHERE entry=25608;
 UPDATE creature_template SET ScriptName='spell_dummy_npc_brutallus_cloud' WHERE entry=25703;
 UPDATE creature_template SET ScriptName='boss_felmyst' WHERE entry=25038;
+UPDATE creature_template SET ScriptName='npc_shield_orb' WHERE entry=25502;
+UPDATE creature_template SET ScriptName='npc_power_blue_flight' WHERE entry=25653;
 
 /* SWAMP OF SORROWS */
 UPDATE creature_template SET ScriptName='npc_galen_goodward' WHERE entry=5391;
@@ -1270,6 +1269,7 @@ UPDATE creature_template SET ScriptName='boss_janalai' WHERE entry=23578;
 UPDATE creature_template SET ScriptName='boss_malacrass' WHERE entry=24239;
 UPDATE creature_template SET ScriptName='boss_nalorakk' WHERE entry=23576;
 UPDATE creature_template SET ScriptName='boss_zuljin' WHERE entry=23863;
+UPDATE creature_template SET ScriptName='npc_feather_vortex' WHERE entry=24136;
 UPDATE creature_template SET ScriptName='npc_dragonhawk_egg' WHERE entry=23817;
 UPDATE creature_template SET ScriptName='npc_janalai_firebomb' WHERE entry=23920;
 UPDATE creature_template SET ScriptName='npc_amanishi_hatcher' WHERE entry IN (23818,24504);
