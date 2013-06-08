@@ -3,7 +3,7 @@
 --
 
 DELETE FROM sd2_db_version;
-INSERT INTO sd2_db_version (version) VALUES ('ScriptDev2 (for MangosR2 2776+ / for C-MaNGOS 12458+) ');
+INSERT INTO sd2_db_version (version) VALUES ('ScriptDev2 (for MangosR2 2812+ / for CMaNGOS 12514+) ');
 
 --
 -- Below contains data for table `script_texts` mainly used in C++ parts.
@@ -107,7 +107,9 @@ INSERT INTO script_texts (entry,content_default,sound,type,language,emote,commen
 (-1000153,'Contemptible wretch!',11338,1,0,0,'kazzak SAY_KILL2'),
 (-1000154,'The universe will be remade.',11339,1,0,0,'kazzak SAY_KILL3'),
 (-1000155,'The Legion... will never... fall.',11340,1,0,0,'kazzak SAY_DEATH'),
-(-1000156,'REUSE ME',0,0,0,0,'REUSE ME'),
+
+(-1000156,'Bloodmaul Brew? Me favorite!',0,0,0,0,'bladespire ogre SAY_BREW_1'),
+
 (-1000157,'Invaders, you dangle upon the precipice of oblivion! The Burning Legion comes and with it comes your end.',0,1,0,0,'kazzak SAY_RAND1'),
 (-1000158,'Impudent whelps, you only delay the inevitable. Where one has fallen, ten shall rise. Such is the will of Kazzak...',0,1,0,0,'kazzak SAY_RAND2'),
 
@@ -176,9 +178,8 @@ INSERT INTO script_texts (entry,content_default,sound,type,language,emote,commen
 (-1000205,'%s looks at you unexpectadly.',0,2,0,0,'cluck EMOTE_H_HELLO'),
 (-1000206,'%s starts pecking at the feed.',0,2,0,0,'cluck EMOTE_CLUCK_TEXT2'),
 
-(-1000207,'REUSE ME',0,0,0,0,'REUSE ME'),
-
-(-1000208,'REUSE ME',0,0,0,0,'REUSE ME'),
+(-1000207,'Mmm. Me thirsty!',0,0,0,0,'bladespire ogre SAY_BREW_2'),
+(-1000208,'Ohh, look! Bloodmaul Brew! Mmmm...',0,0,0,0,'bladespire ogre SAY_BREW_3'),
 
 (-1000209,'Very well. Let\'s see what you have to show me, $N.',0,0,1,0,'anvilward SAY_ANVIL1'),
 (-1000210,'What manner of trick is this, $R? If you seek to ambush me, I warn you I will not go down quietly!',0,0,1,0,'anvilward SAY_ANVIL2'),
@@ -606,7 +607,7 @@ INSERT INTO script_texts (entry,content_default,sound,type,language,emote,commen
 (-1000577,'This is far enough. I can make it on my own from here.',0,0,0,0,'Lurgglbr - SAY_END_1'),
 (-1000578,'Thank you for helping me $r. Please tell the king I am back.',0,0,0,0,'Lurgglbr - SAY_END_2'),
 
-(-1000579,'REUSE ME',0,0,0,0,'REUSE ME'),
+(-1000579,'There! Destroy him! The Cipher must be recovered!',0,0,0,25,'spirit hunter - SAY_VENERATUS_SPAWN'),
 
 (-1000580,'Sleep now, young one ...',0,0,0,0,'Raelorasz SAY_SLEEP'),
 (-1000581,'A wonderful specimen.',0,0,0,0,'Raeloarsz SAY_SPECIMEN'),
@@ -974,7 +975,11 @@ INSERT INTO script_texts (entry,content_default,sound,type,language,emote,commen
 (-1000904,'%s salutes $N.',0,2,0,0,'vanguard EMOTE_VANGUARD_FINISH'),
 
 (-1000905,'Ok, let\'s go!!',0,0,0,1,'therylune SAY_THERYLUNE_START'),
-(-1000906,'I can make it the rest of the way. $N. THANKS!',0,0,0,1,'therylune SAY_THERYLUNE_START');
+(-1000906,'I can make it the rest of the way. $N. THANKS!',0,0,0,1,'therylune SAY_THERYLUNE_START'),
+
+(-1000907,'%s sniffs at the air. A tuber is near!',0,2,0,0,'domesticated felboar EMOTE_SNIFF_AIR'),
+(-1000908,'%s starts to dig.',0,2,0,0,'domesticated felboar EMOTE_START_DIG'),
+(-1000909,'%s squeals with glee at its discovery.',0,2,0,0,'domesticated felboar EMOTE_SQUEAL');
 
 -- -1 033 000 SHADOWFANG KEEP
 INSERT INTO script_texts (entry,content_default,sound,type,language,emote,comment) VALUES
@@ -1186,6 +1191,11 @@ INSERT INTO script_texts (entry,content_default,sound,type,language,emote,commen
 (-1189035,'The master has fallen! Avenge him my brethren!',5834,1,0,0,'trainee SAY_TRAINEE_SPAWN');
 
 -- -1 209 000 ZUL'FARRAK
+INSERT INTO script_texts (entry,content_default,sound,type,language,emote,comment) VALUES
+(-1209000,'How dare you enter my sanctum!',0,0,0,0,'zumrah SAY_INTRO'),
+(-1209001,'Sands consume you!',5872,1,14,0,'zumrah SAY_AGGRO'),
+(-1209002,'Fall!',5873,1,14,0,'zumrah SAY_KILL'),
+(-1209003,'Come to me, my children!',0,0,8,0,'zumrah SAY_SUMMON');
 
 -- -1 229 000 BLACKROCK SPIRE
 INSERT INTO script_texts (entry,content_default,sound,type,language,emote,comment) VALUES

@@ -17,7 +17,7 @@
 /* ScriptData
 SDName: Shadowmoon_Valley
 SD%Complete: 100
-SDComment: Quest support: 10781, 10804, 10854, 10458, 10480, 10481, 10588, 11020.
+SDComment: Quest support: 11020, 10458, 10480, 10481, 10514, 10540, 10588, 10781, 10804, 10854.
 SDCategory: Shadowmoon Valley
 EndScriptData */
 
@@ -415,7 +415,7 @@ CreatureAI* GetAI_npc_dragonmaw_peon(Creature* pCreature)
     return new npc_dragonmaw_peonAI(pCreature);
 }
 
-bool EffectDummyCreature_npc_dragonmaw_peon(Unit* pCaster, uint32 uiSpellId, SpellEffectIndex uiEffIndex, Creature* pCreatureTarget)
+bool EffectDummyCreature_npc_dragonmaw_peon(Unit* pCaster, uint32 uiSpellId, SpellEffectIndex uiEffIndex, Creature* pCreatureTarget, ObjectGuid /*originalCasterGuid*/)
 {
     if (uiEffIndex != EFFECT_INDEX_1 || uiSpellId != SPELL_SERVING_MUTTON || pCaster->GetTypeId() != TYPEID_PLAYER)
         return false;
@@ -1224,7 +1224,7 @@ CreatureAI* GetAI_npc_totem_of_spirits(Creature* pCreature)
     return new npc_totem_of_spiritsAI(pCreature);
 }
 
-bool EffectDummyCreature_npc_totem_of_spirits(Unit* pCaster, uint32 uiSpellId, SpellEffectIndex uiEffIndex, Creature* pCreatureTarget)
+bool EffectDummyCreature_npc_totem_of_spirits(Unit* /*pCaster*/, uint32 uiSpellId, SpellEffectIndex uiEffIndex, Creature* pCreatureTarget, ObjectGuid /*originalCasterGuid*/)
 {
     if (uiEffIndex != EFFECT_INDEX_0)
         return false;
@@ -1659,6 +1659,170 @@ bool GossipSelect_npc_spawned_oronok_tornheart(Player* pPlayer, Creature* pCreat
     return true;
 }
 
+/*######
+## npc_domesticated_felboar
+######*/
+
+enum
+{
+    EMOTE_SNIFF_AIR             = -1000907,
+    EMOTE_START_DIG             = -1000908,
+    EMOTE_SQUEAL                = -1000909,
+
+    SPELL_SHADOWMOON_TUBER      = 36462,
+    SPELL_SPECIAL_UNARMED       = 33334,
+    SPELL_TUBER_WHISTLE         = 36652,
+
+    NPC_DOMESTICATED_FELBOAR    = 21195,
+    NPC_SHADOWMOON_TUBER_NODE   = 21347,
+    GO_SHADOWMOON_TUBER_MOUND   = 184701,
+};
+
+struct MANGOS_DLL_DECL npc_domesticated_felboarAI : public ScriptedAI
+{
+    npc_domesticated_felboarAI(Creature* pCreature) : ScriptedAI(pCreature) { Reset(); }
+
+    uint32 m_uiTuberTimer;
+    uint8 m_uiTuberStage;
+
+    void Reset() override
+    {
+        m_uiTuberTimer = 0;
+        m_uiTuberStage = 0;
+    }
+
+    void MovementInform(uint32 uiMoveType, uint32 uiPointId) override
+    {
+        if (uiMoveType != POINT_MOTION_TYPE || !uiPointId)
+            return;
+
+        if (DoCastSpellIfCan(m_creature, SPELL_SPECIAL_UNARMED) == CAST_OK)
+        {
+            DoScriptText(EMOTE_START_DIG, m_creature);
+            m_uiTuberTimer = 2000;
+        }
+    }
+
+    void ReceiveAIEvent(AIEventType eventType, Creature* pSender, Unit* pInvoker, uint32 /*uiMiscValue*/) override
+    {
+        if (eventType == AI_EVENT_START_EVENT && pInvoker->GetTypeId() == TYPEID_PLAYER)
+        {
+            DoScriptText(EMOTE_SNIFF_AIR, m_creature);
+
+            float fX, fY, fZ;
+            m_creature->SetWalk(false);
+            m_creature->GetMotionMaster()->MoveIdle();
+            pSender->GetContactPoint(m_creature, fX, fY, fZ);
+            m_creature->GetMotionMaster()->MovePoint(1, fX, fY, fZ);
+        }
+    }
+
+    void UpdateAI(const uint32 uiDiff) override
+    {
+        if (m_uiTuberTimer)
+        {
+            if (m_uiTuberTimer <= uiDiff)
+            {
+                switch (m_uiTuberStage)
+                {
+                    case 0:
+                        if (DoCastSpellIfCan(m_creature, SPELL_SPECIAL_UNARMED) == CAST_OK)
+                            m_uiTuberTimer = 2000;
+                        break;
+                    case 1:
+                        if (DoCastSpellIfCan(m_creature, SPELL_SHADOWMOON_TUBER) == CAST_OK)
+                        {
+                            // Despawn current tuber
+                            if (GameObject* pTuber = GetClosestGameObjectWithEntry(m_creature, GO_SHADOWMOON_TUBER_MOUND, 3.0f))
+                                pTuber->SetLootState(GO_JUST_DEACTIVATED);
+
+                            DoScriptText(EMOTE_SQUEAL, m_creature);
+                            m_uiTuberTimer = 2000;
+                        }
+                        break;
+                    case 2:
+                        EnterEvadeMode();
+                        break;
+                }
+                ++m_uiTuberStage;
+            }
+            else
+                m_uiTuberTimer -= uiDiff;
+        }
+
+        if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
+            return;
+
+        DoMeleeAttackIfReady();
+    }
+};
+
+CreatureAI* GetAI_npc_domesticated_felboar(Creature* pCreature)
+{
+    return new npc_domesticated_felboarAI(pCreature);
+}
+
+bool EffectDummyCreature_npc_shadowmoon_tuber_node(Unit* pCaster, uint32 uiSpellId, SpellEffectIndex uiEffIndex, Creature* pCreatureTarget, ObjectGuid /*originalCasterGuid*/)
+{
+    // always check spellid and effectindex
+    if (uiSpellId == SPELL_TUBER_WHISTLE && uiEffIndex == EFFECT_INDEX_0)
+    {
+        if (pCreatureTarget->GetEntry() == NPC_SHADOWMOON_TUBER_NODE)
+        {
+            // Check if tuber mound exists or it's spawned
+            GameObject* pTuber = GetClosestGameObjectWithEntry(pCreatureTarget, GO_SHADOWMOON_TUBER_MOUND, 1.0f);
+            if (!pTuber || !pTuber->isSpawned())
+                return true;
+
+            // Call nearby felboar
+            if (Creature* pBoar = GetClosestCreatureWithEntry(pCreatureTarget, NPC_DOMESTICATED_FELBOAR, 40.0f))
+                pCreatureTarget->AI()->SendAIEvent(AI_EVENT_START_EVENT, pCaster, pBoar);
+        }
+
+        // always return true when we are handling this spell and effect
+        return true;
+    }
+
+    return false;
+}
+
+/*######
+## npc_veneratus_spawn_node
+######*/
+
+enum
+{
+    SAY_VENERATUS_SPAWN         = -1000579,
+
+    NPC_VENERATUS               = 20427,
+    NPC_SPIRIT_HUNTER           = 21332,
+};
+
+struct MANGOS_DLL_DECL npc_veneratus_spawn_nodeAI : public Scripted_NoMovementAI
+{
+    npc_veneratus_spawn_nodeAI(Creature* pCreature) : Scripted_NoMovementAI(pCreature) { Reset(); }
+
+    void Reset() override { }
+
+    void MoveInLineOfSight(Unit* pWho) override
+    {
+        // Check for the spirit hunter in order to spawn Veneratus; this will replace missing spells 36614 (dummy periodic spell) and 36616 (summon spell)
+        if (pWho->GetEntry() == NPC_SPIRIT_HUNTER && m_creature->IsWithinDistInMap(pWho, 40.0f) && m_creature->IsWithinLOSInMap(pWho))
+        {
+            DoScriptText(SAY_VENERATUS_SPAWN, pWho);
+            DoSpawnCreature(NPC_VENERATUS, 0, 0, 0, 0, TEMPSUMMON_TIMED_OOC_OR_DEAD_DESPAWN, 60000);
+            m_creature->ForcedDespawn();
+        }
+    }
+
+    void UpdateAI(const uint32 uiDiff) override { }
+};
+
+CreatureAI* GetAI_npc_veneratus_spawn_node(Creature* pCreature)
+{
+    return new npc_veneratus_spawn_nodeAI(pCreature);
+}
+
 void AddSC_shadowmoon_valley()
 {
     Script* pNewScript;
@@ -1717,5 +1881,20 @@ void AddSC_shadowmoon_valley()
     pNewScript->GetAI = &GetAI_npc_spawned_oronok_tornheart;
     pNewScript->pGossipHello =  &GossipHello_npc_spawned_oronok_tornheart;
     pNewScript->pGossipSelect = &GossipSelect_npc_spawned_oronok_tornheart;
+    pNewScript->RegisterSelf();
+
+    pNewScript = new Script;
+    pNewScript->Name = "npc_domesticated_felboar";
+    pNewScript->GetAI = &GetAI_npc_domesticated_felboar;
+    pNewScript->RegisterSelf();
+
+    pNewScript = new Script;
+    pNewScript->Name = "npc_shadowmoon_tuber_node";
+    pNewScript->pEffectDummyNPC = &EffectDummyCreature_npc_shadowmoon_tuber_node;
+    pNewScript->RegisterSelf();
+
+    pNewScript = new Script;
+    pNewScript->Name = "npc_veneratus_spawn_node";
+    pNewScript->GetAI = &GetAI_npc_veneratus_spawn_node;
     pNewScript->RegisterSelf();
 }

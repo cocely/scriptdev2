@@ -38,7 +38,6 @@ spell 45111
 spell 46023
 spell 46770
 spell 47575
-spell 48218
 spell 50706
 spell 51331
 spell 51332
@@ -69,7 +68,7 @@ enum
     ITEM_TASTY_REEF_FISH        = 34127,
 };
 
-bool EffectDummyGameObj_spell_dummy_go(Unit* pCaster, uint32 uiSpellId, SpellEffectIndex uiEffIndex, GameObject* pGOTarget)
+bool EffectDummyGameObj_spell_dummy_go(Unit* pCaster, uint32 uiSpellId, SpellEffectIndex uiEffIndex, GameObject* pGOTarget, ObjectGuid /*originalCasterGuid*/)
 {
     switch (uiSpellId)
     {
@@ -306,9 +305,6 @@ enum
     SAY_FREE_2                          = -1000782,
     SAY_FREE_3                          = -1000783,
 
-    // quest 12213, 12220, item 37173
-    SPELL_SAMPLING_ENERGY               = 48218,
-
     // npcs that are only interactable while dead
     SPELL_SHROUD_OF_DEATH               = 10848,
     SPELL_SPIRIT_PARTICLES              = 17327,
@@ -477,7 +473,7 @@ bool EffectAuraDummy_spell_aura_dummy_npc(const Aura* pAura, bool bApply)
     return false;
 }
 
-bool EffectDummyCreature_spell_dummy_npc(Unit* pCaster, uint32 uiSpellId, SpellEffectIndex uiEffIndex, Creature* pCreatureTarget)
+bool EffectDummyCreature_spell_dummy_npc(Unit* pCaster, uint32 uiSpellId, SpellEffectIndex uiEffIndex, Creature* pCreatureTarget, ObjectGuid /*originalCasterGuid*/)
 {
     switch (uiSpellId)
     {
@@ -929,17 +925,6 @@ bool EffectDummyCreature_spell_dummy_npc(Unit* pCaster, uint32 uiSpellId, SpellE
                 pCreatureTarget->AttackStop(true);
                 pCreatureTarget->GetMotionMaster()->MoveFleeing(pCaster, 7);
                 pCreatureTarget->ForcedDespawn(7 * IN_MILLISECONDS);
-            }
-            return true;
-        }
-        case SPELL_SAMPLING_ENERGY:
-        {
-            if (uiEffIndex == EFFECT_INDEX_0)
-            {
-                if (pCaster->GetTypeId() != TYPEID_PLAYER)
-                    return true;
-
-                ((Player*)pCaster)->KilledMonsterCredit(pCreatureTarget->GetEntry());
             }
             return true;
         }
