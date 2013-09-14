@@ -114,7 +114,7 @@ struct MANGOS_DLL_DECL npc_disciple_of_naralexAI : public npc_escortAI
         }
     }
 
-    void JustRespawned()
+    void JustRespawned() override
     {
         npc_escortAI::JustRespawned();
 
@@ -123,7 +123,7 @@ struct MANGOS_DLL_DECL npc_disciple_of_naralexAI : public npc_escortAI
             m_pInstance->SetData(TYPE_DISCIPLE, FAIL);
     }
 
-    void AttackedBy(Unit* pAttacker)
+    void AttackedBy(Unit* pAttacker) override
     {
         if (!m_bIsFirstHit)
         {
@@ -141,7 +141,7 @@ struct MANGOS_DLL_DECL npc_disciple_of_naralexAI : public npc_escortAI
     }
 
     // Overwrite the evade function, to change the combat stop function (keep casting some spells)
-    void EnterEvadeMode()
+    void EnterEvadeMode() override
     {
         // Do not stop casting at these points
         if (m_uiPoint == 15 || m_uiPoint == 32)
@@ -158,7 +158,7 @@ struct MANGOS_DLL_DECL npc_disciple_of_naralexAI : public npc_escortAI
             npc_escortAI::EnterEvadeMode();
     }
 
-    void JustStartedEscort()
+    void JustStartedEscort() override
     {
         DoScriptText(SAY_PREPARE, m_creature);
 
@@ -166,7 +166,7 @@ struct MANGOS_DLL_DECL npc_disciple_of_naralexAI : public npc_escortAI
             m_pInstance->SetData(TYPE_DISCIPLE, IN_PROGRESS);
     }
 
-    void WaypointReached(uint32 uiPointId)
+    void WaypointReached(uint32 uiPointId) override
     {
         switch (uiPointId)
         {
@@ -199,7 +199,7 @@ struct MANGOS_DLL_DECL npc_disciple_of_naralexAI : public npc_escortAI
         }
     }
 
-    void JustSummoned(Creature* pSummoned)
+    void JustSummoned(Creature* pSummoned) override
     {
         // Attack the disciple
         pSummoned->AI()->AttackStart(m_creature);
@@ -207,7 +207,7 @@ struct MANGOS_DLL_DECL npc_disciple_of_naralexAI : public npc_escortAI
         ++m_uiSummonedAlive;
     }
 
-    void SummonedCreatureJustDied(Creature* pSummoned)
+    void SummonedCreatureJustDied(Creature* /*pSummoned*/) override
     {
         if (m_uiSummonedAlive == 0)
             return;                                         // Actually if this happens, something went wrong before
@@ -225,10 +225,10 @@ struct MANGOS_DLL_DECL npc_disciple_of_naralexAI : public npc_escortAI
         float fX, fY, fZ;
         m_creature->GetNearPoint(m_creature, fX, fY, fZ, 0, fDistance, fAngle);
 
-        m_creature->SummonCreature(uiEntry, fX, fY, fZ, 0, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 20000);
+        m_creature->SummonCreature(uiEntry, fX, fY, fZ, 0, TEMPSUMMON_TIMED_OOC_DESPAWN, 20000);
     }
 
-    void UpdateEscortAI(const uint32 uiDiff)
+    void UpdateEscortAI(const uint32 uiDiff) override
     {
         if (m_uiEventTimer)
         {
@@ -387,7 +387,7 @@ struct MANGOS_DLL_DECL npc_disciple_of_naralexAI : public npc_escortAI
                                 {
                                     // ToDo: Make Naralex fly
                                     // sort of a hack, compare to boss_onyxia
-                                    pNaralex->SetByteValue(UNIT_FIELD_BYTES_1, 3, UNIT_BYTE1_FLAG_ALWAYS_STAND | UNIT_BYTE1_FLAG_UNK_2);
+                                    pNaralex->SetByteValue(UNIT_FIELD_BYTES_1, 3, UNIT_BYTE1_FLAG_ALWAYS_STAND | UNIT_BYTE1_FLAG_HOVER);
 
                                     // Set to flying
                                     pNaralex->SetLevitate(true);
@@ -461,7 +461,7 @@ bool GossipHello_npc_disciple_of_naralex(Player* pPlayer, Creature* pCreature)
     return true;
 }
 
-bool GossipSelect_npc_disciple_of_naralex(Player* pPlayer, Creature* pCreature, uint32 uiSender, uint32 uiAction)
+bool GossipSelect_npc_disciple_of_naralex(Player* pPlayer, Creature* pCreature, uint32 /*uiSender*/, uint32 uiAction)
 {
     ScriptedInstance* m_pInstance = (ScriptedInstance*)pCreature->GetInstanceData();
 

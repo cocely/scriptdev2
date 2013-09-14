@@ -136,7 +136,7 @@ struct MANGOS_DLL_DECL npc_kelerun_bloodmournAI : public ScriptedAI
             if (Creature* pCreature = m_creature->SummonCreature(uiChallengerId[i],
                                       fChallengerLoc[i][0], fChallengerLoc[i][1],
                                       fChallengerLoc[i][2], fChallengerLoc[i][3],
-                                      TEMPSUMMON_TIMED_OR_DEAD_DESPAWN, 600000))
+                                      TEMPSUMMON_TIMED_OOC_OR_DEAD_DESPAWN, 600000))
             {
                 m_aChallengerGuids[i] = pCreature->GetObjectGuid();
                 pCreature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
@@ -144,7 +144,7 @@ struct MANGOS_DLL_DECL npc_kelerun_bloodmournAI : public ScriptedAI
         }
     }
 
-    void UpdateAI(const uint32 uiDiff)
+    void UpdateAI(const uint32 uiDiff) override
     {
         if (m_bIsEventInProgress)
         {
@@ -225,7 +225,7 @@ CreatureAI* GetAI_npc_kelerun_bloodmourn(Creature* pCreature)
 }
 
 // easiest way is to expect database to respawn GO at quest accept (quest_start_script)
-bool QuestAccept_npc_kelerun_bloodmourn(Player* pPlayer, Creature* pCreature, const Quest* pQuest)
+bool QuestAccept_npc_kelerun_bloodmourn(Player* /*pPlayer*/, Creature* pCreature, const Quest* pQuest)
 {
     if (pQuest->GetQuestId() == QUEST_SECOND_TRIAL)
     {
@@ -277,7 +277,7 @@ struct MANGOS_DLL_DECL npc_prospector_anvilwardAI : public npc_escortAI
     void Reset() { }
 
     // Pure Virtual Functions
-    void WaypointReached(uint32 uiPointId)
+    void WaypointReached(uint32 uiPointId) override
     {
         Player* pPlayer = GetPlayerForEscort();
 
@@ -314,7 +314,7 @@ bool GossipHello_npc_prospector_anvilward(Player* pPlayer, Creature* pCreature)
     return true;
 }
 
-bool GossipSelect_npc_prospector_anvilward(Player* pPlayer, Creature* pCreature, uint32 uiSender, uint32 uiAction)
+bool GossipSelect_npc_prospector_anvilward(Player* pPlayer, Creature* pCreature, uint32 /*uiSender*/, uint32 uiAction)
 {
     switch (uiAction)
     {
@@ -362,7 +362,7 @@ struct MANGOS_DLL_DECL npc_apprentice_mirvedaAI : public ScriptedAI
         m_uiFireballTimer = 0;
     }
 
-    void JustDied(Unit* pKiller)
+    void JustDied(Unit* /*pKiller*/) override
     {
         Player* pPlayer = m_creature->GetMap()->GetPlayer(m_playerGuid);
 
@@ -370,13 +370,13 @@ struct MANGOS_DLL_DECL npc_apprentice_mirvedaAI : public ScriptedAI
             pPlayer->SendQuestFailed(QUEST_UNEXPECTED_RESULT);
     }
 
-    void JustSummoned(Creature* pSummoned)
+    void JustSummoned(Creature* pSummoned) override
     {
         pSummoned->AI()->AttackStart(m_creature);
         ++m_uiMobCount;
     }
 
-    void SummonedCreatureJustDied(Creature* pKilled)
+    void SummonedCreatureJustDied(Creature* /*pKilled*/) override
     {
         --m_uiMobCount;
 
@@ -402,7 +402,7 @@ struct MANGOS_DLL_DECL npc_apprentice_mirvedaAI : public ScriptedAI
         m_creature->SummonCreature(NPC_ANGERSHADE, 8745.0f, -7134.32f, 35.22f, 0.0f, TEMPSUMMON_CORPSE_DESPAWN, 4000);
     }
 
-    void UpdateAI(const uint32 uiDiff)
+    void UpdateAI(const uint32 uiDiff) override
     {
         // Return since we have no target
         if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
@@ -473,7 +473,7 @@ struct MANGOS_DLL_DECL npc_infused_crystalAI : public ScriptedAI
         bCompleted = false;
     }
 
-    void MoveInLineOfSight(Unit* pWho)
+    void MoveInLineOfSight(Unit* pWho) override
     {
         if (pWho->GetTypeId() != TYPEID_PLAYER)
             return;
@@ -494,7 +494,7 @@ struct MANGOS_DLL_DECL npc_infused_crystalAI : public ScriptedAI
                 pPlayer->FailQuest(QUEST_POWERING_OUR_DEFENSES);
     }
 
-    void UpdateAI(const uint32 uiDiff)
+    void UpdateAI(const uint32 uiDiff) override
     {
         if (bCompleted) 
             return;
@@ -503,7 +503,7 @@ struct MANGOS_DLL_DECL npc_infused_crystalAI : public ScriptedAI
         {
             for (uint8 i = 0; i < 3; ++i)
             {
-                if (Creature* pEnragedWrath = m_creature->SummonCreature(NPC_ENRAGED_WRAITH, fEnragedWrathPosition[i][0], fEnragedWrathPosition[i][1], fEnragedWrathPosition[i][2], fEnragedWrathPosition[i][3], TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 5000))
+                if (Creature* pEnragedWrath = m_creature->SummonCreature(NPC_ENRAGED_WRAITH, fEnragedWrathPosition[i][0], fEnragedWrathPosition[i][1], fEnragedWrathPosition[i][2], fEnragedWrathPosition[i][3], TEMPSUMMON_TIMED_OOC_DESPAWN, 5000))
                 {
                     pEnragedWrath->AI()->AttackStart(m_creature);
                 }

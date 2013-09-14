@@ -29,15 +29,15 @@ EndScriptData */
 
 guardAI::guardAI(Creature* pCreature) : ScriptedAI(pCreature),
     m_uiGlobalCooldown(0),
-    m_uiBuffTimer(0),
     m_uiZoneAttackMsgTimer(0),
-    m_uiHelp(0)
+    m_uiHelp(0),
+    m_uiBuffTimer(0)
 {}
 
 void guardAI::Reset()
 {
     m_uiGlobalCooldown = 0;
-    m_uiBuffTimer = 0;     //Rebuff as soon as we can
+    m_uiBuffTimer = 0;                                      // Rebuff as soon as we can
     m_uiZoneAttackMsgTimer = 0;
     m_uiHelp = 5000;
 }
@@ -104,7 +104,7 @@ void guardAI::SummonGuardsHelpers()
         entry = NPC_EXODAR_PEACEKEEPER;
     if (m_creature->getFaction() == F_SILVERMOON)
         entry = NPC_SILVERMOON_CITYGUARD;
-    DoSpawnCreature(entry, (float) (X - x), (float) (Y - y), (float) (Z - z), 0, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 5000);
+    DoSpawnCreature(entry, (float) (X - x), (float) (Y - y), (float) (Z - z), 0, TEMPSUMMON_TIMED_OOC_DESPAWN, 5000);
 }
 
 void guardAI::UpdateAI(const uint32 uiDiff)

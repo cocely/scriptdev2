@@ -73,12 +73,12 @@ struct MANGOS_DLL_DECL boss_curatorAI : public ScriptedAI
         m_creature->ApplySpellImmune(0, IMMUNITY_DAMAGE, SPELL_SCHOOL_MASK_ARCANE, true);
     }
 
-    void KilledUnit(Unit* pVictim)
+    void KilledUnit(Unit* /*pVictim*/) override
     {
         DoScriptText(urand(0, 1) ? SAY_KILL1 : SAY_KILL2, m_creature);
     }
 
-    void JustDied(Unit* pKiller)
+    void JustDied(Unit* /*pKiller*/) override
     {
         DoScriptText(SAY_DEATH, m_creature);
 
@@ -86,7 +86,7 @@ struct MANGOS_DLL_DECL boss_curatorAI : public ScriptedAI
             m_pInstance->SetData(TYPE_CURATOR, DONE);
     }
 
-    void Aggro(Unit* pWho)
+    void Aggro(Unit* /*pWho*/) override
     {
         DoScriptText(SAY_AGGRO, m_creature);
 
@@ -94,13 +94,13 @@ struct MANGOS_DLL_DECL boss_curatorAI : public ScriptedAI
             m_pInstance->SetData(TYPE_CURATOR, IN_PROGRESS);
     }
 
-    void JustReachedHome()
+    void JustReachedHome() override
     {
         if (m_pInstance)
             m_pInstance->SetData(TYPE_CURATOR, FAIL);
     }
 
-    void JustSummoned(Creature* pSummoned)
+    void JustSummoned(Creature* pSummoned) override
     {
         if (pSummoned->GetEntry() == NPC_ASTRAL_FLARE)
         {
@@ -114,7 +114,7 @@ struct MANGOS_DLL_DECL boss_curatorAI : public ScriptedAI
         }
     }
 
-    void UpdateAI(const uint32 uiDiff)
+    void UpdateAI(const uint32 uiDiff) override
     {
         if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
             return;
@@ -153,7 +153,7 @@ struct MANGOS_DLL_DECL boss_curatorAI : public ScriptedAI
                 // summon Astral Flare
                 float fX, fY, fZ;
                 m_creature->GetRandomPoint(m_creature->GetPositionX(), m_creature->GetPositionY(), m_creature->GetPositionZ(), 10.0f, fX, fY, fZ);
-                m_creature->SummonCreature(NPC_ASTRAL_FLARE, fX, fY, fZ, 0, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 5000);
+                m_creature->SummonCreature(NPC_ASTRAL_FLARE, fX, fY, fZ, 0, TEMPSUMMON_TIMED_OOC_DESPAWN, 5000);
 
                 // reduce mana by 10% of maximum
                 if (int32 iMana = m_creature->GetMaxPower(POWER_MANA))

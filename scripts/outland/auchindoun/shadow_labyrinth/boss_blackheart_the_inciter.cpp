@@ -78,12 +78,12 @@ struct MANGOS_DLL_DECL boss_blackheart_the_inciterAI : public ScriptedAI
         m_uiKnockbackTimer   = urand(10000, 14000);
     }
 
-    void KilledUnit(Unit* pVictim)
+    void KilledUnit(Unit* /*pVictim*/) override
     {
         DoScriptText(urand(0, 1) ? SAY_SLAY1 : SAY_SLAY2, m_creature);
     }
 
-    void JustDied(Unit* pKiller)
+    void JustDied(Unit* /*pKiller*/) override
     {
         DoScriptText(SAY_DEATH, m_creature);
 
@@ -91,7 +91,7 @@ struct MANGOS_DLL_DECL boss_blackheart_the_inciterAI : public ScriptedAI
             m_pInstance->SetData(TYPE_INCITER, DONE);
     }
 
-    void Aggro(Unit* pWho)
+    void Aggro(Unit* /*pWho*/) override
     {
         switch (urand(0, 2))
         {
@@ -104,7 +104,7 @@ struct MANGOS_DLL_DECL boss_blackheart_the_inciterAI : public ScriptedAI
             m_pInstance->SetData(TYPE_INCITER, IN_PROGRESS);
     }
 
-    void JustReachedHome()
+    void JustReachedHome() override
     {
         if (m_pInstance)
             m_pInstance->SetData(TYPE_INCITER, FAIL);
@@ -126,7 +126,7 @@ struct MANGOS_DLL_DECL boss_blackheart_the_inciterAI : public ScriptedAI
             if (m_uiInciteChaosWaitTimer <= uiDiff)
             {
                 // Restart attack on all targets
-                for (GuidVector::const_iterator itr = m_vTargetsGuids.begin(); itr!= m_vTargetsGuids.end(); ++itr)
+                for (GuidVector::const_iterator itr = m_vTargetsGuids.begin(); itr != m_vTargetsGuids.end(); ++itr)
                 {
                     if (Unit* pTarget = m_creature->GetMap()->GetUnit(*itr))
                         AttackStart(pTarget);

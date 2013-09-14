@@ -71,13 +71,13 @@ struct MANGOS_DLL_DECL mob_vrykul_skeletonAI : public ScriptedAI
     uint32 m_uiCastTimer;
     uint32 m_uiReviveTimer;
 
-    void Reset()
+    void Reset() override
     {
         m_uiReviveTimer = 0;
         m_uiCastTimer = urand(5000, 10000);                 // taken out of thin air
     }
 
-    void MoveInLineOfSight(Unit* pWho)
+    void MoveInLineOfSight(Unit* pWho) override
     {
         if (!pWho || m_uiReviveTimer)
             return;
@@ -85,7 +85,7 @@ struct MANGOS_DLL_DECL mob_vrykul_skeletonAI : public ScriptedAI
         ScriptedAI::MoveInLineOfSight(pWho);
     }
 
-    void AttackStart(Unit* pWho)
+    void AttackStart(Unit* pWho) override
     {
         if (!pWho || m_uiReviveTimer)
             return;
@@ -106,7 +106,7 @@ struct MANGOS_DLL_DECL mob_vrykul_skeletonAI : public ScriptedAI
         m_uiReviveTimer = 0;
     }
 
-    void DamageTaken(Unit* pDoneBy, uint32& uiDamage)
+    void DamageTaken(Unit* /*pDoneBy*/, uint32& uiDamage) override
     {
         if (m_uiReviveTimer)
         {
@@ -125,10 +125,10 @@ struct MANGOS_DLL_DECL mob_vrykul_skeletonAI : public ScriptedAI
             m_creature->SetFlag(UNIT_DYNAMIC_FLAGS, UNIT_DYNFLAG_DEAD);
             m_creature->SetStandState(UNIT_STAND_STATE_DEAD);
             return;
-       }
+        }
     }
 
-    void UpdateAI(const uint32 uiDiff)
+    void UpdateAI(const uint32 uiDiff) override
     {
         if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
             return;
@@ -194,7 +194,7 @@ struct MANGOS_DLL_DECL boss_kelesethAI : public ScriptedAI
 
     GuidList m_lSummonedAddGuids;
 
-    void Reset()
+    void Reset() override
     {
         // timers need confirmation
         m_uiFrostTombTimer = 20000;
@@ -204,7 +204,7 @@ struct MANGOS_DLL_DECL boss_kelesethAI : public ScriptedAI
         DespawnOrKillAdds(true);
     }
 
-    void AttackStart(Unit* pWho)
+    void AttackStart(Unit* pWho) override
     {
         if (m_creature->Attack(pWho, true))
         {
@@ -216,7 +216,7 @@ struct MANGOS_DLL_DECL boss_kelesethAI : public ScriptedAI
         }
     }
 
-    void Aggro(Unit* pWho)
+    void Aggro(Unit* /*pWho*/) override
     {
         DoScriptText(SAY_AGGRO, m_creature);
 
@@ -226,8 +226,8 @@ struct MANGOS_DLL_DECL boss_kelesethAI : public ScriptedAI
 
     void SummonAdds()
     {
-        for (uint8 i=0; i<4; ++i)
-            m_creature->SummonCreature(NPC_VRYKUL_SKELETON, fAddPosition[0]+rand()%7, fAddPosition[1]+rand()%7, fAddPosition[2], fAddPosition[3], TEMPSUMMON_DEAD_DESPAWN, 0);
+        for (uint8 i = 0; i < 4; ++i)
+            m_creature->SummonCreature(NPC_VRYKUL_SKELETON, fAddPosition[0] + rand() % 7, fAddPosition[1] + rand() % 7, fAddPosition[2], fAddPosition[3], TEMPSUMMON_DEAD_DESPAWN, 0);
     }
 
     void DespawnOrKillAdds(bool bDespawn)
@@ -249,7 +249,7 @@ struct MANGOS_DLL_DECL boss_kelesethAI : public ScriptedAI
         m_lSummonedAddGuids.clear();
     }
 
-    void JustSummoned(Creature* pSummoned)
+    void JustSummoned(Creature* pSummoned) override
     {
         if (pSummoned->GetEntry() == NPC_VRYKUL_SKELETON)
         {
@@ -261,7 +261,7 @@ struct MANGOS_DLL_DECL boss_kelesethAI : public ScriptedAI
             pSummoned->ApplySpellImmune(0, IMMUNITY_DAMAGE, SPELL_SCHOOL_MASK_FROST, true);
     }
 
-    void JustDied(Unit* pKiller)
+    void JustDied(Unit* /*pKiller*/) override
     {
         DoScriptText(SAY_DEATH, m_creature);
 
@@ -271,18 +271,18 @@ struct MANGOS_DLL_DECL boss_kelesethAI : public ScriptedAI
         DespawnOrKillAdds(false);
     }
 
-    void JustReachedHome()
+    void JustReachedHome() override
     {
         if (m_pInstance)
             m_pInstance->SetData(TYPE_KELESETH, FAIL);
     }
 
-    void KilledUnit(Unit* pVictim)
+    void KilledUnit(Unit* /*pVictim*/) override
     {
         DoScriptText(SAY_KILL, m_creature);
     }
 
-    void UpdateAI(const uint32 uiDiff)
+    void UpdateAI(const uint32 uiDiff) override
     {
         if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
             return;
@@ -310,7 +310,7 @@ struct MANGOS_DLL_DECL boss_kelesethAI : public ScriptedAI
         {
             if (Unit* pTombTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0))
             {
-                //DoCastSpellIfCan(pTombTarget, SPELL_SUMMON_FROST_TOMB);
+                // DoCastSpellIfCan(pTombTarget, SPELL_SUMMON_FROST_TOMB);
                 float fPosX, fPosY, fPosZ;
                 pTombTarget->GetPosition(fPosX, fPosY, fPosZ);
 

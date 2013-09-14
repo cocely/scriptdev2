@@ -102,7 +102,7 @@ struct MANGOS_DLL_DECL example_creatureAI : public ScriptedAI
 
     // *** HANDLED FUNCTION ***
     // Aggro is called when we enter combat, against an enemy, and haven't been in combat before
-    void Aggro(Unit* pWho)
+    void Aggro(Unit* pWho) override
     {
         // Say some stuff
         DoScriptText(SAY_AGGRO, m_creature, pWho);
@@ -110,7 +110,7 @@ struct MANGOS_DLL_DECL example_creatureAI : public ScriptedAI
 
     // *** HANDLED FUNCTION ***
     // Our Recive emote function
-    void ReceiveEmote(Player* pPlayer, uint32 uiTextEmote)
+    void ReceiveEmote(Player* /*pPlayer*/, uint32 uiTextEmote) override
     {
         m_creature->HandleEmote(uiTextEmote);
 
@@ -127,7 +127,7 @@ struct MANGOS_DLL_DECL example_creatureAI : public ScriptedAI
 
     // *** HANDLED FUNCTION ***
     // Update AI is called Every single map update (roughly once every 100ms if a player is within the grid)
-    void UpdateAI(const uint32 uiDiff)
+    void UpdateAI(const uint32 uiDiff) override
     {
         // Out of combat timers
         if (!m_creature->getVictim())
@@ -263,7 +263,7 @@ bool GossipHello_example_creature(Player* pPlayer, Creature* pCreature)
 
 // This function is called when the player clicks an option on the gossip menu
 // In this case here the faction change could be handled by world-DB gossip, hence it should be handled there!
-bool GossipSelect_example_creature(Player* pPlayer, Creature* pCreature, uint32 uiSender, uint32 uiAction)
+bool GossipSelect_example_creature(Player* pPlayer, Creature* pCreature, uint32 /*uiSender*/, uint32 uiAction)
 {
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
     {

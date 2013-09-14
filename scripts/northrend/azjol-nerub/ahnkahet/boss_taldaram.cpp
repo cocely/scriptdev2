@@ -91,7 +91,7 @@ struct MANGOS_DLL_DECL boss_taldaramAI : public ScriptedAI
         m_bIsFirstAggro         = false;
     }
 
-    void Aggro(Unit* pWho) override
+    void Aggro(Unit* /*pWho*/) override
     {
         // Aggro is called after the boss vanish expires. There is no need to call this multiple times
         if (m_bIsFirstAggro)
@@ -311,7 +311,7 @@ bool EffectDummyCreature_spell_conjure_flame_orbs(Unit* /*pCaster*/, uint32 uiSp
 ## go_nerubian_device
 ######*/
 
-bool GOUse_go_nerubian_device(Player* pPlayer, GameObject* pGo)
+bool GOUse_go_nerubian_device(Player* /*pPlayer*/, GameObject* pGo)
 {
     ScriptedInstance* pInstance = (ScriptedInstance*)pGo->GetInstanceData();
 

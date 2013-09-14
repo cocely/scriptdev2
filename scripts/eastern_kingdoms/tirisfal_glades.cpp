@@ -42,7 +42,7 @@ enum
     GO_DOOR         = 176594
 };
 
-bool GOUse_go_mausoleum_door(Player* pPlayer, GameObject* pGo)
+bool GOUse_go_mausoleum_door(Player* pPlayer, GameObject* /*pGo*/)
 {
     if (pPlayer->GetQuestStatus(QUEST_ULAG) != QUEST_STATUS_INCOMPLETE)
         return false;
@@ -50,7 +50,7 @@ bool GOUse_go_mausoleum_door(Player* pPlayer, GameObject* pGo)
     if (GameObject* pTrigger = GetClosestGameObjectWithEntry(pPlayer, GO_TRIGGER, 30.0f))
     {
         pTrigger->SetGoState(GO_STATE_READY);
-        pPlayer->SummonCreature(NPC_ULAG, 2390.26f, 336.47f, 40.01f, 2.26f, TEMPSUMMON_TIMED_OR_DEAD_DESPAWN, 300000);
+        pPlayer->SummonCreature(NPC_ULAG, 2390.26f, 336.47f, 40.01f, 2.26f, TEMPSUMMON_TIMED_OOC_OR_DEAD_DESPAWN, 300000);
         return false;
     }
 
@@ -102,7 +102,7 @@ struct MANGOS_DLL_DECL npc_calvin_montagueAI : public ScriptedAI
         m_playerGuid.Clear();
     }
 
-    void AttackedBy(Unit* pAttacker)
+    void AttackedBy(Unit* pAttacker) override
     {
         if (m_creature->getVictim() || m_creature->IsFriendlyTo(pAttacker))
             return;
@@ -110,7 +110,7 @@ struct MANGOS_DLL_DECL npc_calvin_montagueAI : public ScriptedAI
         AttackStart(pAttacker);
     }
 
-    void DamageTaken(Unit* pDoneBy, uint32& uiDamage)
+    void DamageTaken(Unit* pDoneBy, uint32& uiDamage) override
     {
         if (uiDamage > m_creature->GetHealth() || ((m_creature->GetHealth() - uiDamage) * 100 / m_creature->GetMaxHealth() < 15))
         {
@@ -125,7 +125,7 @@ struct MANGOS_DLL_DECL npc_calvin_montagueAI : public ScriptedAI
         }
     }
 
-    void UpdateAI(const uint32 uiDiff)
+    void UpdateAI(const uint32 uiDiff) override
     {
         if (m_uiPhase)
         {

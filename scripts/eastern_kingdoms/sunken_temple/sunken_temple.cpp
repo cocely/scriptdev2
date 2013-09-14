@@ -39,7 +39,7 @@ enum
     QUEST_ERANIKUS_TYRANT_OF_DREAMS   = 8733
 };
 
-bool AreaTrigger_at_shade_of_eranikus(Player* pPlayer, AreaTriggerEntry const* pAt)
+bool AreaTrigger_at_shade_of_eranikus(Player* pPlayer, AreaTriggerEntry const* /*pAt*/)
 {
     if (ScriptedInstance* pInstance = (ScriptedInstance*)pPlayer->GetInstanceData())
     {
@@ -87,7 +87,7 @@ struct MANGOS_DLL_DECL npc_malfurionAI : public ScriptedAI
     uint32 m_uiSpeech;
 
     void Reset() {}
-    void UpdateAI(const uint32 uiDiff)
+    void UpdateAI(const uint32 uiDiff) override
     {
         // We are in Sunken Temple
         if (m_creature->GetMap()->IsDungeon())
@@ -143,7 +143,7 @@ CreatureAI* GetAI_npc_malfurion(Creature* pCreature)
 ## event_antalarion_statues
 ######*/
 
-bool ProcessEventId_event_antalarion_statue_activation(uint32 uiEventId, Object* pSource, Object* pTarget, bool bIsStart)
+bool ProcessEventId_event_antalarion_statue_activation(uint32 uiEventId, Object* pSource, Object* pTarget, bool /*bIsStart*/)
 {
     if (pSource->GetTypeId() == TYPEID_PLAYER && pTarget->GetTypeId() == TYPEID_GAMEOBJECT)
     {
@@ -181,7 +181,7 @@ bool ProcessEventId_event_antalarion_statue_activation(uint32 uiEventId, Object*
 /*######
 ## event_avatar_of_hakkar
 ######*/
-bool ProcessEventId_event_avatar_of_hakkar(uint32 uiEventId, Object* pSource, Object* pTarget, bool bIsStart)
+bool ProcessEventId_event_avatar_of_hakkar(uint32 /*uiEventId*/, Object* pSource, Object* /*pTarget*/, bool /*bIsStart*/)
 {
     if (pSource->GetTypeId() == TYPEID_PLAYER)
     {
@@ -202,7 +202,7 @@ bool ProcessEventId_event_avatar_of_hakkar(uint32 uiEventId, Object* pSource, Ob
 /*######
 ## go_eternal_flame
 ######*/
-bool GOUse_go_eternal_flame(Player* pPlayer, GameObject* pGo)
+bool GOUse_go_eternal_flame(Player* /*pPlayer*/, GameObject* pGo)
 {
     instance_sunken_temple* pInstance = (instance_sunken_temple*)pGo->GetInstanceData();
 

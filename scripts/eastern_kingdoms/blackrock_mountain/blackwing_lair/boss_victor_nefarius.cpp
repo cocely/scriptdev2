@@ -153,13 +153,13 @@ struct MANGOS_DLL_DECL boss_victor_nefariusAI : public ScriptedAI, private Dialo
             m_pInstance->SetData(TYPE_NEFARIAN, IN_PROGRESS);
     }
 
-    void JustReachedHome()
+    void JustReachedHome() override
     {
         if (m_pInstance)
             m_pInstance->SetData(TYPE_NEFARIAN, FAIL);
     }
 
-    void AttackStart(Unit* pWho)
+    void AttackStart(Unit* pWho) override
     {
         if (m_creature->Attack(pWho, false))
         {
@@ -172,7 +172,7 @@ struct MANGOS_DLL_DECL boss_victor_nefariusAI : public ScriptedAI, private Dialo
         }
     }
 
-    void JustSummoned(Creature* pSummoned)
+    void JustSummoned(Creature* pSummoned) override
     {
         if (m_creature->GetMapId() != MAP_ID_BWL)
             return;
@@ -182,7 +182,7 @@ struct MANGOS_DLL_DECL boss_victor_nefariusAI : public ScriptedAI, private Dialo
             pSummoned->SetWalk(false);
 
             // see boss_onyxia (also note the removal of this in boss_nefarian)
-            pSummoned->SetByteValue(UNIT_FIELD_BYTES_1, 3, UNIT_BYTE1_FLAG_ALWAYS_STAND | UNIT_BYTE1_FLAG_UNK_2);
+            pSummoned->SetByteValue(UNIT_FIELD_BYTES_1, 3, UNIT_BYTE1_FLAG_ALWAYS_STAND | UNIT_BYTE1_FLAG_HOVER);
             pSummoned->SetLevitate(true);
 
             // Let Nefarian fly towards combat area
@@ -198,7 +198,7 @@ struct MANGOS_DLL_DECL boss_victor_nefariusAI : public ScriptedAI, private Dialo
         }
     }
 
-    void SummonedMovementInform(Creature* pSummoned, uint32 uiMotionType, uint32 uiPointId)
+    void SummonedMovementInform(Creature* pSummoned, uint32 uiMotionType, uint32 uiPointId) override
     {
         if (m_creature->GetMapId() != MAP_ID_BWL)
             return;
@@ -241,7 +241,7 @@ struct MANGOS_DLL_DECL boss_victor_nefariusAI : public ScriptedAI, private Dialo
         StartNextDialogueText(SAY_GAMESBEGIN_1);
     }
 
-    void UpdateAI(const uint32 uiDiff)
+    void UpdateAI(const uint32 uiDiff) override
     {
         if (m_creature->GetMapId() != MAP_ID_BWL)
             return;

@@ -57,7 +57,7 @@ struct MANGOS_DLL_DECL npc_aeranasAI : public ScriptedAI
     uint32 m_uiEnvelopingWindsTimer;
     uint32 m_uiShockTimer;
 
-    void Reset()
+    void Reset() override
     {
         m_uiFactionTimer         = 8000;
         m_uiEnvelopingWindsTimer = 9000;
@@ -68,7 +68,7 @@ struct MANGOS_DLL_DECL npc_aeranasAI : public ScriptedAI
         DoScriptText(SAY_SUMMON, m_creature);
     }
 
-    void UpdateAI(const uint32 uiDiff)
+    void UpdateAI(const uint32 uiDiff) override
     {
         if (m_uiFactionTimer)
         {
@@ -146,12 +146,12 @@ struct MANGOS_DLL_DECL npc_ancestral_wolfAI : public npc_escortAI
         Reset();
     }
 
-    void Reset()
+    void Reset() override
     {
         m_creature->CastSpell(m_creature, SPELL_ANCESTRAL_WOLF_BUFF, true);
     }
 
-    void WaypointReached(uint32 uiPointId)
+    void WaypointReached(uint32 uiPointId) override
     {
         switch (uiPointId)
         {
@@ -220,11 +220,11 @@ struct MANGOS_DLL_DECL npc_demoniac_scryerAI : public ScriptedAI
     uint32 m_uiSpawnButtressTimer;
     uint32 m_uiButtressCount;
 
-    void Reset() {}
+    void Reset() override {}
 
     // we don't want anything to happen when attacked
-    void AttackedBy(Unit* pEnemy) {}
-    void AttackStart(Unit* pEnemy) {}
+    void AttackedBy(Unit* /*pEnemy*/) override {}
+    void AttackStart(Unit* /*pEnemy*/) override {}
 
     void DoSpawnButtress()
     {
@@ -252,10 +252,10 @@ struct MANGOS_DLL_DECL npc_demoniac_scryerAI : public ScriptedAI
         float fX, fY, fZ;
         m_creature->GetRandomPoint(m_creature->GetPositionX(), m_creature->GetPositionY(), m_creature->GetPositionZ(), 20.0f, fX, fY, fZ);
 
-        m_creature->SummonCreature(NPC_HELLFIRE_WARDLING, fX, fY, fZ, 0.0f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 5000);
+        m_creature->SummonCreature(NPC_HELLFIRE_WARDLING, fX, fY, fZ, 0.0f, TEMPSUMMON_TIMED_OOC_DESPAWN, 5000);
     }
 
-    void JustSummoned(Creature* pSummoned)
+    void JustSummoned(Creature* pSummoned) override
     {
         if (pSummoned->GetEntry() == NPC_HELLFIRE_WARDLING)
         {
@@ -272,13 +272,13 @@ struct MANGOS_DLL_DECL npc_demoniac_scryerAI : public ScriptedAI
         }
     }
 
-    void SpellHitTarget(Unit* pTarget, const SpellEntry* pSpell)
+    void SpellHitTarget(Unit* pTarget, const SpellEntry* pSpell) override
     {
         if (pTarget->GetEntry() == NPC_HELLFIRE_WARDLING && pSpell->Id == SPELL_SUCKER_DESPAWN_MOB)
             ((Creature*)pTarget)->ForcedDespawn();
     }
 
-    void UpdateAI(const uint32 uiDiff)
+    void UpdateAI(const uint32 uiDiff) override
     {
         if (m_bIsComplete || !m_creature->isAlive())
             return;
@@ -338,7 +338,7 @@ bool GossipHello_npc_demoniac_scryer(Player* pPlayer, Creature* pCreature)
     return true;
 }
 
-bool GossipSelect_npc_demoniac_scryer(Player* pPlayer, Creature* pCreature, uint32 uiSender, uint32 uiAction)
+bool GossipSelect_npc_demoniac_scryer(Player* pPlayer, Creature* pCreature, uint32 /*uiSender*/, uint32 uiAction)
 {
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
     {
@@ -372,7 +372,7 @@ struct MANGOS_DLL_DECL npc_wounded_blood_elfAI : public npc_escortAI
 {
     npc_wounded_blood_elfAI(Creature* pCreature) : npc_escortAI(pCreature) {Reset();}
 
-    void WaypointReached(uint32 uiPointId)
+    void WaypointReached(uint32 uiPointId) override
     {
         Player* pPlayer = GetPlayerForEscort();
 
@@ -387,8 +387,8 @@ struct MANGOS_DLL_DECL npc_wounded_blood_elfAI : public npc_escortAI
             case 9:
                 DoScriptText(SAY_ELF_SUMMON1, m_creature, pPlayer);
                 // Spawn two Haal'eshi Talonguard
-                DoSpawnCreature(NPC_WINDWALKER, -15, -15, 0, 0, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 5000);
-                DoSpawnCreature(NPC_WINDWALKER, -17, -17, 0, 0, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 5000);
+                DoSpawnCreature(NPC_WINDWALKER, -15, -15, 0, 0, TEMPSUMMON_TIMED_OOC_DESPAWN, 5000);
+                DoSpawnCreature(NPC_WINDWALKER, -17, -17, 0, 0, TEMPSUMMON_TIMED_OOC_DESPAWN, 5000);
                 break;
             case 13:
                 DoScriptText(SAY_ELF_RESTING, m_creature, pPlayer);
@@ -396,8 +396,8 @@ struct MANGOS_DLL_DECL npc_wounded_blood_elfAI : public npc_escortAI
             case 14:
                 DoScriptText(SAY_ELF_SUMMON2, m_creature, pPlayer);
                 // Spawn two Haal'eshi Windwalker
-                DoSpawnCreature(NPC_WINDWALKER, -15, -15, 0, 0, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 5000);
-                DoSpawnCreature(NPC_WINDWALKER, -17, -17, 0, 0, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 5000);
+                DoSpawnCreature(NPC_WINDWALKER, -15, -15, 0, 0, TEMPSUMMON_TIMED_OOC_DESPAWN, 5000);
+                DoSpawnCreature(NPC_WINDWALKER, -17, -17, 0, 0, TEMPSUMMON_TIMED_OOC_DESPAWN, 5000);
                 break;
             case 27:
                 DoScriptText(SAY_ELF_COMPLETE, m_creature, pPlayer);
@@ -407,15 +407,15 @@ struct MANGOS_DLL_DECL npc_wounded_blood_elfAI : public npc_escortAI
         }
     }
 
-    void Reset() { }
+    void Reset() override { }
 
-    void Aggro(Unit* pWho)
+    void Aggro(Unit* /*pWho*/) override
     {
         if (HasEscortState(STATE_ESCORT_ESCORTING))
             DoScriptText(SAY_ELF_AGGRO, m_creature);
     }
 
-    void JustSummoned(Creature* pSummoned)
+    void JustSummoned(Creature* pSummoned) override
     {
         pSummoned->AI()->AttackStart(m_creature);
     }
@@ -461,13 +461,13 @@ struct MANGOS_DLL_DECL npc_fel_guard_houndAI : public ScriptedPetAI
 
     bool m_bIsPooActive;
 
-    void Reset()
+    void Reset() override
     {
         m_uiPoodadTimer = 0;
         m_bIsPooActive  = false;
     }
 
-    void MovementInform(uint32 uiMoveType, uint32 uiPointId)
+    void MovementInform(uint32 uiMoveType, uint32 uiPointId) override
     {
         if (uiMoveType != POINT_MOTION_TYPE || !uiPointId)
             return;
@@ -486,7 +486,7 @@ struct MANGOS_DLL_DECL npc_fel_guard_houndAI : public ScriptedPetAI
         m_creature->GetMotionMaster()->MovePoint(1, pBoar->GetPositionX(), pBoar->GetPositionY(), pBoar->GetPositionZ());
     }
 
-    void UpdateAI(const uint32 uiDiff)
+    void UpdateAI(const uint32 uiDiff) override
     {
         if (m_uiPoodadTimer)
         {

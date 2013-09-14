@@ -173,7 +173,7 @@ struct MANGOS_DLL_DECL boss_black_knightAI : public ScriptedAI
             m_pInstance->SetData(TYPE_BLACK_KNIGHT, IN_PROGRESS);
     }
 
-    void DamageTaken(Unit* pDoneBy, uint32& uiDamage)
+    void DamageTaken(Unit* pDoneBy, uint32& uiDamage) override
     {
         if ((uiDamage > m_creature->GetHealth() || m_creature->GetHealth()/m_creature->GetHealth() <= 0.1 )  && !phase3)
         {
@@ -187,7 +187,7 @@ struct MANGOS_DLL_DECL boss_black_knightAI : public ScriptedAI
         }
     }
 
-    void JustDied(Unit* pKiller)
+    void JustDied(Unit* pKiller) override
     {
         if (!m_pInstance)
             return;
@@ -276,9 +276,9 @@ struct MANGOS_DLL_DECL boss_black_knightAI : public ScriptedAI
         if (Summon_Ghoul < diff && phase1 && !ghoul)
         {
             if (m_pInstance->GetData(DATA_TOC5_ANNOUNCER) == m_pInstance->GetData(DATA_JAEREN))
-                m_creature->SummonCreature(NPC_RISEN_JAEREN, 0.0f, 0.0f, 0.0f, 0, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 5000);
+                m_creature->SummonCreature(NPC_RISEN_JAEREN, 0.0f, 0.0f, 0.0f, 0, TEMPSUMMON_TIMED_OOC_DESPAWN, 5000);
             else
-                m_creature->SummonCreature(NPC_RISEN_ARELAS, 0.0f, 0.0f, 0.0f, 0, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 5000);
+                m_creature->SummonCreature(NPC_RISEN_ARELAS, 0.0f, 0.0f, 0.0f, 0, TEMPSUMMON_TIMED_OOC_DESPAWN, 5000);
 
             ghoul = true;
         }

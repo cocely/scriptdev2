@@ -95,7 +95,7 @@ struct MANGOS_DLL_DECL boss_ragnarosAI : public Scripted_NoMovementAI
         m_bIsSubmerged = false;
     }
 
-    void KilledUnit(Unit* pVictim)
+    void KilledUnit(Unit* pVictim) override
     {
         if (pVictim->GetTypeId() != TYPEID_PLAYER)
             return;
@@ -106,7 +106,7 @@ struct MANGOS_DLL_DECL boss_ragnarosAI : public Scripted_NoMovementAI
         DoScriptText(SAY_KILL, m_creature);
     }
 
-    void JustDied(Unit* pKiller)
+    void JustDied(Unit* pKiller) override
     {
         if (m_pInstance)
             m_pInstance->SetData(TYPE_RAGNAROS, DONE);
@@ -123,7 +123,7 @@ struct MANGOS_DLL_DECL boss_ragnarosAI : public Scripted_NoMovementAI
             m_pInstance->SetData(TYPE_RAGNAROS, IN_PROGRESS);
     }
 
-    void EnterEvadeMode()
+    void EnterEvadeMode() override
     {
         if (m_pInstance)
             m_pInstance->SetData(TYPE_RAGNAROS, FAIL);
@@ -148,7 +148,7 @@ struct MANGOS_DLL_DECL boss_ragnarosAI : public Scripted_NoMovementAI
         }
     }
 
-    void JustSummoned(Creature* pSummoned)
+    void JustSummoned(Creature* pSummoned) override
     {
         if (pSummoned->GetEntry() == NPC_SON_OF_FLAME)
         {
@@ -161,14 +161,14 @@ struct MANGOS_DLL_DECL boss_ragnarosAI : public Scripted_NoMovementAI
             pSummoned->CastSpell(pSummoned, SPELL_INTENSE_HEAT, true, NULL, NULL, m_creature->GetObjectGuid());
     }
 
-    void SpellHitTarget(Unit* pTarget, const SpellEntry* pSpell)
+    void SpellHitTarget(Unit* pTarget, const SpellEntry* pSpell) override
     {
         // As Majordomo is now killed, the last timer (until attacking) must be handled with ragnaros script
         if (pSpell->Id == SPELL_ELEMENTAL_FIRE_KILL && pTarget->GetTypeId() == TYPEID_UNIT && pTarget->GetEntry() == NPC_MAJORDOMO)
             m_uiEnterCombatTimer = 10000;
     }
 
-    void UpdateAI(const uint32 uiDiff)
+    void UpdateAI(const uint32 uiDiff) override
     {
         if (m_uiEnterCombatTimer)
         {
@@ -279,7 +279,7 @@ struct MANGOS_DLL_DECL boss_ragnarosAI : public Scripted_NoMovementAI
             for (uint8 i = 0; i < MAX_ADDS_IN_SUBMERGE; ++i)
             {
                 m_creature->GetRandomPoint(m_creature->GetPositionX(), m_creature->GetPositionY(), m_creature->GetPositionZ(), 30.0f, fX, fY, fZ);
-                m_creature->SummonCreature(NPC_SON_OF_FLAME, fX, fY, fZ, 0.0f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 1000);
+                m_creature->SummonCreature(NPC_SON_OF_FLAME, fX, fY, fZ, 0.0f, TEMPSUMMON_TIMED_OOC_DESPAWN, 1000);
             }
 
             return;

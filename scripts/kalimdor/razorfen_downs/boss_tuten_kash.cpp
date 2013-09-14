@@ -84,18 +84,18 @@ struct MANGOS_DLL_DECL boss_tuten_kashAI : public ScriptedAI
         m_uiWebSpray_Timer          = 8500;
     }
 
-    void JustDied(Unit* pKiller)
+    void JustDied(Unit* pKiller) override
     {
         m_uiGongPhase = PHASE_TWOB;
     }
 
-    void JustReachedHome()
+    void JustReachedHome() override
     {
         m_creature->ForcedDespawn();
         m_uiGongPhase = PHASE_ZERO;
     }
 
-    void UpdateAI(const uint32 uiDiff)
+    void UpdateAI(const uint32 uiDiff) override
     {
         if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
             return;
@@ -154,7 +154,7 @@ struct MANGOS_DLL_DECL npc_tomb_fiendAI : public ScriptedAI
         m_uiPoison_Timer   = 5500;
     }
 
-    void JustDied(Unit* pKiller)
+    void JustDied(Unit* pKiller) override
     {
         if (++m_uiFiendDead == 4)
         {
@@ -162,7 +162,7 @@ struct MANGOS_DLL_DECL npc_tomb_fiendAI : public ScriptedAI
         }
     }
 
-    void JustReachedHome()
+    void JustReachedHome() override
     {
         m_creature->ForcedDespawn();
         m_uiGongPhase = PHASE_ZERO;
@@ -182,7 +182,7 @@ struct MANGOS_DLL_DECL npc_tomb_fiendAI : public ScriptedAI
         }
     }
 
-    void UpdateAI(const uint32 uiDiff)
+    void UpdateAI(const uint32 uiDiff) override
     {
         if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
             return;
@@ -241,7 +241,7 @@ struct MANGOS_DLL_DECL npc_tomb_reaverAI : public ScriptedAI
         }
     }
 
-    void JustDied(Unit* pKiller)
+    void JustDied(Unit* pKiller) override
     {
         if (++m_uiReaverDead == 2)
         {
@@ -249,13 +249,13 @@ struct MANGOS_DLL_DECL npc_tomb_reaverAI : public ScriptedAI
         }
     }
 
-    void JustReachedHome()
+    void JustReachedHome() override
     {
         m_creature->ForcedDespawn();
         m_uiGongPhase = PHASE_ZERO;
     }
 
-    void UpdateAI(const uint32 uiDiff)
+    void UpdateAI(const uint32 uiDiff) override
     {
         if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
             return;
@@ -307,22 +307,22 @@ bool GOUse_go_gong_razor(Player* pPlayer, GameObject* pGo)
     switch(m_uiGongPhase)
     {
         case PHASE_ZERO: ///-> First time clicking
-            pGo->SummonCreature(NPC_TOMB_FIEND, PositionF1[0], PositionF1[1], PositionF1[2], PositionF1[3], TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 10*MINUTE*IN_MILLISECONDS);
-            pGo->SummonCreature(NPC_TOMB_FIEND, PositionF2[0], PositionF2[1], PositionF2[2], PositionF2[3], TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 10*MINUTE*IN_MILLISECONDS);
-            pGo->SummonCreature(NPC_TOMB_FIEND, PositionF3[0], PositionF3[1], PositionF3[2], PositionF3[3], TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 10*MINUTE*IN_MILLISECONDS);
-            pGo->SummonCreature(NPC_TOMB_FIEND, PositionF4[0], PositionF4[1], PositionF4[2], PositionF4[3], TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 10*MINUTE*IN_MILLISECONDS);
+            pGo->SummonCreature(NPC_TOMB_FIEND, PositionF1[0], PositionF1[1], PositionF1[2], PositionF1[3], TEMPSUMMON_TIMED_OOC_DESPAWN, 10*MINUTE*IN_MILLISECONDS);
+            pGo->SummonCreature(NPC_TOMB_FIEND, PositionF2[0], PositionF2[1], PositionF2[2], PositionF2[3], TEMPSUMMON_TIMED_OOC_DESPAWN, 10*MINUTE*IN_MILLISECONDS);
+            pGo->SummonCreature(NPC_TOMB_FIEND, PositionF3[0], PositionF3[1], PositionF3[2], PositionF3[3], TEMPSUMMON_TIMED_OOC_DESPAWN, 10*MINUTE*IN_MILLISECONDS);
+            pGo->SummonCreature(NPC_TOMB_FIEND, PositionF4[0], PositionF4[1], PositionF4[2], PositionF4[3], TEMPSUMMON_TIMED_OOC_DESPAWN, 10*MINUTE*IN_MILLISECONDS);
             break;
 ///-> empty case to keep players from multi summon the wave they are on 8P damn cheaters
         case PHASE_ZEROB:
             break;
         case PHASE_ONE:
-            pGo->SummonCreature(NPC_TOMB_REAVER, PositionR1[0], PositionR1[1], PositionR1[2], PositionR1[3], TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 10*MINUTE*IN_MILLISECONDS);
-            pGo->SummonCreature(NPC_TOMB_REAVER, PositionR2[0], PositionR2[1], PositionR2[2], PositionR2[3], TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 10*MINUTE*IN_MILLISECONDS);
+            pGo->SummonCreature(NPC_TOMB_REAVER, PositionR1[0], PositionR1[1], PositionR1[2], PositionR1[3], TEMPSUMMON_TIMED_OOC_DESPAWN, 10*MINUTE*IN_MILLISECONDS);
+            pGo->SummonCreature(NPC_TOMB_REAVER, PositionR2[0], PositionR2[1], PositionR2[2], PositionR2[3], TEMPSUMMON_TIMED_OOC_DESPAWN, 10*MINUTE*IN_MILLISECONDS);
             break;
         case PHASE_ONEB:
             break;
         case PHASE_TWO:
-            pGo->SummonCreature(NPC_TUTEN, PositionTUT[0], PositionTUT[1], PositionTUT[2], PositionTUT[3], TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 10*MINUTE*IN_MILLISECONDS);
+            pGo->SummonCreature(NPC_TUTEN, PositionTUT[0], PositionTUT[1], PositionTUT[2], PositionTUT[3], TEMPSUMMON_TIMED_OOC_DESPAWN, 10*MINUTE*IN_MILLISECONDS);
             break;
         case PHASE_TWOB:
             break;

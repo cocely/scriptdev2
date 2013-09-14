@@ -70,7 +70,7 @@ struct MANGOS_DLL_DECL npc_willix_the_importerAI : public npc_escortAI
     void Reset() {}
 
     // Exact use of these texts remains unknown, it seems that he should only talk when he initiates the attack or he is the first who is attacked by a npc
-    void Aggro(Unit* pWho)
+    void Aggro(Unit* pWho) override
     {
         switch (urand(0, 6))                                // Not always said
         {
@@ -81,12 +81,12 @@ struct MANGOS_DLL_DECL npc_willix_the_importerAI : public npc_escortAI
         }
     }
 
-    void JustSummoned(Creature* pSummoned)
+    void JustSummoned(Creature* pSummoned) override
     {
         pSummoned->AI()->AttackStart(m_creature);
     }
 
-    void WaypointReached(uint32 uiPointId)
+    void WaypointReached(uint32 uiPointId) override
     {
         switch (uiPointId)
         {
@@ -102,8 +102,8 @@ struct MANGOS_DLL_DECL npc_willix_the_importerAI : public npc_escortAI
             case 14:
                 DoScriptText(SAY_WILLIX_4, m_creature);
                 // Summon 2 boars on the pathway
-                m_creature->SummonCreature(NPC_RAGING_AGAMAR, aBoarSpawn[0][0], aBoarSpawn[0][1], aBoarSpawn[0][2], 0, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 25000);
-                m_creature->SummonCreature(NPC_RAGING_AGAMAR, aBoarSpawn[1][0], aBoarSpawn[1][1], aBoarSpawn[1][2], 0, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 25000);
+                m_creature->SummonCreature(NPC_RAGING_AGAMAR, aBoarSpawn[0][0], aBoarSpawn[0][1], aBoarSpawn[0][2], 0, TEMPSUMMON_TIMED_OOC_DESPAWN, 25000);
+                m_creature->SummonCreature(NPC_RAGING_AGAMAR, aBoarSpawn[1][0], aBoarSpawn[1][1], aBoarSpawn[1][2], 0, TEMPSUMMON_TIMED_OOC_DESPAWN, 25000);
                 break;
             case 25:
                 DoScriptText(SAY_WILLIX_5, m_creature);
@@ -114,8 +114,8 @@ struct MANGOS_DLL_DECL npc_willix_the_importerAI : public npc_escortAI
             case 44:
                 DoScriptText(SAY_WILLIX_7, m_creature);
                 // Summon 2 boars at the end
-                m_creature->SummonCreature(NPC_RAGING_AGAMAR, aBoarSpawn[2][0], aBoarSpawn[2][1], aBoarSpawn[2][2], 0, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 25000);
-                m_creature->SummonCreature(NPC_RAGING_AGAMAR, aBoarSpawn[3][0], aBoarSpawn[3][1], aBoarSpawn[3][2], 0, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 25000);
+                m_creature->SummonCreature(NPC_RAGING_AGAMAR, aBoarSpawn[2][0], aBoarSpawn[2][1], aBoarSpawn[2][2], 0, TEMPSUMMON_TIMED_OOC_DESPAWN, 25000);
+                m_creature->SummonCreature(NPC_RAGING_AGAMAR, aBoarSpawn[3][0], aBoarSpawn[3][1], aBoarSpawn[3][2], 0, TEMPSUMMON_TIMED_OOC_DESPAWN, 25000);
                 break;
             case 45:
                 DoScriptText(SAY_WILLIX_END, m_creature);
@@ -169,7 +169,7 @@ struct MANGOS_DLL_DECL npc_snufflenose_gopherAI : public ScriptedPetAI
 
     ObjectGuid m_targetTubberGuid;
 
-    void Reset() override
+    void Reset()
     {
         m_bIsMovementActive  = false;
     }
@@ -209,7 +209,7 @@ struct MANGOS_DLL_DECL npc_snufflenose_gopherAI : public ScriptedPetAI
             {
                 pNearestTubber = *itr;
                 break;
-             }
+            }
         }
 
         if (!pNearestTubber)

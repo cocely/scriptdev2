@@ -142,7 +142,7 @@ struct MANGOS_DLL_DECL mob_black_holeAI : public ScriptedAI
         m_creature->SetRespawnDelay(DAY);
     }
 
-    void UpdateAI(const uint32 uiDiff)
+    void UpdateAI(const uint32 uiDiff) override
     {
         if (m_pInstance && m_pInstance->GetData(TYPE_ALGALON) != IN_PROGRESS) 
             m_creature->ForcedDespawn();
@@ -153,7 +153,7 @@ struct MANGOS_DLL_DECL mob_black_holeAI : public ScriptedAI
         // summon unleashed dark matter in phase 2
         if (m_uiSummonTimer < uiDiff && m_bIsPhase2)
         {
-        if(Creature* pTemp = m_creature->SummonCreature(NPC_UNLEASHED_DARK_MATTER, 0, 0, 0, 0, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 30000))
+        if(Creature* pTemp = m_creature->SummonCreature(NPC_UNLEASHED_DARK_MATTER, 0, 0, 0, 0, TEMPSUMMON_TIMED_OOC_DESPAWN, 30000))
             pTemp->SetInCombatWithZone();
             m_uiSummonTimer = urand(10000, 15000);
         }
@@ -264,7 +264,7 @@ struct MANGOS_DLL_DECL boss_algalonAI : public ScriptedAI
         }
     }
 
-    void JustReachedHome()
+    void JustReachedHome() override
     {
         if (m_pInstance)
             m_pInstance->SetData(TYPE_ALGALON, NOT_STARTED);
@@ -287,7 +287,7 @@ struct MANGOS_DLL_DECL boss_algalonAI : public ScriptedAI
         m_creature->ForcedDespawn();
     }
 
-    void AttackStart(Unit* pWho)
+    void AttackStart(Unit* pWho) override
     {
         if(!m_bIsInProgress)
             return;
@@ -302,7 +302,7 @@ struct MANGOS_DLL_DECL boss_algalonAI : public ScriptedAI
         }
     }
 
-    void MoveInLineOfSight(Unit* pWho)
+    void MoveInLineOfSight(Unit* pWho) override
     {
         if (!pWho)
             return;
@@ -321,7 +321,7 @@ struct MANGOS_DLL_DECL boss_algalonAI : public ScriptedAI
         m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
     }
 
-    void DamageTaken(Unit *done_by, uint32 &uiDamage)
+    void DamageTaken(Unit* pDoneBy, uint32& uiDamage) override
     {
         if(m_creature->GetHealthPercent() < 1.0f)
         {
@@ -335,7 +335,7 @@ struct MANGOS_DLL_DECL boss_algalonAI : public ScriptedAI
         float angle = (float) rand()*360/RAND_MAX + 1;
         float homeX = 1630.475f + urand(15, 30)*cos(angle*(M_PI/180));
         float homeY = -286.989f + urand(15, 30)*sin(angle*(M_PI/180));
-        if(Creature* pTemp = m_creature->SummonCreature(m_uiCreatureEntry, homeX, homeY, 417.32f, 0.0f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 30000))
+        if(Creature* pTemp = m_creature->SummonCreature(m_uiCreatureEntry, homeX, homeY, 417.32f, 0.0f, TEMPSUMMON_TIMED_OOC_DESPAWN, 30000))
         {
             pTemp->SetInCombatWithZone();
             if(pTemp->GetEntry() == NPC_DARK_MATTER)
@@ -368,7 +368,7 @@ struct MANGOS_DLL_DECL boss_algalonAI : public ScriptedAI
             m_pInstance->SetData(TYPE_ALGALON, IN_PROGRESS);
     }
 
-    void UpdateAI(const uint32 uiDiff)
+    void UpdateAI(const uint32 uiDiff) override
     {
         // despawn timer
         if(m_uiDespawnTimer < uiDiff && !m_bIsDespawned && m_bIsInProgress)
@@ -686,7 +686,7 @@ struct MANGOS_DLL_DECL mob_collapsing_starAI : public ScriptedAI
         m_creature->SetRespawnDelay(DAY);
     }
 
-    void DamageTaken(Unit* pDoneBy, uint32 &uiDamage)
+    void DamageTaken(Unit* pDoneBy, uint32& uiDamage) override
     {
         if(uiDamage > m_creature->GetHealth())
         {
@@ -698,7 +698,7 @@ struct MANGOS_DLL_DECL mob_collapsing_starAI : public ScriptedAI
         }
     }
 
-    void UpdateAI(const uint32 uiDiff)
+    void UpdateAI(const uint32 uiDiff) override
     {
         if (m_pInstance && m_pInstance->GetData(TYPE_ALGALON) != IN_PROGRESS) 
             m_creature->ForcedDespawn();
@@ -750,7 +750,7 @@ struct MANGOS_DLL_DECL mob_living_constellationAI : public ScriptedAI
         m_creature->SetRespawnDelay(DAY);
     }
 
-    void UpdateAI(const uint32 uiDiff)
+    void UpdateAI(const uint32 uiDiff) override
     {
         if (m_pInstance && m_pInstance->GetData(TYPE_ALGALON) != IN_PROGRESS) 
             m_creature->ForcedDespawn();
@@ -791,7 +791,7 @@ struct MANGOS_DLL_DECL mob_cosmic_smash_targetAI : public ScriptedAI
         m_creature->SetRespawnDelay(DAY);
     }
 
-    void UpdateAI(const uint32 uiDiff)
+    void UpdateAI(const uint32 uiDiff) override
     {
         if (m_pInstance && m_pInstance->GetData(TYPE_ALGALON) != IN_PROGRESS) 
             m_creature->ForcedDespawn();

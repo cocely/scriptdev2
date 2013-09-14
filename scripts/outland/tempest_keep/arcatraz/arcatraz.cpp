@@ -90,6 +90,7 @@ struct MANGOS_DLL_DECL npc_millhouse_manastormAI : public ScriptedAI, private Di
         m_pInstance = (ScriptedInstance*)pCreature->GetInstanceData();
         InitializeDialogueHelper(m_pInstance);
         Reset();
+        m_attackDistance = 25.0f;
     }
 
     ScriptedInstance* m_pInstance;
@@ -102,7 +103,7 @@ struct MANGOS_DLL_DECL npc_millhouse_manastormAI : public ScriptedAI, private Di
     uint32 m_uiConeColtTimer;
     uint32 m_uiArcaneMissileTimer;
 
-    void Reset()
+    void Reset() override
     {
         m_bHasLowHp             = false;
         m_uiPyroblastTimer      = urand(6000, 9000);
@@ -115,23 +116,23 @@ struct MANGOS_DLL_DECL npc_millhouse_manastormAI : public ScriptedAI, private Di
         StartNextDialogueText(NPC_MILLHOUSE);
     }
 
-    void AttackStart(Unit* pWho)
+    void AttackStart(Unit* pWho) override
     {
         if (m_creature->Attack(pWho, true))
         {
             m_creature->AddThreat(pWho);
             m_creature->SetInCombatWith(pWho);
             pWho->SetInCombatWith(m_creature);
-            DoStartMovement(pWho, 25.0f);
+            HandleMovementOnAttackStart(pWho);
         }
     }
 
-    void KilledUnit(Unit* pVictim)
+    void KilledUnit(Unit* /*pVictim*/) override
     {
         DoScriptText(urand(0, 1) ? SAY_KILL_1 : SAY_KILL_2, m_creature);
     }
 
-    void JustDied(Unit* pVictim)
+    void JustDied(Unit* /*pVictim*/) override
     {
         DoScriptText(SAY_DEATH, m_creature);
 
@@ -140,7 +141,7 @@ struct MANGOS_DLL_DECL npc_millhouse_manastormAI : public ScriptedAI, private Di
             ->FailQuest();*/
     }
 
-    void EnterEvadeMode()
+    void EnterEvadeMode() override
     {
         m_creature->RemoveAllAuras();
         m_creature->DeleteThreatList();
@@ -156,7 +157,7 @@ struct MANGOS_DLL_DECL npc_millhouse_manastormAI : public ScriptedAI, private Di
         Reset();
     }
 
-    void JustDidDialogueStep(int32 iEntry)
+    void JustDidDialogueStep(int32 iEntry) override
     {
         switch (iEntry)
         {
@@ -183,7 +184,7 @@ struct MANGOS_DLL_DECL npc_millhouse_manastormAI : public ScriptedAI, private Di
         }
     }
 
-    void UpdateAI(const uint32 uiDiff)
+    void UpdateAI(const uint32 uiDiff) override
     {
         DialogueUpdate(uiDiff);
 
@@ -279,15 +280,15 @@ struct MANGOS_DLL_DECL npc_warden_mellicharAI : public ScriptedAI
     uint32 m_uiIntroTimer;
     ObjectGuid m_targetPlayerGuid;
 
-    void Reset()
+    void Reset() override
     {
         m_uiIntroTimer = 5000;
         m_creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
     }
 
-    void AttackStart(Unit* pWho) {}
+    void AttackStart(Unit* /*pWho*/) override {}
 
-    void Aggro(Unit* pWho)
+    void Aggro(Unit* pWho) override
     {
         m_creature->InterruptNonMeleeSpells(false);
         m_creature->SetFacingToObject(pWho);
@@ -302,7 +303,7 @@ struct MANGOS_DLL_DECL npc_warden_mellicharAI : public ScriptedAI
             m_pInstance->SetData(TYPE_HARBINGERSKYRISS, IN_PROGRESS);
     }
 
-    void JustSummoned(Creature* pSummoned)
+    void JustSummoned(Creature* pSummoned) override
     {
         pSummoned->CastSpell(pSummoned, SPELL_SIMPLE_TELEPORT, false);
 
@@ -313,7 +314,7 @@ struct MANGOS_DLL_DECL npc_warden_mellicharAI : public ScriptedAI
         }
     }
 
-    void JustDied(Unit* pKiller)
+    void JustDied(Unit* /*pKiller*/) override
     {
         if (m_pInstance)
         {
@@ -325,7 +326,7 @@ struct MANGOS_DLL_DECL npc_warden_mellicharAI : public ScriptedAI
         }
     }
 
-    void UpdateAI(const uint32 uiDiff)
+    void UpdateAI(const uint32 uiDiff) override
     {
         // Set the visual intro on OOC timer
         if (m_uiIntroTimer)

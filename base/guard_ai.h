@@ -13,6 +13,8 @@ enum
     SAY_GUARD_SIL_AGGRO1            = -1000198,
     SAY_GUARD_SIL_AGGRO2            = -1000199,
     SAY_GUARD_SIL_AGGRO3            = -1000200,
+
+    NPC_CENARION_INFANTRY           = 15184
 };
 
 enum eShattrathGuard
@@ -26,7 +28,6 @@ enum eShattrathGuard
 enum SummonUnderAttackGuards
 {
 ///-> values match faction values used by YTDB
-    NPC_CENARION_INFANTRY           = 15184,        ///-> need to be added not using in intial developing  syill needs to be defined
     NPC_BLUFF_WATCHERS              = 3084,        ///-> Faction 105
     NPC_ORGRIMMAR_GRUNT             = 3296,        ///-> Faction 85
     NPC_DARNASSUS_SENTINEL          = 4262,        ///-> Faction 79
@@ -57,15 +58,15 @@ struct MANGOS_DLL_DECL guardAI : public ScriptedAI
         uint32 m_uiZoneAttackMsgTimer;                      ///-> This keeps track of zone under attack message
         uint32 m_uiHelp;                                    ///-> help timer that aggroed guards
 
-        void Reset();
+        void Reset() override;
 
-        void Aggro(Unit* pWho);
+        void Aggro(Unit* pWho) override;
 
-        void JustDied(Unit* pKiller);
+        void JustDied(Unit* /*pKiller*/) override;
 
         void SummonGuardsHelpers();
 
-        void UpdateAI(const uint32 uiDiff);
+        void UpdateAI(const uint32 uiDiff) override;
 
         // Commonly used for guards in main cities
         void DoReplyToTextEmote(uint32 uiTextEmote);
@@ -75,21 +76,21 @@ struct MANGOS_DLL_DECL guardAI_thunderbluff : public guardAI
 {
     guardAI_thunderbluff(Creature* pCreature) : guardAI(pCreature) {}
 
-    void ReceiveEmote(Player* pPlayer, uint32 uiTextEmote);
+    void ReceiveEmote(Player* pPlayer, uint32 uiTextEmote) override;
 };
 
 struct MANGOS_DLL_DECL guardAI_orgrimmar : public guardAI
 {
     guardAI_orgrimmar(Creature* pCreature) : guardAI(pCreature) {}
 
-    void ReceiveEmote(Player* pPlayer, uint32 uiTextEmote);
+    void ReceiveEmote(Player* pPlayer, uint32 uiTextEmote) override;
 };
 
 struct MANGOS_DLL_DECL guardAI_stormwind : public guardAI
 {
     guardAI_stormwind(Creature* pCreature) : guardAI(pCreature) {}
 
-    void ReceiveEmote(Player* pPlayer, uint32 uiTextEmote);
+    void ReceiveEmote(Player* pPlayer, uint32 uiTextEmote) override;
 };
 
 #endif

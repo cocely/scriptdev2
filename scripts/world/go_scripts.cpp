@@ -45,7 +45,7 @@ enum
     SPELL_LEARN_FELCLOTH_BAG  = 26095
 };
 
-bool GOUse_go_barov_journal(Player* pPlayer, GameObject* pGo)
+bool GOUse_go_barov_journal(Player* pPlayer, GameObject* /*pGo*/)
 {
     if (pPlayer->HasSkill(SKILL_TAILORING) && pPlayer->GetBaseSkillValue(SKILL_TAILORING) >= 280 && !pPlayer->HasSpell(SPELL_TAILOR_FELCLOTH_BAG))
     {
@@ -87,7 +87,7 @@ bool GOUse_go_ethereum_prison(Player* pPlayer, GameObject* pGo)
 
     if (Creature* pCreature = pPlayer->SummonCreature(uiNpcPrisonEntry[uiRandom],
                               pGo->GetPositionX(), pGo->GetPositionY(), pGo->GetPositionZ(), pGo->GetAngle(pPlayer),
-                              TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 30000))
+                              TEMPSUMMON_TIMED_OOC_DESPAWN, 30000))
     {
         if (!pCreature->IsHostileTo(pPlayer))
         {
@@ -131,7 +131,7 @@ bool GOUse_go_ethereum_stasis(Player* pPlayer, GameObject* pGo)
 
     pPlayer->SummonCreature(uiNpcStasisEntry[uiRandom],
                             pGo->GetPositionX(), pGo->GetPositionY(), pGo->GetPositionZ(), pGo->GetAngle(pPlayer),
-                            TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 30000);
+                            TEMPSUMMON_TIMED_OOC_DESPAWN, 30000);
 
     return false;
 }
@@ -194,7 +194,7 @@ enum
     QUEST_TELE_CRYSTAL_FLAG  = 12845
 };
 
-bool GOUse_go_tele_to_dalaran_crystal(Player* pPlayer, GameObject* pGo)
+bool GOUse_go_tele_to_dalaran_crystal(Player* pPlayer, GameObject* /*pGo*/)
 {
     if (pPlayer->GetQuestRewardStatus(QUEST_TELE_CRYSTAL_FLAG))
         return false;
@@ -207,7 +207,7 @@ bool GOUse_go_tele_to_dalaran_crystal(Player* pPlayer, GameObject* pGo)
 ## go_tele_to_violet_stand
 ######*/
 
-bool GOUse_go_tele_to_violet_stand(Player* pPlayer, GameObject* pGo)
+bool GOUse_go_tele_to_violet_stand(Player* pPlayer, GameObject* /*pGo*/)
 {
     if (pPlayer->GetQuestRewardStatus(QUEST_LEARN_LEAVE_RETURN) || pPlayer->GetQuestStatus(QUEST_LEARN_LEAVE_RETURN) == QUEST_STATUS_INCOMPLETE)
         return false;

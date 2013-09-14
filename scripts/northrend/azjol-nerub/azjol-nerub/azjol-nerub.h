@@ -39,23 +39,23 @@ enum
 static const uint32 aWatchers[] = {NPC_GASHRA, NPC_NARJIL, NPC_SILTHIK};
 
 // Used to sort the summont triggers
-static const int aSortDistance[4] = {-90, 10, 20, 30};
+static const int aSortDistance[4] = { -90, 10, 20, 30};
 
 class MANGOS_DLL_DECL instance_azjol_nerub : public ScriptedInstance
 {
     public:
         instance_azjol_nerub(Map* pMap);
 
-        void Initialize();
+        void Initialize() override;
 
-        void OnObjectCreate(GameObject* pGo);
-        void OnCreatureCreate(Creature* pCreature);
+        void OnObjectCreate(GameObject* pGo) override;
+        void OnCreatureCreate(Creature* pCreature) override;
 
-        void OnCreatureEnterCombat(Creature* pCreature);
-        void OnCreatureEvade(Creature* pCreature);
-        void OnCreatureDeath(Creature* pCreature);
+        void OnCreatureEnterCombat(Creature* pCreature) override;
+        void OnCreatureEvade(Creature* pCreature) override;
+        void OnCreatureDeath(Creature* pCreature) override;
 
-        void SetData(uint32 uiType, uint32 uiData);
+        void SetData(uint32 uiType, uint32 uiData) override;
 
         bool CheckAchievementCriteriaMeet(uint32 uiCriteriaId, Player const* pSource, Unit const* pTarget, uint32 uiMiscValue1 /* = 0*/) const override;
 
@@ -64,10 +64,10 @@ class MANGOS_DLL_DECL instance_azjol_nerub : public ScriptedInstance
         ObjectGuid GetDarterTrigger() { return m_darterSummonTarget; }
         ObjectGuid GetAnubTrigger() { return m_anubSummonTarget; }
 
-        const char* Save() const { return m_strInstData.c_str(); }
-        void Load(const char* chrIn);
+        const char* Save() const override { return m_strInstData.c_str(); }
+        void Load(const char* chrIn) override;
 
-        void Update(uint32 uiDiff);
+        void Update(uint32 uiDiff) override;
 
     private:
         void DoSendWatcherOrKrikthir();
@@ -77,6 +77,8 @@ class MANGOS_DLL_DECL instance_azjol_nerub : public ScriptedInstance
         std::string m_strInstData;
 
         ObjectGuid m_playerGuid;
+
+        // Anub triggers
         ObjectGuid m_darterSummonTarget;
         ObjectGuid m_guardianSummonTarget;
         ObjectGuid m_anubSummonTarget;

@@ -105,18 +105,18 @@ struct MANGOS_DLL_DECL boss_nightbaneAI : public npc_escortAI
         m_uiFireballBarrageTimer    = 10000;
     }
 
-    void Aggro(Unit* pWho)
+    void Aggro(Unit* /*pWho*/) override
     {
         DoScriptText(SAY_AGGRO, m_creature);
     }
 
-    void JustDied(Unit* pKiller)
+    void JustDied(Unit* /*pKiller*/) override
     {
         if (m_pInstance)
             m_pInstance->SetData(TYPE_NIGHTBANE, DONE);
     }
 
-    void JustReachedHome()
+    void JustReachedHome() override
     {
         if (m_pInstance)
             m_pInstance->SetData(TYPE_NIGHTBANE, FAIL);
@@ -125,13 +125,13 @@ struct MANGOS_DLL_DECL boss_nightbaneAI : public npc_escortAI
         npc_escortAI::JustRespawned();
     }
 
-    void EnterEvadeMode()
+    void EnterEvadeMode() override
     {
         // Use standard AI evade, in order to reset position
         ScriptedAI::EnterEvadeMode();
     }
 
-    void WaypointReached(uint32 uiPointId)
+    void WaypointReached(uint32 uiPointId) override
     {
         // Set in combat after the intro is done
         if (uiPointId == 31)
@@ -139,13 +139,13 @@ struct MANGOS_DLL_DECL boss_nightbaneAI : public npc_escortAI
             SetEscortPaused(true);
             m_creature->SetLevitate(false);
             m_creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
-            m_creature->RemoveByteFlag(UNIT_FIELD_BYTES_1, 3, UNIT_BYTE1_FLAG_ALWAYS_STAND | UNIT_BYTE1_FLAG_UNK_2);
+            m_creature->RemoveByteFlag(UNIT_FIELD_BYTES_1, 3, UNIT_BYTE1_FLAG_ALWAYS_STAND | UNIT_BYTE1_FLAG_HOVER);
 
             m_creature->SetInCombatWithZone();
         }
     }
 
-    void MovementInform(uint32 uiMotionType, uint32 uiPointId)
+    void MovementInform(uint32 uiMotionType, uint32 uiPointId) override
     {
         if (uiMotionType != POINT_MOTION_TYPE)
             return;
@@ -161,7 +161,7 @@ struct MANGOS_DLL_DECL boss_nightbaneAI : public npc_escortAI
                     break;
                 case POINT_ID_GROUND:
                     m_creature->SetLevitate(false);
-                    m_creature->RemoveByteFlag(UNIT_FIELD_BYTES_1, 3, UNIT_BYTE1_FLAG_ALWAYS_STAND | UNIT_BYTE1_FLAG_UNK_2);
+                    m_creature->RemoveByteFlag(UNIT_FIELD_BYTES_1, 3, UNIT_BYTE1_FLAG_ALWAYS_STAND | UNIT_BYTE1_FLAG_HOVER);
 
                     m_uiPhase = PHASE_GROUND;
                     SetCombatMovement(true);
@@ -171,7 +171,7 @@ struct MANGOS_DLL_DECL boss_nightbaneAI : public npc_escortAI
         }
     }
 
-    void JustSummoned(Creature* pSummoned)
+    void JustSummoned(Creature* pSummoned) override
     {
         if (m_creature->getVictim())
             pSummoned->AI()->AttackStart(m_creature->getVictim());
@@ -208,7 +208,7 @@ struct MANGOS_DLL_DECL boss_nightbaneAI : public npc_escortAI
         }
     }
 
-    void UpdateEscortAI(const uint32 uiDiff)
+    void UpdateEscortAI(const uint32 uiDiff) override
     {
         if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
             return;
@@ -264,7 +264,7 @@ struct MANGOS_DLL_DECL boss_nightbaneAI : public npc_escortAI
                 {
                     // Start air phase movement (handled by creature_movement_template)
                     SetCombatMovement(false);
-                    m_creature->SetByteValue(UNIT_FIELD_BYTES_1, 3, UNIT_BYTE1_FLAG_ALWAYS_STAND | UNIT_BYTE1_FLAG_UNK_2);
+                    m_creature->SetByteValue(UNIT_FIELD_BYTES_1, 3, UNIT_BYTE1_FLAG_ALWAYS_STAND | UNIT_BYTE1_FLAG_HOVER);
                     m_creature->SetLevitate(true);
                     DoMoveToClosestTrigger(false);
 
@@ -354,7 +354,7 @@ CreatureAI* GetAI_boss_nightbane(Creature* pCreature)
     return new boss_nightbaneAI(pCreature);
 }
 
-bool ProcessEventId_event_spell_summon_nightbane(uint32 uiEventId, Object* pSource, Object* pTarget, bool bIsStart)
+bool ProcessEventId_event_spell_summon_nightbane(uint32 /*uiEventId*/, Object* pSource, Object* /*pTarget*/, bool bIsStart)
 {
     if (bIsStart && pSource->GetTypeId() == TYPEID_PLAYER)
     {
@@ -371,7 +371,7 @@ bool ProcessEventId_event_spell_summon_nightbane(uint32 uiEventId, Object* pSour
 
                 // Sort of a hack, it is unclear how this really work but the values appear to be valid (see Onyxia, too)
                 pNightbane->SetStandState(UNIT_STAND_STATE_STAND);
-                pNightbane->SetByteValue(UNIT_FIELD_BYTES_1, 3, UNIT_BYTE1_FLAG_ALWAYS_STAND | UNIT_BYTE1_FLAG_UNK_2);
+                pNightbane->SetByteValue(UNIT_FIELD_BYTES_1, 3, UNIT_BYTE1_FLAG_ALWAYS_STAND | UNIT_BYTE1_FLAG_HOVER);
                 pNightbane->SetLevitate(true);
 
                 // Switch to waypoint movement

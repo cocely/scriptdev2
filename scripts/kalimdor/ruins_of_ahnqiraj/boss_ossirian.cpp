@@ -57,8 +57,8 @@ enum
 
 static const float aSandVortexSpawnPos[2][4] =
 {
-    {-9523.482f, 1880.435f, 85.645f, 5.08f},
-    {-9321.39f,  1822.968f, 84.266f, 3.16f},
+    { -9523.482f, 1880.435f, 85.645f, 5.08f},
+    { -9321.39f,  1822.968f, 84.266f, 3.16f},
 };
 
 static const float aCrystalSpawnPos[3] = { -9355.75f, 1905.43f, 85.55f};
@@ -93,7 +93,7 @@ struct MANGOS_DLL_DECL boss_ossirianAI : public ScriptedAI
         m_uiSupremeTimer = 45000;
     }
 
-    void Aggro(Unit* pWho)
+    void Aggro(Unit* /*pWho*/) override
     {
         DoCastSpellIfCan(m_creature, SPELL_SUPREME, CAST_TRIGGERED);
         DoScriptText(SAY_AGGRO, m_creature);
@@ -103,12 +103,12 @@ struct MANGOS_DLL_DECL boss_ossirianAI : public ScriptedAI
             m_creature->SummonCreature(NPC_SAND_VORTEX, aSandVortexSpawnPos[i][0], aSandVortexSpawnPos[i][1], aSandVortexSpawnPos[i][2], aSandVortexSpawnPos[i][3], TEMPSUMMON_CORPSE_DESPAWN, 0);
     }
 
-    void JustDied(Unit* pKiller)
+    void JustDied(Unit* /*pKiller*/) override
     {
         DoScriptText(SAY_DEATH, m_creature);
     }
 
-    void KilledUnit(Unit* pVictim)
+    void KilledUnit(Unit* /*pVictim*/) override
     {
         DoScriptText(SAY_SLAY, m_creature);
     }
@@ -145,7 +145,7 @@ struct MANGOS_DLL_DECL boss_ossirianAI : public ScriptedAI
         ++m_uiCrystalPosition %= MAX_CRYSTAL_POSITIONS;
     }
 
-    void JustSummoned(Creature* pSummoned)
+    void JustSummoned(Creature* pSummoned) override
     {
         if (pSummoned->GetEntry() == NPC_OSSIRIAN_TRIGGER)
             pSummoned->CastSpell(pSummoned, SPELL_SUMMON_CRYSTAL, true);
@@ -157,7 +157,7 @@ struct MANGOS_DLL_DECL boss_ossirianAI : public ScriptedAI
         }
     }
 
-    void SpellHit(Unit* pCaster, const SpellEntry* pSpell)
+    void SpellHit(Unit* pCaster, const SpellEntry* pSpell) override
     {
         if (pCaster->GetTypeId() == TYPEID_UNIT && pCaster->GetEntry() == NPC_OSSIRIAN_TRIGGER)
         {
@@ -182,7 +182,7 @@ struct MANGOS_DLL_DECL boss_ossirianAI : public ScriptedAI
         }
     }
 
-    void MoveInLineOfSight(Unit* pWho)
+    void MoveInLineOfSight(Unit* pWho) override
     {
         // TODO: Range guesswork
         if (!m_bSaidIntro && pWho->GetTypeId() == TYPEID_PLAYER && m_creature->IsWithinDistInMap(pWho, 75.0f, false))
@@ -197,7 +197,7 @@ struct MANGOS_DLL_DECL boss_ossirianAI : public ScriptedAI
         }
     }
 
-    void UpdateAI(const uint32 uiDiff)
+    void UpdateAI(const uint32 uiDiff) override
     {
         if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
             return;
@@ -258,7 +258,7 @@ CreatureAI* GetAI_boss_ossirian(Creature* pCreature)
 }
 
 // This is actually a hack for a server-side spell
-bool GOUse_go_ossirian_crystal(Player* pPlayer, GameObject* pGo)
+bool GOUse_go_ossirian_crystal(Player* /*pPlayer*/, GameObject* pGo)
 {
     if (Creature* pOssirianTrigger = GetClosestCreatureWithEntry(pGo, NPC_OSSIRIAN_TRIGGER, 10.0f))
         pOssirianTrigger->CastSpell(pOssirianTrigger, aWeaknessSpell[urand(0, 4)], false);

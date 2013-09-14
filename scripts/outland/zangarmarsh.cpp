@@ -50,7 +50,7 @@ struct MANGOS_DLL_DECL npc_cooshcooshAI : public ScriptedAI
     uint32 m_uiNormFaction;
     uint32 m_uiLightningBolt_Timer;
 
-    void Reset()
+    void Reset() override
     {
         m_uiLightningBolt_Timer = 2000;
 
@@ -58,7 +58,7 @@ struct MANGOS_DLL_DECL npc_cooshcooshAI : public ScriptedAI
             m_creature->setFaction(m_uiNormFaction);
     }
 
-    void UpdateAI(const uint32 uiDiff)
+    void UpdateAI(const uint32 uiDiff) override
     {
         if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
             return;
@@ -99,7 +99,7 @@ struct MANGOS_DLL_DECL npc_kayra_longmaneAI : public npc_escortAI
 {
     npc_kayra_longmaneAI(Creature* pCreature) : npc_escortAI(pCreature) { Reset(); }
 
-    void WaypointReached(uint32 i)
+    void WaypointReached(uint32 i) override
     {
         Player* pPlayer = GetPlayerForEscort();
 
@@ -110,8 +110,8 @@ struct MANGOS_DLL_DECL npc_kayra_longmaneAI : public npc_escortAI
         {
             case 4:
                 DoScriptText(SAY_AMBUSH1, m_creature, pPlayer);
-                DoSpawnCreature(NPC_SLAVEBINDER, -10.0f, -5.0f, 0.0f, 0.0f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 30000);
-                DoSpawnCreature(NPC_SLAVEBINDER, -8.0f, 5.0f, 0.0f, 0.0f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 30000);
+                DoSpawnCreature(NPC_SLAVEBINDER, -10.0f, -5.0f, 0.0f, 0.0f, TEMPSUMMON_TIMED_OOC_DESPAWN, 30000);
+                DoSpawnCreature(NPC_SLAVEBINDER, -8.0f, 5.0f, 0.0f, 0.0f, TEMPSUMMON_TIMED_OOC_DESPAWN, 30000);
                 break;
             case 5:
                 DoScriptText(SAY_PROGRESS, m_creature, pPlayer);
@@ -119,8 +119,8 @@ struct MANGOS_DLL_DECL npc_kayra_longmaneAI : public npc_escortAI
                 break;
             case 16:
                 DoScriptText(SAY_AMBUSH2, m_creature, pPlayer);
-                DoSpawnCreature(NPC_SLAVEBINDER, -10.0f, -5.0f, 0.0f, 0.0f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 30000);
-                DoSpawnCreature(NPC_SLAVEBINDER, -8.0f, 5.0f, 0.0f, 0.0f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 30000);
+                DoSpawnCreature(NPC_SLAVEBINDER, -10.0f, -5.0f, 0.0f, 0.0f, TEMPSUMMON_TIMED_OOC_DESPAWN, 30000);
+                DoSpawnCreature(NPC_SLAVEBINDER, -8.0f, 5.0f, 0.0f, 0.0f, TEMPSUMMON_TIMED_OOC_DESPAWN, 30000);
                 break;
             case 17:
                 DoScriptText(SAY_END, m_creature, pPlayer);
@@ -131,7 +131,7 @@ struct MANGOS_DLL_DECL npc_kayra_longmaneAI : public npc_escortAI
         }
     }
 
-    void Reset() { }
+    void Reset() override { }
 };
 
 bool QuestAccept_npc_kayra_longmane(Player* pPlayer, Creature* pCreature, const Quest* pQuest)
@@ -161,7 +161,7 @@ enum
     EVENT_ID_STORMCROW      = 11225,
 };
 
-bool ProcessEventId_event_taxi_stormcrow(uint32 uiEventId, Object* pSource, Object* pTarget, bool bIsStart)
+bool ProcessEventId_event_taxi_stormcrow(uint32 uiEventId, Object* pSource, Object* /*pTarget*/, bool bIsStart)
 {
     if (uiEventId == EVENT_ID_STORMCROW && !bIsStart && pSource->GetTypeId() == TYPEID_PLAYER)
     {

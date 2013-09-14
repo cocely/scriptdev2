@@ -62,7 +62,7 @@ struct MANGOS_DLL_DECL boss_kriAI : public ScriptedAI
         m_uiToxicVolleyTimer = urand(6000, 12000);
     }
 
-    void JustDied(Unit* pKiller)
+    void JustDied(Unit* /*pKiller*/) override
     {
         // poison cloud on death
         DoCastSpellIfCan(m_creature, SPELL_SUMMON_CLOUD, CAST_TRIGGERED);
@@ -78,13 +78,13 @@ struct MANGOS_DLL_DECL boss_kriAI : public ScriptedAI
         }
     }
 
-    void JustReachedHome()
+    void JustReachedHome() override
     {
         if (m_pInstance)
             m_pInstance->SetData(TYPE_BUG_TRIO, FAIL);
     }
 
-    void UpdateAI(const uint32 uiDiff)
+    void UpdateAI(const uint32 uiDiff) override
     {
         // Return since we have no target
         if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
@@ -131,7 +131,7 @@ struct MANGOS_DLL_DECL boss_vemAI : public ScriptedAI
         m_uiKnockBackTimer  = urand(8000, 20000);
     }
 
-    void JustDied(Unit* pKiller)
+    void JustDied(Unit* /*pKiller*/) override
     {
         // Enrage the other bugs
         DoCastSpellIfCan(m_creature, SPELL_VENGEANCE, CAST_TRIGGERED);
@@ -147,13 +147,13 @@ struct MANGOS_DLL_DECL boss_vemAI : public ScriptedAI
         }
     }
 
-    void JustReachedHome()
+    void JustReachedHome() override
     {
         if (m_pInstance)
             m_pInstance->SetData(TYPE_BUG_TRIO, FAIL);
     }
 
-    void UpdateAI(const uint32 uiDiff)
+    void UpdateAI(const uint32 uiDiff) override
     {
         // Return since we have no target
         if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
@@ -208,14 +208,14 @@ struct MANGOS_DLL_DECL boss_yaujAI : public ScriptedAI
         m_uiFearTimer = urand(12000, 24000);
     }
 
-    void JustDied(Unit* Killer)
+    void JustDied(Unit* /*Killer*/) override
     {
         // Spawn 10 yauj brood on death
         float fX, fY, fZ;
         for (int i = 0; i < 10; ++i)
         {
             m_creature->GetRandomPoint(m_creature->GetPositionX(), m_creature->GetPositionY(), m_creature->GetPositionZ(), 10.0f, fX, fY, fZ);
-            m_creature->SummonCreature(NPC_YAUJ_BROOD, fX, fY, fZ, 0.0f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 30000);
+            m_creature->SummonCreature(NPC_YAUJ_BROOD, fX, fY, fZ, 0.0f, TEMPSUMMON_TIMED_OOC_DESPAWN, 30000);
         }
 
         if (!m_pInstance)
@@ -229,13 +229,13 @@ struct MANGOS_DLL_DECL boss_yaujAI : public ScriptedAI
         }
     }
 
-    void JustReachedHome()
+    void JustReachedHome() override
     {
         if (m_pInstance)
             m_pInstance->SetData(TYPE_BUG_TRIO, FAIL);
     }
 
-    void UpdateAI(const uint32 uiDiff)
+    void UpdateAI(const uint32 uiDiff) override
     {
         // Return since we have no target
         if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())

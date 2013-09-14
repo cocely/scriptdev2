@@ -80,7 +80,7 @@ struct MANGOS_DLL_DECL boss_hakkarAI : public ScriptedAI
         m_uiAspectOfArlokkTimer    = 18000;
     }
 
-    void Aggro(Unit* who)
+    void Aggro(Unit* /*who*/) override
     {
         DoScriptText(SAY_AGGRO, m_creature);
 
@@ -100,7 +100,7 @@ struct MANGOS_DLL_DECL boss_hakkarAI : public ScriptedAI
         }
     }
 
-    void UpdateAI(const uint32 uiDiff)
+    void UpdateAI(const uint32 uiDiff) override
     {
         if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
             return;

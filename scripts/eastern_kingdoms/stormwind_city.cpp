@@ -51,9 +51,9 @@ struct MANGOS_DLL_DECL npc_bartlebyAI : public ScriptedAI
         Reset();
     }
 
-    void Reset() override {}
+    void Reset() {}
 
-    void AttackedBy(Unit* pAttacker)
+    void AttackedBy(Unit* pAttacker) override
     {
         if (m_creature->getVictim())
             return;
@@ -64,7 +64,7 @@ struct MANGOS_DLL_DECL npc_bartlebyAI : public ScriptedAI
         AttackStart(pAttacker);
     }
 
-    void DamageTaken(Unit* pDoneBy, uint32& uiDamage)
+    void DamageTaken(Unit* pDoneBy, uint32& uiDamage) override
     {
         if (uiDamage > m_creature->GetHealth() || ((m_creature->GetHealth() - uiDamage) * 100 / m_creature->GetMaxHealth() < 15))
         {
@@ -110,9 +110,9 @@ struct MANGOS_DLL_DECL npc_dashel_stonefistAI : public ScriptedAI
         Reset();
     }
 
-    void Reset() override {}
+    void Reset() {}
 
-    void AttackedBy(Unit* pAttacker)
+    void AttackedBy(Unit* pAttacker) override
     {
         if (m_creature->getVictim())
             return;
@@ -123,7 +123,7 @@ struct MANGOS_DLL_DECL npc_dashel_stonefistAI : public ScriptedAI
         AttackStart(pAttacker);
     }
 
-    void DamageTaken(Unit* pDoneBy, uint32& uiDamage)
+    void DamageTaken(Unit* pDoneBy, uint32& uiDamage) override
     {
         if (uiDamage > m_creature->GetHealth() || ((m_creature->GetHealth() - uiDamage) * 100 / m_creature->GetMaxHealth() < 15))
         {
@@ -174,7 +174,7 @@ bool GossipHello_npc_lady_katrana_prestor(Player* pPlayer, Creature* pCreature)
     return true;
 }
 
-bool GossipSelect_npc_lady_katrana_prestor(Player* pPlayer, Creature* pCreature, uint32 uiSender, uint32 uiAction)
+bool GossipSelect_npc_lady_katrana_prestor(Player* pPlayer, Creature* pCreature, uint32 /*uiSender*/, uint32 uiAction)
 {
     switch (uiAction)
     {
@@ -222,7 +222,7 @@ struct MANGOS_DLL_DECL boss_king_varian_wrynnAI : public ScriptedAI
         m_uiWhirlwind       = 15000;
     }
 
-    void UpdateAI(const uint32 uiDiff)
+    void UpdateAI(const uint32 uiDiff) override
     {
         //Return since we have no target
         if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
@@ -306,7 +306,7 @@ struct MANGOS_DLL_DECL npc_squire_roweAI : public npc_escortAI, private Dialogue
 
     void Reset() { }
 
-    void JustSummoned(Creature* pSummoned)
+    void JustSummoned(Creature* pSummoned) override
     {
         if (pSummoned->GetEntry() == NPC_WINDSOR)
         {
@@ -320,7 +320,7 @@ struct MANGOS_DLL_DECL npc_squire_roweAI : public npc_escortAI, private Dialogue
             m_horseGuid = pSummoned->GetObjectGuid();
     }
 
-    void SummonedCreatureDespawn(Creature* pSummoned)
+    void SummonedCreatureDespawn(Creature* pSummoned) override
     {
         if (pSummoned->GetEntry() == NPC_WINDSOR)
         {
@@ -329,7 +329,7 @@ struct MANGOS_DLL_DECL npc_squire_roweAI : public npc_escortAI, private Dialogue
         }
     }
 
-    void SummonedMovementInform(Creature* pSummoned, uint32 uiMotionType, uint32 uiPointId)
+    void SummonedMovementInform(Creature* pSummoned, uint32 uiMotionType, uint32 uiPointId) override
     {
         if (uiMotionType != POINT_MOTION_TYPE || !uiPointId || pSummoned->GetEntry() != NPC_WINDSOR)
             return;
@@ -339,7 +339,7 @@ struct MANGOS_DLL_DECL npc_squire_roweAI : public npc_escortAI, private Dialogue
             StartNextDialogueText(NPC_WINDSOR);
     }
 
-    void WaypointReached(uint32 uiPointId)
+    void WaypointReached(uint32 uiPointId) override
     {
         switch (uiPointId)
         {
@@ -358,7 +358,7 @@ struct MANGOS_DLL_DECL npc_squire_roweAI : public npc_escortAI, private Dialogue
         }
     }
 
-    void JustDidDialogueStep(int32 iEntry)
+    void JustDidDialogueStep(int32 iEntry) override
     {
         switch (iEntry)
         {
@@ -406,7 +406,7 @@ struct MANGOS_DLL_DECL npc_squire_roweAI : public npc_escortAI, private Dialogue
         }
     }
 
-    Creature* GetSpeakerByEntry(uint32 uiEntry)
+    Creature* GetSpeakerByEntry(uint32 uiEntry) override
     {
         if (uiEntry == NPC_WINDSOR)
             return m_creature->GetMap()->GetCreature(m_windsorGuid);
@@ -452,7 +452,7 @@ bool GossipHello_npc_squire_rowe(Player* pPlayer, Creature* pCreature)
     return true;
 }
 
-bool GossipSelect_npc_squire_rowe(Player* pPlayer, Creature* pCreature, uint32 uiSender, uint32 uiAction)
+bool GossipSelect_npc_squire_rowe(Player* pPlayer, Creature* pCreature, uint32 /*uiSender*/, uint32 uiAction)
 {
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
     {
@@ -653,7 +653,7 @@ struct MANGOS_DLL_DECL npc_reginald_windsorAI : public npc_escortAI, private Dia
         m_bCanGuardSalute    = false;
     }
 
-    void MoveInLineOfSight(Unit* pWho)
+    void MoveInLineOfSight(Unit* pWho) override
     {
         // Note: this implementation is not the best; It should be better handled by the guard script
         if (m_bCanGuardSalute && (pWho->GetEntry() == NPC_GUARD_CITY || pWho->GetEntry() == NPC_GUARD_ROYAL ||
@@ -665,7 +665,7 @@ struct MANGOS_DLL_DECL npc_reginald_windsorAI : public npc_escortAI, private Dia
         }
     }
 
-    void WaypointReached(uint32 uiPointId)
+    void WaypointReached(uint32 uiPointId) override
     {
         switch (uiPointId)
         {
@@ -721,7 +721,7 @@ struct MANGOS_DLL_DECL npc_reginald_windsorAI : public npc_escortAI, private Dia
         }
     }
 
-    void SummonedMovementInform(Creature* pSummoned, uint32 uiMotionType, uint32 uiPointId)
+    void SummonedMovementInform(Creature* pSummoned, uint32 uiMotionType, uint32 uiPointId) override
     {
         if (uiMotionType != POINT_MOTION_TYPE || !uiPointId || pSummoned->GetEntry() != NPC_GUARD_ROYAL)
             return;
@@ -742,7 +742,7 @@ struct MANGOS_DLL_DECL npc_reginald_windsorAI : public npc_escortAI, private Dia
         }
     }
 
-    void JustDidDialogueStep(int32 iEntry)
+    void JustDidDialogueStep(int32 iEntry) override
     {
         if (!m_pScriptedMap)
             return;
@@ -986,7 +986,7 @@ struct MANGOS_DLL_DECL npc_reginald_windsorAI : public npc_escortAI, private Dia
 
     bool IsKeepEventReady() { return m_bIsKeepReady; }
 
-    void UpdateEscortAI(const uint32 uiDiff)
+    void UpdateEscortAI(const uint32 uiDiff) override
     {
         DialogueUpdate(uiDiff);
 
@@ -1058,7 +1058,7 @@ bool GossipHello_npc_reginald_windsor(Player* pPlayer, Creature* pCreature)
     return true;
 }
 
-bool GossipSelect_npc_reginald_windsor(Player* pPlayer, Creature* pCreature, uint32 uiSender, uint32 uiAction)
+bool GossipSelect_npc_reginald_windsor(Player* pPlayer, Creature* pCreature, uint32 /*uiSender*/, uint32 uiAction)
 {
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
     {

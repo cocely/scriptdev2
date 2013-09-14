@@ -47,13 +47,13 @@ struct MANGOS_DLL_DECL boss_noxxionAI : public ScriptedAI
         m_uiSummonTimer         = 19000;
     }
 
-    void JustSummoned(Creature* pSummoned)
+    void JustSummoned(Creature* pSummoned) override
     {
         if (Unit* pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0))
             pSummoned->AI()->AttackStart(pTarget);
     }
 
-    void UpdateAI(const uint32 diff)
+    void UpdateAI(const uint32 diff) override
     {
         if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
             return;

@@ -53,7 +53,7 @@ struct MANGOS_DLL_DECL npc_00x09hlAI : public npc_escortAI
 
     void Reset() { }
 
-    void WaypointReached(uint32 uiPointId)
+    void WaypointReached(uint32 uiPointId) override
     {
         switch (uiPointId)
         {
@@ -71,7 +71,7 @@ struct MANGOS_DLL_DECL npc_00x09hlAI : public npc_escortAI
         }
     }
 
-    void WaypointStart(uint32 uiPointId)
+    void WaypointStart(uint32 uiPointId) override
     {
         switch (uiPointId)
         {
@@ -96,7 +96,7 @@ struct MANGOS_DLL_DECL npc_00x09hlAI : public npc_escortAI
         }
     }
 
-    void Aggro(Unit* pWho)
+    void Aggro(Unit* pWho) override
     {
         if (pWho->GetEntry() == NPC_MARAUDING_OWL || pWho->GetEntry() == NPC_VILE_AMBUSHER)
             return;
@@ -104,7 +104,7 @@ struct MANGOS_DLL_DECL npc_00x09hlAI : public npc_escortAI
         DoScriptText(urand(0, 1) ? SAY_OOX_AGGRO1 : SAY_OOX_AGGRO2, m_creature);
     }
 
-    void JustSummoned(Creature* pSummoned)
+    void JustSummoned(Creature* pSummoned) override
     {
         pSummoned->GetMotionMaster()->MovePoint(0, m_creature->GetPositionX(), m_creature->GetPositionY(), m_creature->GetPositionZ());
     }
@@ -182,7 +182,7 @@ struct MANGOS_DLL_DECL npc_rinjiAI : public npc_escortAI
         m_uiPostEventTimer = 3000;
     }
 
-    void JustRespawned()
+    void JustRespawned() override
     {
         m_bIsByOutrunner = false;
         m_iSpawnId = 0;
@@ -190,7 +190,7 @@ struct MANGOS_DLL_DECL npc_rinjiAI : public npc_escortAI
         npc_escortAI::JustRespawned();
     }
 
-    void Aggro(Unit* pWho)
+    void Aggro(Unit* pWho) override
     {
         if (HasEscortState(STATE_ESCORT_ESCORTING))
         {
@@ -215,23 +215,23 @@ struct MANGOS_DLL_DECL npc_rinjiAI : public npc_escortAI
 
         m_creature->SummonCreature(NPC_RANGER,
                                    m_afAmbushSpawn[m_iSpawnId].x, m_afAmbushSpawn[m_iSpawnId].y, m_afAmbushSpawn[m_iSpawnId].z, 0.0f,
-                                   TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 60000);
+                                   TEMPSUMMON_TIMED_OOC_OR_CORPSE_DESPAWN, 60000);
 
         for (int i = 0; i < 2; ++i)
         {
             m_creature->SummonCreature(NPC_OUTRUNNER,
                                        m_afAmbushSpawn[m_iSpawnId].x, m_afAmbushSpawn[m_iSpawnId].y, m_afAmbushSpawn[m_iSpawnId].z, 0.0f,
-                                       TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 60000);
+                                       TEMPSUMMON_TIMED_OOC_OR_CORPSE_DESPAWN, 60000);
         }
     }
 
-    void JustSummoned(Creature* pSummoned)
+    void JustSummoned(Creature* pSummoned) override
     {
         m_creature->SetWalk(false);
         pSummoned->GetMotionMaster()->MovePoint(0, m_afAmbushMoveTo[m_iSpawnId].x, m_afAmbushMoveTo[m_iSpawnId].y, m_afAmbushMoveTo[m_iSpawnId].z);
     }
 
-    void WaypointReached(uint32 uiPointId)
+    void WaypointReached(uint32 uiPointId) override
     {
         Player* pPlayer = GetPlayerForEscort();
 
@@ -258,7 +258,7 @@ struct MANGOS_DLL_DECL npc_rinjiAI : public npc_escortAI
         }
     }
 
-    void UpdateEscortAI(const uint32 uiDiff)
+    void UpdateEscortAI(const uint32 uiDiff) override
     {
         // Check if we have a current target
         if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())

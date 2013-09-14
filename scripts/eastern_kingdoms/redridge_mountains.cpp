@@ -81,7 +81,7 @@ struct MANGOS_DLL_DECL npc_corporal_keeshan_escortAI : public npc_escortAI
         }
     }
 
-    void WaypointReached(uint32 uiWP)
+    void WaypointReached(uint32 uiWP) override
     {
         switch (uiWP)
         {
@@ -97,7 +97,7 @@ struct MANGOS_DLL_DECL npc_corporal_keeshan_escortAI : public npc_escortAI
         }
     }
 
-    void UpdateEscortAI(const uint32 uiDiff)
+    void UpdateEscortAI(const uint32 uiDiff) override
     {
         // Combat check
         if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())

@@ -72,25 +72,25 @@ struct MANGOS_DLL_DECL boss_fankrissAI : public ScriptedAI
         m_uiEntangleSummonTimer = 0;
     }
 
-    void Aggro(Unit* pWho)
+    void Aggro(Unit* /*pWho*/) override
     {
         if (m_pInstance)
             m_pInstance->SetData(TYPE_FANKRISS, IN_PROGRESS);
     }
 
-    void JustReachedHome()
+    void JustReachedHome() override
     {
         if (m_pInstance)
             m_pInstance->SetData(TYPE_FANKRISS, FAIL);
     }
 
-    void JustDied(Unit* pKiller)
+    void JustDied(Unit* /*pKiller*/) override
     {
         if (m_pInstance)
             m_pInstance->SetData(TYPE_FANKRISS, DONE);
     }
 
-    void JustSummoned(Creature* pSummoned)
+    void JustSummoned(Creature* pSummoned) override
     {
         if (pSummoned->GetEntry() == NPC_SPAWN_FANKRISS)
         {
@@ -104,7 +104,7 @@ struct MANGOS_DLL_DECL boss_fankrissAI : public ScriptedAI
         }
     }
 
-    void UpdateAI(const uint32 uiDiff)
+    void UpdateAI(const uint32 uiDiff) override
     {
         if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
             return;
@@ -154,7 +154,7 @@ struct MANGOS_DLL_DECL boss_fankrissAI : public ScriptedAI
                     for (uint8 i = 0; i < 4; ++i)
                     {
                         m_creature->GetRandomPoint(pTarget->GetPositionX(), pTarget->GetPositionY(), pTarget->GetPositionZ(), 3.0f, fX, fY, fZ);
-                        m_creature->SummonCreature(NPC_VEKNISS_HATCHLING, fX, fY, fZ, 0.0f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 10000);
+                        m_creature->SummonCreature(NPC_VEKNISS_HATCHLING, fX, fY, fZ, 0.0f, TEMPSUMMON_TIMED_OOC_DESPAWN, 10000);
                     }
                     m_uiEntangleSummonTimer = 0;
                 }

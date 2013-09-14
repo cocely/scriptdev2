@@ -56,7 +56,7 @@ enum
     SPELL_DARK_FLAME                        = 45345,
 
     // Sacrolash spells
-    SPELL_DARK_TOUCHED                      = 45347,        // TODO NYI  - Player debuff; removed by shadow damage
+    SPELL_DARK_TOUCHED                      = 45347,        // Player debuff; removed by shadow damage
     SPELL_SHADOW_BLADES                     = 45248,        // 10 secs
     SPELL_DARK_STRIKE                       = 45271,
     SPELL_SHADOW_NOVA                       = 45329,        // 30-35 secs
@@ -70,7 +70,7 @@ enum
 
     // Alythess spells
     SPELL_PYROGENICS                        = 45230,        // Self buff; 15secs
-    SPELL_FLAME_TOUCHED                     = 45348,        // TODO NYI  - Player debuff; removed by shadow damage
+    SPELL_FLAME_TOUCHED                     = 45348,        // Player debuff; removed by shadow damage
     SPELL_CONFLAGRATION                     = 45342,        // 30-35 secs
     SPELL_BLAZE                             = 45235,        // On main target every 3 secs; should trigger 45236 which leaves a fire on the ground
     SPELL_BLAZE_SUMMON                      = 45236,        //187366 GO  // firepatch
@@ -91,6 +91,10 @@ static const DialogueEntry aIntroDialogue[] =
     {SAY_INTRO_8, NPC_ALYTHESS,  0},
     {0, 0, 0},
 };
+
+/*######
+## boss_alythess
+######*/
 
 struct MANGOS_DLL_DECL boss_alythessAI : public ScriptedAI
 {
@@ -122,7 +126,7 @@ struct MANGOS_DLL_DECL boss_alythessAI : public ScriptedAI
         m_bDidIntro = false;
     }
 
-    void JustReachedHome()
+    void JustReachedHome() override
     {
         if (m_pInstance)
         {
@@ -138,7 +142,7 @@ struct MANGOS_DLL_DECL boss_alythessAI : public ScriptedAI
         }
     }
 
-    void Aggro(Unit* pWho)
+    void Aggro(Unit* /*pWho*/) override
     {
         if (m_pInstance)
         {
@@ -147,7 +151,7 @@ struct MANGOS_DLL_DECL boss_alythessAI : public ScriptedAI
         }
     }
 
-    void AttackStart(Unit* pWho)
+    void AttackStart(Unit* pWho) override
     {
         if (m_creature->Attack(pWho, false))
         {
@@ -160,12 +164,12 @@ struct MANGOS_DLL_DECL boss_alythessAI : public ScriptedAI
         }
     }
 
-    void KilledUnit(Unit* pVictim)
+    void KilledUnit(Unit* /*pVictim*/) override
     {
         DoScriptText(urand(0, 1) ? SAY_ALYTHESS_KILL_1 : SAY_ALYTHESS_KILL_2, m_creature);
     }
 
-    void JustDied(Unit* pKiller)
+    void JustDied(Unit* /*pKiller*/) override
     {
         if (m_pInstance)
         {
@@ -239,7 +243,7 @@ struct MANGOS_DLL_DECL boss_alythessAI : public ScriptedAI
         }
     }
 
-    void UpdateAI(const uint32 uiDiff)
+    void UpdateAI(const uint32 uiDiff) override
     {
         if (m_pInstance && m_pInstance->GetData(TYPE_EREDAR_TWINS) == SPECIAL)
         {
@@ -322,6 +326,10 @@ struct MANGOS_DLL_DECL boss_alythessAI : public ScriptedAI
     }
 };
 
+/*######
+## boss_sacrolash
+######*/
+
 struct MANGOS_DLL_DECL boss_sacrolashAI : public ScriptedAI
 {
     boss_sacrolashAI(Creature* pCreature) : ScriptedAI(pCreature)
@@ -349,7 +357,7 @@ struct MANGOS_DLL_DECL boss_sacrolashAI : public ScriptedAI
         m_uiSummonShadowImage    = 10000;
     }
 
-    void JustReachedHome()
+    void JustReachedHome() override
     {
         if (m_pInstance)
         {
@@ -365,7 +373,7 @@ struct MANGOS_DLL_DECL boss_sacrolashAI : public ScriptedAI
         }
     }
 
-    void Aggro(Unit* pWho)
+    void Aggro(Unit* /*pWho*/) override
     {
         if (m_pInstance)
         {
@@ -374,12 +382,12 @@ struct MANGOS_DLL_DECL boss_sacrolashAI : public ScriptedAI
         }
     }
 
-    void KilledUnit(Unit* pVictim)
+    void KilledUnit(Unit* /*pVictim*/) override
     {
         DoScriptText(urand(0, 1) ? SAY_SACROLASH_KILL_1 : SAY_SACROLASH_KILL_2, m_creature);
     }
 
-    void JustDied(Unit* pKiller)
+    void JustDied(Unit* /*pKiller*/) override
     {
         if (m_pInstance)
         {
@@ -423,7 +431,7 @@ struct MANGOS_DLL_DECL boss_sacrolashAI : public ScriptedAI
             return m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 1);
     }
 
-    void JustSummoned(Creature* pSummoned)
+    void JustSummoned(Creature* pSummoned) override
     {
         if (pSummoned->GetEntry() == NPC_SHADOW_IMAGE)
         {
@@ -489,7 +497,7 @@ struct MANGOS_DLL_DECL boss_sacrolashAI : public ScriptedAI
         }
     }
 
-    void UpdateAI(const uint32 uiDiff)
+    void UpdateAI(const uint32 uiDiff) override
     {
         if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
             return;
@@ -594,6 +602,10 @@ struct MANGOS_DLL_DECL boss_sacrolashAI : public ScriptedAI
     }
 };
 
+/*######
+## npc_shadow_image
+######*/
+
 struct MANGOS_DLL_DECL npc_shadow_imageAI : public ScriptedAI
 {
     npc_shadow_imageAI(Creature* pCreature) : ScriptedAI(pCreature)  { Reset(); }
@@ -612,7 +624,7 @@ struct MANGOS_DLL_DECL npc_shadow_imageAI : public ScriptedAI
         m_uiSuicideTimer = 0;
     }
 
-    void UpdateAI(const uint32 uiDiff)
+    void UpdateAI(const uint32 uiDiff) override
     {
         if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
             return;

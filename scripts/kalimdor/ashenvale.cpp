@@ -105,7 +105,7 @@ struct MANGOS_DLL_DECL npc_muglashAI : public npc_escortAI
         }
     }
 
-    void Aggro(Unit* pWho)
+    void Aggro(Unit* /*pWho*/) override
     {
         if (HasEscortState(STATE_ESCORT_PAUSED))
         {
@@ -117,7 +117,7 @@ struct MANGOS_DLL_DECL npc_muglashAI : public npc_escortAI
         }
     }
 
-    void WaypointReached(uint32 uiPointId)
+    void WaypointReached(uint32 uiPointId) override
     {
         switch (uiPointId)
         {
@@ -156,17 +156,17 @@ struct MANGOS_DLL_DECL npc_muglashAI : public npc_escortAI
         switch (m_uiWaveId)
         {
             case 1:
-                m_creature->SummonCreature(NPC_WRATH_RIDER,     m_afFirstNagaCoord[0][0], m_afFirstNagaCoord[0][1], m_afFirstNagaCoord[0][2], 0.0f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 60000);
-                m_creature->SummonCreature(NPC_WRATH_SORCERESS, m_afFirstNagaCoord[1][0], m_afFirstNagaCoord[1][1], m_afFirstNagaCoord[1][2], 0.0f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 60000);
-                m_creature->SummonCreature(NPC_WRATH_RAZORTAIL, m_afFirstNagaCoord[2][0], m_afFirstNagaCoord[2][1], m_afFirstNagaCoord[2][2], 0.0f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 60000);
+                m_creature->SummonCreature(NPC_WRATH_RIDER,     m_afFirstNagaCoord[0][0], m_afFirstNagaCoord[0][1], m_afFirstNagaCoord[0][2], 0.0f, TEMPSUMMON_TIMED_OOC_DESPAWN, 60000);
+                m_creature->SummonCreature(NPC_WRATH_SORCERESS, m_afFirstNagaCoord[1][0], m_afFirstNagaCoord[1][1], m_afFirstNagaCoord[1][2], 0.0f, TEMPSUMMON_TIMED_OOC_DESPAWN, 60000);
+                m_creature->SummonCreature(NPC_WRATH_RAZORTAIL, m_afFirstNagaCoord[2][0], m_afFirstNagaCoord[2][1], m_afFirstNagaCoord[2][2], 0.0f, TEMPSUMMON_TIMED_OOC_DESPAWN, 60000);
                 break;
             case 2:
-                m_creature->SummonCreature(NPC_WRATH_PRIESTESS, m_afSecondNagaCoord[0][0], m_afSecondNagaCoord[0][1], m_afSecondNagaCoord[0][2], 0.0f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 60000);
-                m_creature->SummonCreature(NPC_WRATH_MYRMIDON,  m_afSecondNagaCoord[1][0], m_afSecondNagaCoord[1][1], m_afSecondNagaCoord[1][2], 0.0f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 60000);
-                m_creature->SummonCreature(NPC_WRATH_SEAWITCH,  m_afSecondNagaCoord[2][0], m_afSecondNagaCoord[2][1], m_afSecondNagaCoord[2][2], 0.0f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 60000);
+                m_creature->SummonCreature(NPC_WRATH_PRIESTESS, m_afSecondNagaCoord[0][0], m_afSecondNagaCoord[0][1], m_afSecondNagaCoord[0][2], 0.0f, TEMPSUMMON_TIMED_OOC_DESPAWN, 60000);
+                m_creature->SummonCreature(NPC_WRATH_MYRMIDON,  m_afSecondNagaCoord[1][0], m_afSecondNagaCoord[1][1], m_afSecondNagaCoord[1][2], 0.0f, TEMPSUMMON_TIMED_OOC_DESPAWN, 60000);
+                m_creature->SummonCreature(NPC_WRATH_SEAWITCH,  m_afSecondNagaCoord[2][0], m_afSecondNagaCoord[2][1], m_afSecondNagaCoord[2][2], 0.0f, TEMPSUMMON_TIMED_OOC_DESPAWN, 60000);
                 break;
             case 3:
-                m_creature->SummonCreature(NPC_VORSHA, m_fVorshaCoord[0], m_fVorshaCoord[1], m_fVorshaCoord[2], 0.0f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 60000);
+                m_creature->SummonCreature(NPC_VORSHA, m_fVorshaCoord[0], m_fVorshaCoord[1], m_fVorshaCoord[2], 0.0f, TEMPSUMMON_TIMED_OOC_DESPAWN, 60000);
                 break;
             case 4:
                 SetEscortPaused(false);
@@ -175,12 +175,12 @@ struct MANGOS_DLL_DECL npc_muglashAI : public npc_escortAI
         }
     }
 
-    void JustSummoned(Creature* pSummoned)
+    void JustSummoned(Creature* pSummoned) override
     {
         pSummoned->AI()->AttackStart(m_creature);
     }
 
-    void UpdateEscortAI(const uint32 uiDiff)
+    void UpdateEscortAI(const uint32 uiDiff) override
     {
         if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
         {
@@ -224,7 +224,7 @@ CreatureAI* GetAI_npc_muglash(Creature* pCreature)
     return new npc_muglashAI(pCreature);
 }
 
-bool GOUse_go_naga_brazier(Player* pPlayer, GameObject* pGo)
+bool GOUse_go_naga_brazier(Player* /*pPlayer*/, GameObject* pGo)
 {
     if (Creature* pCreature = GetClosestCreatureWithEntry(pGo, NPC_MUGLASH, INTERACTION_DISTANCE * 2))
     {
@@ -258,7 +258,7 @@ struct MANGOS_DLL_DECL npc_ruul_snowhoofAI : public npc_escortAI
 
     void Reset() {}
 
-    void WaypointReached(uint32 uiPointId)
+    void WaypointReached(uint32 uiPointId) override
     {
         switch (uiPointId)
         {
@@ -279,7 +279,7 @@ struct MANGOS_DLL_DECL npc_ruul_snowhoofAI : public npc_escortAI
         }
     }
 
-    void JustSummoned(Creature* summoned)
+    void JustSummoned(Creature* summoned) override
     {
         summoned->AI()->AttackStart(m_creature);
     }
@@ -339,7 +339,7 @@ struct MANGOS_DLL_DECL npc_torekAI : public npc_escortAI
         m_uiThunderclap_Timer = 8000;
     }
 
-    void WaypointReached(uint32 uiPointId)
+    void WaypointReached(uint32 uiPointId) override
     {
         Player* pPlayer = GetPlayerForEscort();
 
@@ -356,9 +356,9 @@ struct MANGOS_DLL_DECL npc_torekAI : public npc_escortAI
                 break;
             case 19:
                 // TODO: verify location and creatures amount.
-                m_creature->SummonCreature(NPC_DURIEL, 1776.73f, -2049.06f, 109.83f, 1.54f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 25000);
-                m_creature->SummonCreature(NPC_SILVERWING_SENTINEL, 1774.64f, -2049.41f, 109.83f, 1.40f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 25000);
-                m_creature->SummonCreature(NPC_SILVERWING_WARRIOR, 1778.73f, -2049.50f, 109.83f, 1.67f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 25000);
+                m_creature->SummonCreature(NPC_DURIEL, 1776.73f, -2049.06f, 109.83f, 1.54f, TEMPSUMMON_TIMED_OOC_DESPAWN, 25000);
+                m_creature->SummonCreature(NPC_SILVERWING_SENTINEL, 1774.64f, -2049.41f, 109.83f, 1.40f, TEMPSUMMON_TIMED_OOC_DESPAWN, 25000);
+                m_creature->SummonCreature(NPC_SILVERWING_WARRIOR, 1778.73f, -2049.50f, 109.83f, 1.67f, TEMPSUMMON_TIMED_OOC_DESPAWN, 25000);
                 break;
             case 20:
                 DoScriptText(SAY_WIN, m_creature, pPlayer);
@@ -370,12 +370,12 @@ struct MANGOS_DLL_DECL npc_torekAI : public npc_escortAI
         }
     }
 
-    void JustSummoned(Creature* pSummoned)
+    void JustSummoned(Creature* pSummoned) override
     {
         pSummoned->AI()->AttackStart(m_creature);
     }
 
-    void UpdateEscortAI(const uint32 uiDiff)
+    void UpdateEscortAI(const uint32 uiDiff) override
     {
         if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
             return;
@@ -485,7 +485,7 @@ struct MANGOS_DLL_DECL npc_feero_ironhandAI : public npc_escortAI
         }
     }
 
-    void WaypointReached(uint32 uiPointId)
+    void WaypointReached(uint32 uiPointId) override
     {
         switch (uiPointId)
         {
@@ -504,9 +504,9 @@ struct MANGOS_DLL_DECL npc_feero_ironhandAI : public npc_escortAI
             case 29:
                 // Final ambush
                 DoScriptText(SAY_FINAL_AMBUSH_START, m_creature);
-                m_creature->SummonCreature(NPC_BALIZAR_THE_UMBRAGE, aEliteSummonPositions[0][0], aEliteSummonPositions[0][1], aEliteSummonPositions[0][2], aEliteSummonPositions[0][3], TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 20000);
-                m_creature->SummonCreature(NPC_ALIGAR_THE_TORMENTOR, aEliteSummonPositions[1][0], aEliteSummonPositions[1][1], aEliteSummonPositions[1][2], aEliteSummonPositions[1][3], TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 20000);
-                m_creature->SummonCreature(NPC_CAEDAKAR_THE_VICIOUS, aEliteSummonPositions[2][0], aEliteSummonPositions[2][1], aEliteSummonPositions[2][2], aEliteSummonPositions[2][3], TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 20000);
+                m_creature->SummonCreature(NPC_BALIZAR_THE_UMBRAGE, aEliteSummonPositions[0][0], aEliteSummonPositions[0][1], aEliteSummonPositions[0][2], aEliteSummonPositions[0][3], TEMPSUMMON_TIMED_OOC_DESPAWN, 20000);
+                m_creature->SummonCreature(NPC_ALIGAR_THE_TORMENTOR, aEliteSummonPositions[1][0], aEliteSummonPositions[1][1], aEliteSummonPositions[1][2], aEliteSummonPositions[1][3], TEMPSUMMON_TIMED_OOC_DESPAWN, 20000);
+                m_creature->SummonCreature(NPC_CAEDAKAR_THE_VICIOUS, aEliteSummonPositions[2][0], aEliteSummonPositions[2][1], aEliteSummonPositions[2][2], aEliteSummonPositions[2][3], TEMPSUMMON_TIMED_OOC_DESPAWN, 20000);
                 break;
             case 30:
                 // Complete the quest
@@ -516,7 +516,7 @@ struct MANGOS_DLL_DECL npc_feero_ironhandAI : public npc_escortAI
         }
     }
 
-    void AttackedBy(Unit* pWho)
+    void AttackedBy(Unit* pWho) override
     {
         // Yell only at the first attack
         if (!m_bIsAttacked)
@@ -535,10 +535,10 @@ struct MANGOS_DLL_DECL npc_feero_ironhandAI : public npc_escortAI
         float fX, fY, fZ;
         m_creature->GetNearPoint(m_creature, fX, fY, fZ, 0, fDistance, fAngle);
 
-        m_creature->SummonCreature(uiEntry, fX, fY, fZ, 0, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 20000);
+        m_creature->SummonCreature(uiEntry, fX, fY, fZ, 0, TEMPSUMMON_TIMED_OOC_DESPAWN, 20000);
     }
 
-    void SummonedCreatureJustDied(Creature* pSummoned)
+    void SummonedCreatureJustDied(Creature* pSummoned) override
     {
         --m_uiCreaturesCount;
 
@@ -561,7 +561,7 @@ struct MANGOS_DLL_DECL npc_feero_ironhandAI : public npc_escortAI
         }
     }
 
-    void JustSummoned(Creature* pSummoned)
+    void JustSummoned(Creature* pSummoned) override
     {
         if (pSummoned->GetEntry() == NPC_FORSAKEN_SCOUT)
         {

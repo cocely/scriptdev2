@@ -49,17 +49,17 @@ class MANGOS_DLL_DECL instance_zulgurub : public ScriptedInstance
         instance_zulgurub(Map* pMap);
         ~instance_zulgurub() {}
 
-        void Initialize();
-        // IsEncounterInProgress() const { return false; }  // not active in Zul'Gurub
+        void Initialize() override;
+        // IsEncounterInProgress() const override { return false; }  // not active in Zul'Gurub
 
-        void OnCreatureCreate(Creature* pCreature);
-        void OnObjectCreate(GameObject* pGo);
+        void OnCreatureCreate(Creature* pCreature) override;
+        void OnObjectCreate(GameObject* pGo) override;
 
-        void SetData(uint32 uiType, uint32 uiData);
-        uint32 GetData(uint32 uiType) const;
+        void SetData(uint32 uiType, uint32 uiData) override;
+        uint32 GetData(uint32 uiType) const override;
 
-        const char* Save() const { return m_strInstData.c_str(); }
-        void Load(const char* chrIn);
+        const char* Save() const override { return m_strInstData.c_str(); }
+        void Load(const char* chrIn) override;
 
         void DoYellAtTriggerIfCan(uint32 uiTriggerId);
 
@@ -71,9 +71,9 @@ class MANGOS_DLL_DECL instance_zulgurub : public ScriptedInstance
         uint32 m_auiEncounter[MAX_ENCOUNTER];
         std::string m_strInstData;
 
-        GuidList m_lRightPantherTriggerGuidList;
-        GuidList m_lLeftPantherTriggerGuidList;
-        GuidList m_lSpiderEggGuidList;
+        GuidList m_lRightPantherTriggerGUIDList;
+        GuidList m_lLeftPantherTriggerGUIDList;
+        GuidList m_lSpiderEggGUIDList;
 
         bool m_bHasIntroYelled;
         bool m_bHasAltarYelled;

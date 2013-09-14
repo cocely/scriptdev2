@@ -93,7 +93,7 @@ struct MANGOS_DLL_DECL boss_vazruden_heraldAI : public ScriptedAI
     ObjectGuid m_lastSeenPlayerGuid;
     ObjectGuid m_vazrudenGuid;
 
-    void Reset()
+    void Reset() override
     {
         if (m_creature->GetEntry() != NPC_VAZRUDEN_HERALD)
             m_creature->UpdateEntry(NPC_VAZRUDEN_HERALD);
@@ -112,11 +112,11 @@ struct MANGOS_DLL_DECL boss_vazruden_heraldAI : public ScriptedAI
 
         // see boss_onyxia
         // sort of a hack, it is unclear how this really work but the values appear to be valid
-        m_creature->SetByteValue(UNIT_FIELD_BYTES_1, 3, UNIT_BYTE1_FLAG_ALWAYS_STAND | UNIT_BYTE1_FLAG_UNK_2);
+        m_creature->SetByteValue(UNIT_FIELD_BYTES_1, 3, UNIT_BYTE1_FLAG_ALWAYS_STAND | UNIT_BYTE1_FLAG_HOVER);
         m_creature->SetLevitate(true);
     }
 
-    void MoveInLineOfSight(Unit* pWho)
+    void MoveInLineOfSight(Unit* pWho) override
     {
         if (m_bIsEventInProgress && !m_lastSeenPlayerGuid && pWho->GetTypeId() == TYPEID_PLAYER && pWho->isAlive() && !((Player*)pWho)->isGameMaster())
         {
@@ -233,7 +233,7 @@ struct MANGOS_DLL_DECL boss_vazruden_heraldAI : public ScriptedAI
         DoScriptText(EMOTE_DESCEND, m_creature);
     }
 
-    void JustSummoned(Creature* pSummoned)
+    void JustSummoned(Creature* pSummoned) override
     {
         if (pSummoned->GetEntry() != NPC_VAZRUDEN)
             return;
@@ -247,19 +247,19 @@ struct MANGOS_DLL_DECL boss_vazruden_heraldAI : public ScriptedAI
             m_pInstance->SetData(TYPE_VAZRUDEN, IN_PROGRESS);
     }
 
-    void JustDied(Unit* pKiller)
+    void JustDied(Unit* /*pKiller*/) override
     {
         if (m_pInstance)
             m_pInstance->SetData(TYPE_NAZAN, DONE);
     }
 
-    void JustReachedHome()
+    void JustReachedHome() override
     {
         if (m_pInstance)
             m_pInstance->SetData(TYPE_NAZAN, FAIL);
     }
 
-    void UpdateAI(const uint32 uiDiff)
+    void UpdateAI(const uint32 uiDiff) override
     {
         if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
         {
@@ -379,7 +379,7 @@ struct MANGOS_DLL_DECL boss_vazrudenAI : public ScriptedAI
         m_uiRevengeTimer = urand(5500, 8400);
     }
 
-    void Aggro(Unit* pWho) override
+    void Aggro(Unit* /*pWho*/) override
     {
         switch (urand(0, 2))
         {
@@ -408,7 +408,7 @@ struct MANGOS_DLL_DECL boss_vazrudenAI : public ScriptedAI
         DoScriptText(urand(0, 1) ? SAY_KILL1 : SAY_KILL2, m_creature);
     }
 
-    void DamageTaken(Unit* pDealer, uint32& uiDamage) override
+    void DamageTaken(Unit* /*pDealer*/, uint32& uiDamage) override
     {
         if (!m_bHealthBelow && m_pInstance && (float(m_creature->GetHealth() - uiDamage) / m_creature->GetMaxHealth()) < 0.30f)
         {

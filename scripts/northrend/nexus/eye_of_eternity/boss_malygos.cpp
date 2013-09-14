@@ -272,7 +272,7 @@ struct MANGOS_DLL_DECL boss_malygosAI : public ScriptedAI
             m_pInstance->SetData(TYPE_MALYGOS, IN_PROGRESS);
     }
 
-    void JustDied(Unit* pKiller)
+    void JustDied(Unit* pKiller) override
     {
         DoScriptText(SAY_DEATH, m_creature);
         m_creature->SummonCreature(NPC_ALEXSTRASZA, CENTER_X+20.0f, CENTER_Y+20.0f, AIR_Z, 0, TEMPSUMMON_DEAD_DESPAWN, 0);
@@ -280,7 +280,7 @@ struct MANGOS_DLL_DECL boss_malygosAI : public ScriptedAI
         m_creature->MonsterMoveWithSpeed(m_creature->GetPositionX(), m_creature->GetPositionY(), FLOOR_Z-400.0f, 26);
     }
 
-    void KilledUnit(Unit* pVictim)
+    void KilledUnit(Unit* pVictim) override
     {
         uint8 uiText = 0;
         switch (m_Phase)
@@ -307,7 +307,7 @@ struct MANGOS_DLL_DECL boss_malygosAI : public ScriptedAI
         }
     }
 
-    void SpellHit(Unit* pCaster, const SpellEntry* pSpell)
+    void SpellHit(Unit* pCaster, const SpellEntry* pSpell) override
     {
         switch (pSpell->Id)
         {
@@ -319,7 +319,7 @@ struct MANGOS_DLL_DECL boss_malygosAI : public ScriptedAI
         }
     }
 
-    void SpellHitTarget(Unit* pTarget, const SpellEntry* pSpell)
+    void SpellHitTarget(Unit* pTarget, const SpellEntry* pSpell) override
     {
         switch (pSpell->Id)
         {
@@ -343,7 +343,7 @@ struct MANGOS_DLL_DECL boss_malygosAI : public ScriptedAI
         }
     }
 
-    void JustSummoned(Creature* pSummoned)
+    void JustSummoned(Creature* pSummoned) override
     {
         switch (pSummoned->GetEntry())
         {
@@ -408,7 +408,7 @@ struct MANGOS_DLL_DECL boss_malygosAI : public ScriptedAI
         }
     }
 
-    void MovementInform(uint32 uiType, uint32 uiPointId)
+    void MovementInform(uint32 uiType, uint32 uiPointId) override
     {
         if (uiType != POINT_MOTION_TYPE)
             return;
@@ -486,7 +486,7 @@ struct MANGOS_DLL_DECL boss_malygosAI : public ScriptedAI
         }
     }
 
-    void UpdateAI(const uint32 uiDiff)
+    void UpdateAI(const uint32 uiDiff) override
     {
         if (m_Phase != PHASE_INTRO)
         {
@@ -972,12 +972,12 @@ struct MANGOS_DLL_DECL npc_power_sparkAI : public ScriptedAI
         m_creature->SetRespawnDelay(DAY);
     }
 
-    void JustDied(Unit* pKiller)
+    void JustDied(Unit* pKiller) override
     {
         DoCast(m_creature, SPELL_POWER_SPARK_PLAYERS, true);
     }
 
-    void UpdateAI(const uint32 uiDiff)
+    void UpdateAI(const uint32 uiDiff) override
     {
         if (m_uiCheckTimer <= uiDiff)
         {
@@ -1029,7 +1029,7 @@ struct MANGOS_DLL_DECL npc_nexus_lordAI : public ScriptedAI
         m_uiHasteTimer = urand(10000, 12000);
     }
 
-    void UpdateAI(const uint32 uiDiff)
+    void UpdateAI(const uint32 uiDiff) override
     {
         if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
             return;
@@ -1096,7 +1096,7 @@ struct MANGOS_DLL_DECL npc_scion_of_eternityAI : public ScriptedAI
         m_uiArcaneBarrageTimer = urand(4000, 12000);
     }
 
-    void UpdateAI(const uint32 uiDiff)
+    void UpdateAI(const uint32 uiDiff) override
     {
         if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
             return;
@@ -1151,23 +1151,23 @@ struct MANGOS_DLL_DECL npc_hover_diskAI : public ScriptedAI
         m_creature->SetLevitate(true);
     }
 
-    void AttackStart(Unit *pWho)
+    void AttackStart(Unit* pWho) override
     {
     }
 
-    void PassengerBoarded(Unit * pWho, int8 seatId, bool apply)
+    void PassengerBoarded(Unit* pWho, int8 seatId, bool apply) override
     {
         if (!apply)
         {
             m_creature->GetMotionMaster()->MoveFall();
             m_creature->setFaction(35);
-            m_creature->SetByteValue(UNIT_FIELD_BYTES_1, 3, UNIT_BYTE1_FLAG_ALWAYS_STAND | UNIT_BYTE1_FLAG_UNK_2);
+            m_creature->SetByteValue(UNIT_FIELD_BYTES_1, 3, UNIT_BYTE1_FLAG_ALWAYS_STAND | UNIT_BYTE1_FLAG_HOVER);
             m_creature->CastSpell(m_creature, SPELL_FLIGHT, true);
             m_creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
         }
     }
 
-    void UpdateAI(const uint32 uiDiff)
+    void UpdateAI(const uint32 uiDiff) override
     {
     }
 };
@@ -1191,7 +1191,7 @@ struct MANGOS_DLL_DECL npc_alexstraszaAI : public ScriptedAI
     {
         m_uiTimer = 9500;
         m_uiCount = 0;
-        m_creature->SetByteValue(UNIT_FIELD_BYTES_1, 3, UNIT_BYTE1_FLAG_ALWAYS_STAND | UNIT_BYTE1_FLAG_UNK_2);
+        m_creature->SetByteValue(UNIT_FIELD_BYTES_1, 3, UNIT_BYTE1_FLAG_ALWAYS_STAND | UNIT_BYTE1_FLAG_HOVER);
         m_creature->SetLevitate(true);
         if (m_pInstance)
             if (Creature* pMalygos = m_pInstance->GetSingleCreatureFromStorage(NPC_MALYGOS))
@@ -1204,7 +1204,7 @@ struct MANGOS_DLL_DECL npc_alexstraszaAI : public ScriptedAI
             pUnit->CastSpell(pUnit, SPELL_ALEXSTRASZAS_GIFT_VISUAL, true);
     }
 
-    void UpdateAI(const uint32 uiDiff)
+    void UpdateAI(const uint32 uiDiff) override
     {
         if (m_uiCount == 6)
             return;
@@ -1313,12 +1313,12 @@ struct MANGOS_DLL_DECL npc_whyrmrest_skytalonAI : public ScriptedAI
         StartTimer = 500;
         SeatTimer = 2000;
         ownerGUID = m_creature->GetCreatorGuid();
-        m_creature->SetByteValue(UNIT_FIELD_BYTES_1, 3, UNIT_BYTE1_FLAG_ALWAYS_STAND | UNIT_BYTE1_FLAG_UNK_2);
+        m_creature->SetByteValue(UNIT_FIELD_BYTES_1, 3, UNIT_BYTE1_FLAG_ALWAYS_STAND | UNIT_BYTE1_FLAG_HOVER);
         m_creature->SetLevitate(true);
     }
 
     void AttackStart(Unit *) {}
-    void MoveInLineOfSight(Unit*) {}
+    void MoveInLineOfSight(Unit*) override { }
 
     /*void JustDied(Unit* killer)
     {
@@ -1337,7 +1337,7 @@ struct MANGOS_DLL_DECL npc_whyrmrest_skytalonAI : public ScriptedAI
         m_creature->SetCreatorGuid(ObjectGuid());
     }*/
 
-    void UpdateAI(const uint32 uiDiff)
+    void UpdateAI(const uint32 uiDiff) override
     {
 
         if (ownerGUID.IsEmpty())

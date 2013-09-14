@@ -56,7 +56,7 @@ struct MANGOS_DLL_DECL npc_professor_phizzlethorpeAI : public npc_escortAI
 
     void Reset() { }
 
-    void WaypointReached(uint32 uiPointId)
+    void WaypointReached(uint32 uiPointId) override
     {
         Player* pPlayer = GetPlayerForEscort();
 
@@ -69,8 +69,8 @@ struct MANGOS_DLL_DECL npc_professor_phizzlethorpeAI : public npc_escortAI
             case 5: DoScriptText(SAY_PROGRESS_3, m_creature, pPlayer); break;
             case 8: DoScriptText(EMOTE_PROGRESS_4, m_creature); break;
             case 9:
-                m_creature->SummonCreature(ENTRY_VENGEFUL_SURGE, -2056.41f, -2144.01f, 20.59f, 5.70f, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 600000);
-                m_creature->SummonCreature(ENTRY_VENGEFUL_SURGE, -2050.17f, -2140.02f, 19.54f, 5.17f, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 600000);
+                m_creature->SummonCreature(ENTRY_VENGEFUL_SURGE, -2056.41f, -2144.01f, 20.59f, 5.70f, TEMPSUMMON_TIMED_OOC_OR_CORPSE_DESPAWN, 600000);
+                m_creature->SummonCreature(ENTRY_VENGEFUL_SURGE, -2050.17f, -2140.02f, 19.54f, 5.17f, TEMPSUMMON_TIMED_OOC_OR_CORPSE_DESPAWN, 600000);
                 break;
             case 10: DoScriptText(SAY_PROGRESS_5, m_creature, pPlayer); break;
             case 11:
@@ -86,12 +86,12 @@ struct MANGOS_DLL_DECL npc_professor_phizzlethorpeAI : public npc_escortAI
         }
     }
 
-    void Aggro(Unit* pWho)
+    void Aggro(Unit* /*pWho*/) override
     {
         DoScriptText(SAY_AGGRO, m_creature);
     }
 
-    void JustSummoned(Creature* pSummoned)
+    void JustSummoned(Creature* pSummoned) override
     {
         pSummoned->AI()->AttackStart(m_creature);
     }
@@ -147,7 +147,7 @@ struct MANGOS_DLL_DECL npc_kineloryAI : public npc_escortAI
 
     uint32 m_uiBearFormTimer;
 
-    void Reset() override
+    void Reset()
     {
         m_uiBearFormTimer = urand(1000, 5000);
     }

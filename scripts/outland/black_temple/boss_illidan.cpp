@@ -344,7 +344,7 @@ struct MANGOS_DLL_DECL boss_illidan_stormrageAI : public ScriptedAI, private Dia
 
     GuidList m_lBladesGuidList;
 
-    void Reset()
+    void Reset() override
     {
         m_uiPhase               = PHASE_AKAMA;
         m_uiBerserkTimer        = 25 * MINUTE * IN_MILLISECONDS;
@@ -386,27 +386,27 @@ struct MANGOS_DLL_DECL boss_illidan_stormrageAI : public ScriptedAI, private Dia
         SetEquipmentSlots(false, EQUIP_UNEQUIP, EQUIP_UNEQUIP, EQUIP_NO_CHANGE);
     }
 
-    void GetAIInformation(ChatHandler& reader)
+    void GetAIInformation(ChatHandler& reader) override
     {
         reader.PSendSysMessage("Boss Illidan, current uiPhase = %u", m_uiPhase);
     }
 
-    void Aggro(Unit* pWho)
+    void Aggro(Unit* /*pWho*/) override
     {
         if (m_pInstance)
             m_pInstance->SetData(TYPE_ILLIDAN, IN_PROGRESS);
     }
 
     // Do not attack using LoS function. The attack is triggered in script
-    void MoveInLineOfSight(Unit* pWho) { }
+    void MoveInLineOfSight(Unit* /*pWho*/) override { }
 
-    void JustReachedHome()
+    void JustReachedHome() override
     {
         if (m_pInstance)
             m_pInstance->SetData(TYPE_ILLIDAN, FAIL);
     }
 
-    void JustDied(Unit* pKiller)
+    void JustDied(Unit* /*pKiller*/) override
     {
         m_creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
 
@@ -414,7 +414,7 @@ struct MANGOS_DLL_DECL boss_illidan_stormrageAI : public ScriptedAI, private Dia
             m_pInstance->SetData(TYPE_ILLIDAN, DONE);
     }
 
-    void KilledUnit(Unit* pVictim)
+    void KilledUnit(Unit* pVictim) override
     {
         if (pVictim->GetTypeId() != TYPEID_PLAYER)
             return;
@@ -422,7 +422,7 @@ struct MANGOS_DLL_DECL boss_illidan_stormrageAI : public ScriptedAI, private Dia
         DoScriptText(urand(0, 1) ? SAY_KILL1 : SAY_KILL2, m_creature);
     }
 
-    void DamageTaken(Unit* pDealer, uint32& uiDamage)
+    void DamageTaken(Unit* /*pDealer*/, uint32& uiDamage) override
     {
         if (uiDamage < m_creature->GetHealth())
             return;
@@ -455,7 +455,7 @@ struct MANGOS_DLL_DECL boss_illidan_stormrageAI : public ScriptedAI, private Dia
         }
     }
 
-    void JustDidDialogueStep(int32 iEntry)
+    void JustDidDialogueStep(int32 iEntry) override
     {
         switch (iEntry)
         {
@@ -535,7 +535,7 @@ struct MANGOS_DLL_DECL boss_illidan_stormrageAI : public ScriptedAI, private Dia
         }
     }
 
-    void JustSummoned(Creature* pSummoned)
+    void JustSummoned(Creature* pSummoned) override
     {
         switch (pSummoned->GetEntry())
         {
@@ -618,7 +618,7 @@ struct MANGOS_DLL_DECL boss_illidan_stormrageAI : public ScriptedAI, private Dia
         return true;
     }
 
-    void UpdateAI(const uint32 uiDiff)
+    void UpdateAI(const uint32 uiDiff) override
     {
         DialogueUpdate(uiDiff);
 
@@ -1016,7 +1016,7 @@ struct MANGOS_DLL_DECL npc_akama_illidanAI : public npc_escortAI, private Dialog
     bool m_bFightMinions;
     bool m_bIsIntroFinished;
 
-    void Reset()
+    void Reset() override
     {
         m_uiSummonMinionTimer   = 2000;
         m_uiHealDelayTimer      = 0;
@@ -1029,7 +1029,7 @@ struct MANGOS_DLL_DECL npc_akama_illidanAI : public npc_escortAI, private Dialog
         }
     }
 
-    void MoveInLineOfSight(Unit* pWho)
+    void MoveInLineOfSight(Unit* pWho) override
     {
         if (HasEscortState(STATE_ESCORT_ESCORTING))
             return;
@@ -1039,7 +1039,7 @@ struct MANGOS_DLL_DECL npc_akama_illidanAI : public npc_escortAI, private Dialog
             Start(true);
     }
 
-    void AttackStart(Unit* pWho)
+    void AttackStart(Unit* pWho) override
     {
         // Don't attack Illidan again
         if (m_bIsIntroFinished && pWho->GetEntry() == NPC_ILLIDAN_STORMRAGE)
@@ -1048,7 +1048,7 @@ struct MANGOS_DLL_DECL npc_akama_illidanAI : public npc_escortAI, private Dialog
         npc_escortAI::AttackStart(pWho);
     }
 
-    void EnterEvadeMode()
+    void EnterEvadeMode() override
     {
         // Called first when evading from Illidan
         if (!m_bIsIntroFinished)
@@ -1067,7 +1067,7 @@ struct MANGOS_DLL_DECL npc_akama_illidanAI : public npc_escortAI, private Dialog
         npc_escortAI::EnterEvadeMode();
     }
 
-    void WaypointReached(uint32 uiPointId)
+    void WaypointReached(uint32 uiPointId) override
     {
         switch (uiPointId)
         {
@@ -1126,7 +1126,7 @@ struct MANGOS_DLL_DECL npc_akama_illidanAI : public npc_escortAI, private Dialog
         }
     }
 
-    void MovementInform(uint32 uiMoveType, uint32 uiPointId)
+    void MovementInform(uint32 uiMoveType, uint32 uiPointId) override
     {
         npc_escortAI::MovementInform(uiMoveType, uiPointId);
 
@@ -1144,7 +1144,7 @@ struct MANGOS_DLL_DECL npc_akama_illidanAI : public npc_escortAI, private Dialog
         m_creature->ForcedDespawn(10000);
     }
 
-    void JustDidDialogueStep(int32 iEntry)
+    void JustDidDialogueStep(int32 iEntry) override
     {
         switch (iEntry)
         {
@@ -1175,7 +1175,7 @@ struct MANGOS_DLL_DECL npc_akama_illidanAI : public npc_escortAI, private Dialog
         }
     }
 
-    void JustSummoned(Creature* pSummoned)
+    void JustSummoned(Creature* pSummoned) override
     {
         switch (pSummoned->GetEntry())
         {
@@ -1196,7 +1196,7 @@ struct MANGOS_DLL_DECL npc_akama_illidanAI : public npc_escortAI, private Dialog
         m_creature->RemoveFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP);
     }
 
-    void UpdateEscortAI(const uint32 uiDiff)
+    void UpdateEscortAI(const uint32 uiDiff) override
     {
         DialogueUpdate(uiDiff);
 
@@ -1263,7 +1263,7 @@ bool GossipHello_npc_akama_illidan(Player* pPlayer, Creature* pCreature)
     return true;
 }
 
-bool GossipSelect_npc_akama_illidan(Player* pPlayer, Creature* pCreature, uint32 uiSender, uint32 uiAction)
+bool GossipSelect_npc_akama_illidan(Player* pPlayer, Creature* pCreature, uint32 /*uiSender*/, uint32 uiAction)
 {
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 1 || GOSSIP_ACTION_INFO_DEF + 2)
     {
@@ -1298,7 +1298,7 @@ struct MANGOS_DLL_DECL boss_maievAI : public ScriptedAI, private DialogueHelper
 
     bool m_bHasYelledTrap;
 
-    void Reset()
+    void Reset() override
     {
         m_uiTauntTimer        = urand(40000, 60000);
         m_uiShadowStriketimer = urand(4000, 8000);
@@ -1309,7 +1309,7 @@ struct MANGOS_DLL_DECL boss_maievAI : public ScriptedAI, private DialogueHelper
         m_creature->ApplySpellImmune(0, IMMUNITY_SCHOOL, SPELL_SCHOOL_MASK_SHADOW, true);
     }
 
-    void KilledUnit(Unit* pVictim)
+    void KilledUnit(Unit* pVictim) override
     {
         // Dummy function - used to start the epilogue
         if (pVictim->GetEntry() == NPC_ILLIDAN_STORMRAGE)
@@ -1317,7 +1317,7 @@ struct MANGOS_DLL_DECL boss_maievAI : public ScriptedAI, private DialogueHelper
     }
 
     // Custom evade - don't allow her to return to home position
-    void EnterEvadeMode()
+    void EnterEvadeMode() override
     {
         m_creature->RemoveAllAuras();
         m_creature->DeleteThreatList();
@@ -1330,9 +1330,9 @@ struct MANGOS_DLL_DECL boss_maievAI : public ScriptedAI, private DialogueHelper
     }
 
     // Attack only by script
-    void MoveInLineOfSight(Unit* pWho) { }
+    void MoveInLineOfSight(Unit* /*pWho*/) override { }
 
-    void JustDidDialogueStep(int32 iEntry)
+    void JustDidDialogueStep(int32 iEntry) override
     {
         switch (iEntry)
         {
@@ -1350,7 +1350,7 @@ struct MANGOS_DLL_DECL boss_maievAI : public ScriptedAI, private DialogueHelper
         }
     }
 
-    void SpellHit(Unit* pCaster, const SpellEntry* pSpell)
+    void SpellHit(Unit* /*pCaster*/, const SpellEntry* pSpell) override
     {
         if (pSpell->Id == SPELL_CAGE_TRAP)
         {
@@ -1364,7 +1364,7 @@ struct MANGOS_DLL_DECL boss_maievAI : public ScriptedAI, private DialogueHelper
         }
     }
 
-    void UpdateAI(const uint32 uiDiff)
+    void UpdateAI(const uint32 uiDiff) override
     {
         DialogueUpdate(uiDiff);
 
@@ -1414,14 +1414,14 @@ struct MANGOS_DLL_DECL npc_cage_trap_triggerAI : public ScriptedAI
 
     bool m_bActive;
 
-    void Reset()
+    void Reset() override
     {
         m_bActive = false;
     }
 
-    void AttackStart(Unit* pWho) { }
+    void AttackStart(Unit* /*pWho*/) override { }
 
-    void MoveInLineOfSight(Unit* pWho)
+    void MoveInLineOfSight(Unit* pWho) override
     {
         if (!m_bActive && pWho->GetEntry() == NPC_ILLIDAN_STORMRAGE && m_creature->IsWithinDistInMap(pWho, 3.0f))
         {
@@ -1442,7 +1442,7 @@ struct MANGOS_DLL_DECL npc_cage_trap_triggerAI : public ScriptedAI
         }
     }
 
-    void UpdateAI(const uint32 uiDiff) { }
+    void UpdateAI(const uint32 /*uiDiff*/) override { }
 };
 
 /*######
@@ -1458,7 +1458,7 @@ struct MANGOS_DLL_DECL npc_flame_of_azzinothAI : public ScriptedAI
     uint32 m_uiChargeTimer;
     uint32 m_uiWrathCheckTimer;
 
-    void Reset()
+    void Reset() override
     {
         m_uiFlameBlastTimer  = 10000;
         m_uiSummonBlazeTimer = 0;
@@ -1466,13 +1466,13 @@ struct MANGOS_DLL_DECL npc_flame_of_azzinothAI : public ScriptedAI
         m_uiWrathCheckTimer  = 1000;
     }
 
-    void JustSummoned(Creature* pSummoned)
+    void JustSummoned(Creature* pSummoned) override
     {
         if (pSummoned->GetEntry() == NPC_BLAZE)
             pSummoned->CastSpell(pSummoned, SPELL_BLAZE_EFFECT, false);
     }
 
-    void UpdateAI(const uint32 uiDiff)
+    void UpdateAI(const uint32 uiDiff) override
     {
         if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
             return;
@@ -1562,23 +1562,23 @@ struct MANGOS_DLL_DECL npc_shadow_demonAI : public ScriptedAI
 
     ObjectGuid m_targetGuid;
 
-    void Reset() {}
+    void Reset() override {}
 
-    void AttackStart(Unit* pWho)
+    void AttackStart(Unit* pWho) override
     {
         // Function used to set target only - the npc doesn't really attack
         m_targetGuid = pWho->GetObjectGuid();
     }
 
-    void MoveInLineOfSight(Unit* pWho) { }
+    void MoveInLineOfSight(Unit* /*pWho*/) override { }
 
-    void JustDied(Unit* pKiller)
+    void JustDied(Unit* /*pKiller*/) override
     {
         if (Player* pPlayer = m_creature->GetMap()->GetPlayer(m_targetGuid))
             pPlayer->RemoveAurasDueToSpell(SPELL_PARALYZE);
     }
 
-    void MovementInform(uint32 uiMovementType, uint32 uiPointId)
+    void MovementInform(uint32 uiMovementType, uint32 uiPointId) override
     {
         if (uiMovementType != POINT_MOTION_TYPE || !uiPointId)
             return;
@@ -1590,7 +1590,7 @@ struct MANGOS_DLL_DECL npc_shadow_demonAI : public ScriptedAI
         }
     }
 
-    void UpdateAI(const uint32 uiDiff) { }
+    void UpdateAI(const uint32 /*uiDiff*/) override { }
 };
 
 /*######
@@ -1607,13 +1607,13 @@ struct MANGOS_DLL_DECL npc_blade_of_azzinothAI : public ScriptedAI
 
     ScriptedInstance* m_pInstance;
 
-    void Reset() {}
+    void Reset() override {}
 
     // Do-Nothing-But-Stand-There
-    void AttackStart(Unit* pWho) { }
-    void MoveInLineOfSight(Unit* pWho) { }
+    void AttackStart(Unit* /*pWho*/) override { }
+    void MoveInLineOfSight(Unit* /*pWho*/) override { }
 
-    void JustSummoned(Creature* pSummoned)
+    void JustSummoned(Creature* pSummoned) override
     {
         // Summon a Flame pear each blade
         if (pSummoned->GetEntry() == NPC_FLAME_OF_AZZINOTH)
@@ -1623,7 +1623,7 @@ struct MANGOS_DLL_DECL npc_blade_of_azzinothAI : public ScriptedAI
         }
     }
 
-    void SummonedCreatureJustDied(Creature* pSummoned)
+    void SummonedCreatureJustDied(Creature* pSummoned) override
     {
         // Inform Illidan when a flame is killed
         if (pSummoned->GetEntry() == NPC_FLAME_OF_AZZINOTH)
@@ -1640,7 +1640,7 @@ struct MANGOS_DLL_DECL npc_blade_of_azzinothAI : public ScriptedAI
         }
     }
 
-    void UpdateAI(const uint32 uiDiff) { }
+    void UpdateAI(const uint32 /*uiDiff*/) override { }
 };
 
 CreatureAI* GetAI_boss_illidan_stormrage(Creature* pCreature)

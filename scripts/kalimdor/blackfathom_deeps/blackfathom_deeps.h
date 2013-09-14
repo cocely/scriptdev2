@@ -8,9 +8,8 @@
 enum
 {
     ENCOUNTER_KELRIS            = 0,
-    ENCOUNTER_SHRINE,
-    MAX_ENCOUNTER,
-
+    ENCOUNTER_SHRINE            = 1,
+    MAX_ENCOUNTER               = 2,
     MAX_FIRES                   = 4,
     MAX_COUNT_POS               = 3,
     SUMMONS_COUNT               = 6,
@@ -50,6 +49,7 @@ enum
 
 * On wipe the mobs don't despawn; they stay there until player returns
 */
+
 static const LOCATION aSpawnLocations[6] =                 // Should be near the correct positions
 {
     { -768.949f, -174.413f, -25.87f, 3.09f},                // Left side
@@ -86,24 +86,22 @@ static const SummonInformation aWaveSummonInformation[] =
 class MANGOS_DLL_DECL instance_blackfathom_deeps : public ScriptedInstance
 {
     public:
-
-    public:
         instance_blackfathom_deeps(Map* pMap);
         ~instance_blackfathom_deeps() {}
 
-        void Initialize();
+        void Initialize() override;
 
-        void OnCreatureCreate(Creature* pCreature);
-        void OnObjectCreate(GameObject* pGo);
-        void OnCreatureDeath(Creature* pCreature);
+        void OnCreatureCreate(Creature* pCreature) override;
+        void OnObjectCreate(GameObject* pGo) override;
+        void OnCreatureDeath(Creature* pCreature) override;
 
-        void Update(uint32 uiDiff);
+        void Update(uint32 uiDiff) override;
 
-        void SetData(uint32 uiType, uint32 uiData);
-        uint32 GetData(uint32 uiType) const;
+        void SetData(uint32 uiType, uint32 uiData) override;
+        uint32 GetData(uint32 uiType) const override;
 
-        const char* Save() const { return m_strInstData.c_str(); }
-        void Load(const char* chrIn);
+        const char* Save() const override { return m_strInstData.c_str(); }
+        void Load(const char* chrIn) override;
 
     protected:
         void DoSpawnMobs(uint8 uiWaveIndex);

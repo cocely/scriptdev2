@@ -32,6 +32,8 @@ npc_totem_of_spirits
 event_spell_soul_captured_credit
 go_crystal_prison
 npc_spawned_oronok_tornheart
+npc_domesticated_felboar
+npc_veneratus_spawn_node
 EndContentData */
 
 #include "precompiled.h"
@@ -66,7 +68,7 @@ struct MANGOS_DLL_DECL mob_mature_netherwing_drakeAI : public ScriptedAI
     uint32 m_uiCreditTimer;
     uint32 m_uiCastTimer;
 
-    void Reset()
+    void Reset() override
     {
         m_playerGuid.Clear();
 
@@ -75,7 +77,7 @@ struct MANGOS_DLL_DECL mob_mature_netherwing_drakeAI : public ScriptedAI
         m_uiCastTimer   = 5000;
     }
 
-    void SpellHit(Unit* pCaster, SpellEntry const* pSpell)
+    void SpellHit(Unit* pCaster, SpellEntry const* pSpell) override
     {
         if (m_uiEatTimer || m_uiCreditTimer)
             return;
@@ -87,7 +89,7 @@ struct MANGOS_DLL_DECL mob_mature_netherwing_drakeAI : public ScriptedAI
         }
     }
 
-    void MovementInform(uint32 uiMoveType, uint32 uiPointId)
+    void MovementInform(uint32 uiMoveType, uint32 uiPointId) override
     {
         if (uiMoveType != POINT_MOTION_TYPE)
             return;
@@ -97,11 +99,11 @@ struct MANGOS_DLL_DECL mob_mature_netherwing_drakeAI : public ScriptedAI
             m_uiCreditTimer = 7000;
             m_creature->SetLevitate(false);
             m_creature->HandleEmote(EMOTE_ONESHOT_ATTACKUNARMED);
-            m_creature->RemoveByteFlag(UNIT_FIELD_BYTES_1, 3, UNIT_BYTE1_FLAG_ALWAYS_STAND | UNIT_BYTE1_FLAG_UNK_2);
+            m_creature->RemoveByteFlag(UNIT_FIELD_BYTES_1, 3, UNIT_BYTE1_FLAG_ALWAYS_STAND | UNIT_BYTE1_FLAG_HOVER);
         }
     }
 
-    void UpdateAI(const uint32 uiDiff)
+    void UpdateAI(const uint32 uiDiff) override
     {
         if (m_uiEatTimer)
         {
@@ -139,7 +141,7 @@ struct MANGOS_DLL_DECL mob_mature_netherwing_drakeAI : public ScriptedAI
 
                 Reset();
                 m_creature->SetLevitate(true);
-                m_creature->SetByteFlag(UNIT_FIELD_BYTES_1, 3, UNIT_BYTE1_FLAG_ALWAYS_STAND | UNIT_BYTE1_FLAG_UNK_2);
+                m_creature->SetByteFlag(UNIT_FIELD_BYTES_1, 3, UNIT_BYTE1_FLAG_ALWAYS_STAND | UNIT_BYTE1_FLAG_HOVER);
                 m_creature->GetMotionMaster()->Clear();
                 m_uiCreditTimer = 0;
             }
@@ -196,9 +198,9 @@ struct MANGOS_DLL_DECL mob_enslaved_netherwing_drakeAI : public ScriptedAI
     ObjectGuid m_playerGuid;
     uint32 m_uiFlyTimer;
 
-    void Reset() { }
+    void Reset() override { }
 
-    void SpellHit(Unit* pCaster, const SpellEntry* pSpell)
+    void SpellHit(Unit* pCaster, const SpellEntry* pSpell) override
     {
         if (pSpell->Id == SPELL_HIT_FORCE_OF_NELTHARAKU && !m_uiFlyTimer)
         {
@@ -215,7 +217,7 @@ struct MANGOS_DLL_DECL mob_enslaved_netherwing_drakeAI : public ScriptedAI
         }
     }
 
-    void MovementInform(uint32 uiMoveType, uint32 uiPointId)
+    void MovementInform(uint32 uiMoveType, uint32 uiPointId) override
     {
         if (uiMoveType != POINT_MOTION_TYPE)
             return;
@@ -224,7 +226,7 @@ struct MANGOS_DLL_DECL mob_enslaved_netherwing_drakeAI : public ScriptedAI
             m_creature->ForcedDespawn();
     }
 
-    void UpdateAI(const uint32 uiDiff)
+    void UpdateAI(const uint32 uiDiff) override
     {
         if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
         {
@@ -298,7 +300,7 @@ struct MANGOS_DLL_DECL npc_dragonmaw_peonAI : public ScriptedAI
     uint32 m_uiMoveTimer;
     uint32 m_uiEatTimer;
 
-    void Reset()
+    void Reset() override
     {
         m_playerGuid.Clear();
         m_uiPoisonTimer = 0;
@@ -319,7 +321,7 @@ struct MANGOS_DLL_DECL npc_dragonmaw_peonAI : public ScriptedAI
         return true;
     }
 
-    void MovementInform(uint32 uiType, uint32 uiPointId)
+    void MovementInform(uint32 uiType, uint32 uiPointId) override
     {
         if (uiType != POINT_MOTION_TYPE)
             return;
@@ -340,7 +342,7 @@ struct MANGOS_DLL_DECL npc_dragonmaw_peonAI : public ScriptedAI
         }
     }
 
-    void UpdateAI(const uint32 uiDiff)
+    void UpdateAI(const uint32 uiDiff) override
     {
         if (m_uiMoveTimer)
         {
@@ -468,12 +470,12 @@ struct MANGOS_DLL_DECL npc_wildaAI : public npc_escortAI
 
     uint32 m_uiHealingTimer;
 
-    void Reset()
+    void Reset() override
     {
         m_uiHealingTimer = 0;
     }
 
-    void WaypointReached(uint32 uiPointId)
+    void WaypointReached(uint32 uiPointId) override
     {
         Player* pPlayer = GetPlayerForEscort();
 
@@ -532,7 +534,7 @@ struct MANGOS_DLL_DECL npc_wildaAI : public npc_escortAI
         }
     }
 
-    void JustSummoned(Creature* pSummoned)
+    void JustSummoned(Creature* pSummoned) override
     {
         if (pSummoned->GetEntry() == NPC_COILSKAR_ASSASSIN)
             pSummoned->AI()->AttackStart(m_creature);
@@ -555,10 +557,10 @@ struct MANGOS_DLL_DECL npc_wildaAI : public npc_escortAI
         float fX, fY, fZ;
         m_creature->GetRandomPoint(m_creature->GetPositionX(), m_creature->GetPositionY(), m_creature->GetPositionZ(), 15.0f, fX, fY, fZ);
 
-        m_creature->SummonCreature(NPC_COILSKAR_ASSASSIN, fX, fY, fZ, 0.0f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 5000);
+        m_creature->SummonCreature(NPC_COILSKAR_ASSASSIN, fX, fY, fZ, 0.0f, TEMPSUMMON_TIMED_OOC_DESPAWN, 5000);
     }
 
-    void Aggro(Unit* pWho)
+    void Aggro(Unit* pWho) override
     {
         // don't always use
         if (urand(0, 4))
@@ -576,7 +578,7 @@ struct MANGOS_DLL_DECL npc_wildaAI : public npc_escortAI
         }
     }
 
-    void UpdateEscortAI(const uint32 uiDiff)
+    void UpdateEscortAI(const uint32 uiDiff) override
     {
         if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
             return;
@@ -737,7 +739,7 @@ struct MANGOS_DLL_DECL mob_torlothAI : public ScriptedAI
     uint8  m_uiAnimationCount;
     uint32 m_uiAnimationTimer;
 
-    void Reset()
+    void Reset() override
     {
         m_lordIllidanGuid.Clear();
         m_playerGuid.Clear();
@@ -753,7 +755,7 @@ struct MANGOS_DLL_DECL mob_torlothAI : public ScriptedAI
         SetCombatMovement(false);
     }
 
-    void EnterEvadeMode()
+    void EnterEvadeMode() override
     {
         m_creature->ForcedDespawn();
     }
@@ -811,7 +813,7 @@ struct MANGOS_DLL_DECL mob_torlothAI : public ScriptedAI
         ++m_uiAnimationCount;
     }
 
-    void JustDied(Unit* pKiller)
+    void JustDied(Unit* pKiller) override
     {
         if (Player* pPlayer = pKiller->GetCharmerOrOwnerPlayerOrPlayerItself())
         {
@@ -825,7 +827,7 @@ struct MANGOS_DLL_DECL mob_torlothAI : public ScriptedAI
         }
     }
 
-    void UpdateAI(const uint32 uiDiff)
+    void UpdateAI(const uint32 uiDiff) override
     {
         if (m_uiAnimationCount < 7)
         {
@@ -892,7 +894,7 @@ struct MANGOS_DLL_DECL npc_lord_illidan_stormrageAI : public Scripted_NoMovement
     bool m_bEventFailed;
     bool m_bWaveAnnounced;
 
-    void Reset()
+    void Reset() override
     {
         m_playerGuid.Clear();
 
@@ -958,7 +960,7 @@ struct MANGOS_DLL_DECL npc_lord_illidan_stormrageAI : public Scripted_NoMovement
         m_uiAnnounceTimer = WavesInfo[m_uiWaveCount].uiYellTimer;
     }
 
-    void JustSummoned(Creature* pSummoned)
+    void JustSummoned(Creature* pSummoned) override
     {
         // increment mob count
         ++m_uiMobCount;
@@ -985,7 +987,7 @@ struct MANGOS_DLL_DECL npc_lord_illidan_stormrageAI : public Scripted_NoMovement
         }
     }
 
-    void SummonedCreatureDespawn(Creature* pCreature)
+    void SummonedCreatureDespawn(Creature* /*pCreature*/) override
     {
         // decrement mob count
         --m_uiMobCount;
@@ -1056,7 +1058,7 @@ struct MANGOS_DLL_DECL npc_lord_illidan_stormrageAI : public Scripted_NoMovement
         }
     }
 
-    void UpdateAI(const uint32 uiDiff)
+    void UpdateAI(const uint32 uiDiff) override
     {
         if (!m_playerGuid || !m_bEventStarted)
             return;
@@ -1098,7 +1100,7 @@ CreatureAI* GetAI_npc_lord_illidan_stormrage(Creature * (pCreature))
 /*#####
 # go_crystal_prison : GameObject that begins the event and hands out quest
 ######*/
-bool GOQuestAccept_GO_crystal_prison(Player* pPlayer, GameObject* pGo, Quest const* pQuest)
+bool GOQuestAccept_GO_crystal_prison(Player* pPlayer, GameObject* /*pGo*/, Quest const* pQuest)
 {
     if (pQuest->GetQuestId() == QUEST_BATTLE_OF_THE_CRIMSON_WATCH)
         if (Creature* pLordIllidan = GetClosestCreatureWithEntry(pPlayer, NPC_LORD_ILLIDAN, 50.0))
@@ -1159,10 +1161,10 @@ struct MANGOS_DLL_DECL npc_totem_of_spiritsAI : public ScriptedPetAI
 {
     npc_totem_of_spiritsAI(Creature* pCreature) : ScriptedPetAI(pCreature) { Reset(); }
 
-    void Reset() {}
+    void Reset() override {}
 
-    void UpdateAI(const uint32 uiDiff) override {}
-    void AttackedBy(Unit* pAttacker) override {}
+    void UpdateAI(const uint32 /*uiDiff*/) override {}
+    void AttackedBy(Unit* /*pAttacker*/) override {}
 
     void MoveInLineOfSight(Unit* pWho) override
     {
@@ -1292,7 +1294,7 @@ bool EffectAuraDummy_npc_totem_of_spirits(const Aura* pAura, bool bApply)
     return true;
 }
 
-bool ProcessEventId_event_spell_soul_captured_credit(uint32 uiEventId, Object* pSource, Object* pTarget, bool bIsStart)
+bool ProcessEventId_event_spell_soul_captured_credit(uint32 uiEventId, Object* pSource, Object* /*pTarget*/, bool bIsStart)
 {
     if (bIsStart && pSource->GetTypeId() == TYPEID_UNIT)
     {
@@ -1424,7 +1426,7 @@ struct MANGOS_DLL_DECL npc_spawned_oronok_tornheartAI : public ScriptedAI, priva
 
     bool m_bHasAttackStart;
 
-    void Reset()
+    void Reset() override
     {
         m_uiLightningTimer  = 15000;
         m_uiTotemTimer      = 10000;
@@ -1434,7 +1436,7 @@ struct MANGOS_DLL_DECL npc_spawned_oronok_tornheartAI : public ScriptedAI, priva
         m_bHasAttackStart   = false;
     }
 
-    void JustDidDialogueStep(int32 iEntry)
+    void JustDidDialogueStep(int32 iEntry) override
     {
         switch (iEntry)
         {
@@ -1486,7 +1488,7 @@ struct MANGOS_DLL_DECL npc_spawned_oronok_tornheartAI : public ScriptedAI, priva
         }
     }
 
-    Creature* GetSpeakerByEntry(uint32 uiEntry)
+    Creature* GetSpeakerByEntry(uint32 uiEntry) override
     {
         switch (uiEntry)
         {
@@ -1500,7 +1502,7 @@ struct MANGOS_DLL_DECL npc_spawned_oronok_tornheartAI : public ScriptedAI, priva
         }
     }
 
-    void Aggro(Unit* pWho)
+    void Aggro(Unit* pWho) override
     {
         if (!m_bHasAttackStart && pWho->GetEntry() == NPC_EARTH_SPIRIT)
         {
@@ -1515,7 +1517,7 @@ struct MANGOS_DLL_DECL npc_spawned_oronok_tornheartAI : public ScriptedAI, priva
         }
     }
 
-    void JustSummoned(Creature* pSummoned)
+    void JustSummoned(Creature* pSummoned) override
     {
         switch (pSummoned->GetEntry())
         {
@@ -1528,7 +1530,7 @@ struct MANGOS_DLL_DECL npc_spawned_oronok_tornheartAI : public ScriptedAI, priva
         }
     }
 
-    void EnterEvadeMode()
+    void EnterEvadeMode() override
     {
         m_creature->RemoveAllAuras();
         m_creature->DeleteThreatList();
@@ -1554,7 +1556,7 @@ struct MANGOS_DLL_DECL npc_spawned_oronok_tornheartAI : public ScriptedAI, priva
         }
     }
 
-    void MovementInform(uint32 uiMotionType, uint32 uiPointId)
+    void MovementInform(uint32 uiMotionType, uint32 uiPointId) override
     {
         if (uiMotionType != POINT_MOTION_TYPE)
             return;
@@ -1580,7 +1582,7 @@ struct MANGOS_DLL_DECL npc_spawned_oronok_tornheartAI : public ScriptedAI, priva
         }
     }
 
-    void UpdateAI(const uint32 uiDiff)
+    void UpdateAI(const uint32 uiDiff) override
     {
         DialogueUpdate(uiDiff);
 
@@ -1644,7 +1646,7 @@ bool GossipHello_npc_spawned_oronok_tornheart(Player* pPlayer, Creature* pCreatu
     return true;
 }
 
-bool GossipSelect_npc_spawned_oronok_tornheart(Player* pPlayer, Creature* pCreature, uint32 uiSender, uint32 uiAction)
+bool GossipSelect_npc_spawned_oronok_tornheart(Player* pPlayer, Creature* pCreature, uint32 /*uiSender*/, uint32 uiAction)
 {
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
     {

@@ -30,6 +30,7 @@ enum
     // NPC_TERESTIAN                = 15688,
     NPC_NIGHTBANE                   = 17225,
     NPC_NIGHTBANE_HELPER            = 17260,
+    NPC_NETHERSPITE                 = 15689,
     NPC_ECHO_MEDIVH                 = 16816,
     NPC_INVISIBLE_STALKER           = 22519,                    // placeholder for dead chess npcs
     NPC_CHESS_STATUS_BAR            = 22520,                    // npc that controlls the transformation of dead pieces
@@ -143,17 +144,17 @@ class MANGOS_DLL_DECL instance_karazhan : public ScriptedInstance
         instance_karazhan(Map* pMap);
         ~instance_karazhan() {}
 
-        void Initialize();
-        bool IsEncounterInProgress() const;
+        void Initialize() override;
+        bool IsEncounterInProgress() const override;
 
-        void OnPlayerEnter(Player* pPlayer);
-        void OnCreatureCreate(Creature* pCreature);
-        void OnObjectCreate(GameObject* pGo);
+        void OnPlayerEnter(Player* pPlayer) override;
+        void OnCreatureCreate(Creature* pCreature) override;
+        void OnObjectCreate(GameObject* pGo) override;
 
-        void OnCreatureDeath(Creature* pCreature);
+        void OnCreatureDeath(Creature* pCreature) override;
 
-        void SetData(uint32 uiType, uint32 uiData);
-        uint32 GetData(uint32 uiType) const;
+        void SetData(uint32 uiType, uint32 uiData) override;
+        uint32 GetData(uint32 uiType) const override;
 
         void DoPrepareOperaStage(Creature* pOrganizer);
 
@@ -164,8 +165,8 @@ class MANGOS_DLL_DECL instance_karazhan : public ScriptedInstance
 
         void GetNightbaneTriggers(GuidList& lList, bool bGround) { lList = bGround ? m_lNightbaneGroundTriggers : m_lNightbaneAirTriggers; }
 
-        void Load(const char* chrIn);
-        const char* Save() const { return m_strInstData.c_str(); }
+        void Load(const char* chrIn) override;
+        const char* Save() const override { return m_strInstData.c_str(); }
 
         void Update(uint32 uiDiff) override;
 

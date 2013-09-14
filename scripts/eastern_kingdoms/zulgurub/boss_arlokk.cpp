@@ -84,12 +84,12 @@ struct MANGOS_DLL_DECL boss_arlokkAI : public ScriptedAI
             m_creature->SetVisibility(VISIBILITY_ON);
     }
 
-    void Aggro(Unit* pWho)
+    void Aggro(Unit* /*pWho*/) override
     {
         DoScriptText(SAY_AGGRO, m_creature);
     }
 
-    void JustReachedHome()
+    void JustReachedHome() override
     {
         if (m_pInstance)
             m_pInstance->SetData(TYPE_ARLOKK, FAIL);
@@ -98,7 +98,7 @@ struct MANGOS_DLL_DECL boss_arlokkAI : public ScriptedAI
         m_creature->ForcedDespawn();
     }
 
-    void JustDied(Unit* pKiller)
+    void JustDied(Unit* /*pKiller*/) override
     {
         DoScriptText(SAY_DEATH, m_creature);
         // Restore visibility in case of killed by dots
@@ -109,14 +109,14 @@ struct MANGOS_DLL_DECL boss_arlokkAI : public ScriptedAI
             m_pInstance->SetData(TYPE_ARLOKK, DONE);
     }
 
-    void JustSummoned(Creature* pSummoned)
+    void JustSummoned(Creature* pSummoned) override
     {
         // Just attack a random target. The Marked player will attract them automatically
         if (Unit* pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0))
             pSummoned->AI()->AttackStart(pTarget);
     }
 
-    void UpdateAI(const uint32 uiDiff)
+    void UpdateAI(const uint32 uiDiff) override
     {
         if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
             return;
@@ -127,9 +127,9 @@ struct MANGOS_DLL_DECL boss_arlokkAI : public ScriptedAI
             if (m_pInstance)
             {
                 if (Creature* pTrigger = m_pInstance->SelectRandomPantherTrigger(true))
-                    m_creature->SummonCreature(NPC_ZULIAN_PROWLER, pTrigger->GetPositionX(), pTrigger->GetPositionY(), pTrigger->GetPositionZ(), 0, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 30000);
+                    m_creature->SummonCreature(NPC_ZULIAN_PROWLER, pTrigger->GetPositionX(), pTrigger->GetPositionY(), pTrigger->GetPositionZ(), 0, TEMPSUMMON_TIMED_OOC_DESPAWN, 30000);
                 if (Creature* pTrigger = m_pInstance->SelectRandomPantherTrigger(false))
-                    m_creature->SummonCreature(NPC_ZULIAN_PROWLER, pTrigger->GetPositionX(), pTrigger->GetPositionY(), pTrigger->GetPositionZ(), 0, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 30000);
+                    m_creature->SummonCreature(NPC_ZULIAN_PROWLER, pTrigger->GetPositionX(), pTrigger->GetPositionY(), pTrigger->GetPositionZ(), 0, TEMPSUMMON_TIMED_OOC_DESPAWN, 30000);
             }
 
             m_uiSummonTimer = 5000;
@@ -268,7 +268,7 @@ CreatureAI* GetAI_boss_arlokk(Creature* pCreature)
     return new boss_arlokkAI(pCreature);
 }
 
-bool GOUse_go_gong_of_bethekk(Player* pPlayer, GameObject* pGo)
+bool GOUse_go_gong_of_bethekk(Player* /*pPlayer*/, GameObject* pGo)
 {
     if (ScriptedInstance* pInstance = (ScriptedInstance*)pGo->GetInstanceData())
     {

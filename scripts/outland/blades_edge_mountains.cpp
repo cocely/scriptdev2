@@ -71,7 +71,7 @@ struct MANGOS_DLL_DECL mobs_nether_drakeAI : public ScriptedAI
     uint32 m_uiManaBurnTimer;
     uint32 m_uiIntangiblePresenceTimer;
 
-    void Reset()
+    void Reset() override
     {
         m_bIsNihil                  = false;
         m_uiNihilSpeechTimer        = 3000;
@@ -82,7 +82,7 @@ struct MANGOS_DLL_DECL mobs_nether_drakeAI : public ScriptedAI
         m_uiIntangiblePresenceTimer = 15000;
     }
 
-    void MoveInLineOfSight(Unit* pWho)
+    void MoveInLineOfSight(Unit* pWho) override
     {
         if (m_creature->HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE))
             return;
@@ -91,7 +91,7 @@ struct MANGOS_DLL_DECL mobs_nether_drakeAI : public ScriptedAI
     }
 
     // in case creature was not summoned (not expected)
-    void MovementInform(uint32 uiMoveType, uint32 uiPointId)
+    void MovementInform(uint32 uiMoveType, uint32 uiPointId) override
     {
         if (uiMoveType != POINT_MOTION_TYPE)
             return;
@@ -100,7 +100,7 @@ struct MANGOS_DLL_DECL mobs_nether_drakeAI : public ScriptedAI
             m_creature->ForcedDespawn();
     }
 
-    void SpellHit(Unit* pCaster, const SpellEntry* pSpell)
+    void SpellHit(Unit* pCaster, const SpellEntry* pSpell) override
     {
         if (pSpell->Id == SPELL_T_PHASE_MODULATOR && pCaster->GetTypeId() == TYPEID_PLAYER)
         {
@@ -134,7 +134,7 @@ struct MANGOS_DLL_DECL mobs_nether_drakeAI : public ScriptedAI
         }
     }
 
-    void UpdateAI(const uint32 uiDiff)
+    void UpdateAI(const uint32 uiDiff) override
     {
         if (m_bIsNihil)
         {
@@ -158,7 +158,7 @@ struct MANGOS_DLL_DECL mobs_nether_drakeAI : public ScriptedAI
                         m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
                         // take off to location above
                         m_creature->SetLevitate(true);
-                        m_creature->SetByteFlag(UNIT_FIELD_BYTES_1, 3, UNIT_BYTE1_FLAG_ALWAYS_STAND | UNIT_BYTE1_FLAG_UNK_2);
+                        m_creature->SetByteFlag(UNIT_FIELD_BYTES_1, 3, UNIT_BYTE1_FLAG_ALWAYS_STAND | UNIT_BYTE1_FLAG_HOVER);
                         m_creature->GetMotionMaster()->MovePoint(1, m_creature->GetPositionX() + 50.0f, m_creature->GetPositionY(), m_creature->GetPositionZ() + 50.0f);
                         break;
                 }
@@ -226,9 +226,9 @@ struct MANGOS_DLL_DECL npc_daranelleAI : public ScriptedAI
 {
     npc_daranelleAI(Creature* pCreature) : ScriptedAI(pCreature) {Reset();}
 
-    void Reset() { }
+    void Reset() override { }
 
-    void MoveInLineOfSight(Unit* pWho)
+    void MoveInLineOfSight(Unit* pWho) override
     {
         if (pWho->GetTypeId() == TYPEID_PLAYER)
         {

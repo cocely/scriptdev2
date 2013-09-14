@@ -104,7 +104,7 @@ struct MANGOS_DLL_DECL boss_nothAI : public ScriptedAI
     uint32 m_uiCurseTimer;
     uint32 m_uiSummonTimer;
 
-    void Reset()
+    void Reset() override
     {
         m_uiPhase = PHASE_GROUND;
         m_uiPhaseSub = PHASE_GROUND;
@@ -115,9 +115,9 @@ struct MANGOS_DLL_DECL boss_nothAI : public ScriptedAI
         m_uiSummonTimer = 12000;
     }
 
-    void Aggro(Unit* pWho)
+    void Aggro(Unit* /*pWho*/) override
     {
-        switch(urand(0, 2))
+        switch (urand(0, 2))
         {
             case 0: DoScriptText(SAY_AGGRO1, m_creature); break;
             case 1: DoScriptText(SAY_AGGRO2, m_creature); break;
@@ -128,17 +128,17 @@ struct MANGOS_DLL_DECL boss_nothAI : public ScriptedAI
             m_pInstance->SetData(TYPE_NOTH, IN_PROGRESS);
     }
 
-    void JustSummoned(Creature* pSummoned)
+    void JustSummoned(Creature* pSummoned) override
     {
         pSummoned->SetInCombatWithZone();
     }
 
-    void KilledUnit(Unit* pVictim)
+    void KilledUnit(Unit* /*pVictim*/) override
     {
         DoScriptText(urand(0, 1) ? SAY_SLAY1 : SAY_SLAY2, m_creature);
     }
 
-    void JustDied(Unit* pKiller)
+    void JustDied(Unit* /*pKiller*/) override
     {
         DoScriptText(SAY_DEATH, m_creature);
 
@@ -146,13 +146,13 @@ struct MANGOS_DLL_DECL boss_nothAI : public ScriptedAI
             m_pInstance->SetData(TYPE_NOTH, DONE);
     }
 
-    void JustReachedHome()
+    void JustReachedHome() override
     {
         if (m_pInstance)
             m_pInstance->SetData(TYPE_NOTH, FAIL);
     }
 
-    void SpellHit(Unit* pCaster, const SpellEntry* pSpell)
+    void SpellHit(Unit* pCaster, const SpellEntry* pSpell) override
     {
         if (pCaster != m_creature)
             return;
@@ -164,7 +164,7 @@ struct MANGOS_DLL_DECL boss_nothAI : public ScriptedAI
         }
     }
 
-    void UpdateAI(const uint32 uiDiff)
+    void UpdateAI(const uint32 uiDiff) override
     {
         if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
             return;
@@ -182,7 +182,7 @@ struct MANGOS_DLL_DECL boss_nothAI : public ScriptedAI
                         m_uiPhase = PHASE_BALCONY;
                         ++m_uiPhaseSub;
 
-                        switch(m_uiPhaseSub)                // Set Duration of Skeleton phase
+                        switch (m_uiPhaseSub)               // Set Duration of Skeleton phase
                         {
                             case PHASE_SKELETON_1: m_uiPhaseTimer = 70000;  break;
                             case PHASE_SKELETON_2: m_uiPhaseTimer = 97000;  break;
@@ -234,8 +234,8 @@ struct MANGOS_DLL_DECL boss_nothAI : public ScriptedAI
                         SPELL_SUMMON_WARRIOR_1, SPELL_SUMMON_WARRIOR_2, SPELL_SUMMON_WARRIOR_3
                     };
 
-                    for(uint8 i = 0; i < 2; ++i)
-                        DoCastSpellIfCan(m_creature, auiSpellSummonPlaguedWarrior[urand(0,2)], CAST_TRIGGERED);
+                    for (uint8 i = 0; i < 2; ++i)
+                        DoCastSpellIfCan(m_creature, auiSpellSummonPlaguedWarrior[urand(0, 2)], CAST_TRIGGERED);
                 }
                 else
                 {
@@ -290,12 +290,12 @@ struct MANGOS_DLL_DECL boss_nothAI : public ScriptedAI
                 };
 
                 // A bit unclear how many in each sub phase
-                switch(m_uiPhaseSub)
+                switch (m_uiPhaseSub)
                 {
                     case PHASE_SKELETON_1:
                     {
                         for (uint8 i = 0; i < (m_bIsRegularMode ? 2 : 4); ++i)
-                            DoCastSpellIfCan(m_creature, auiSpellSummonPlaguedChampion[urand(0,9)], CAST_TRIGGERED);
+                            DoCastSpellIfCan(m_creature, auiSpellSummonPlaguedChampion[urand(0, 9)], CAST_TRIGGERED);
 
                         break;
                     }
@@ -303,15 +303,15 @@ struct MANGOS_DLL_DECL boss_nothAI : public ScriptedAI
                     {
                         for (uint8 i = 0; i < (m_bIsRegularMode ? 1 : 2); ++i)
                         {
-                            DoCastSpellIfCan(m_creature, auiSpellSummonPlaguedChampion[urand(0,9)], CAST_TRIGGERED);
-                            DoCastSpellIfCan(m_creature, auiSpellSummonPlaguedGuardian[urand(0,3)], CAST_TRIGGERED);
+                            DoCastSpellIfCan(m_creature, auiSpellSummonPlaguedChampion[urand(0, 9)], CAST_TRIGGERED);
+                            DoCastSpellIfCan(m_creature, auiSpellSummonPlaguedGuardian[urand(0, 3)], CAST_TRIGGERED);
                         }
                         break;
                     }
                     case PHASE_SKELETON_3:
                     {
                         for (uint8 i = 0; i < (m_bIsRegularMode ? 2 : 4); ++i)
-                            DoCastSpellIfCan(m_creature, auiSpellSummonPlaguedGuardian[urand(0,3)], CAST_TRIGGERED);
+                            DoCastSpellIfCan(m_creature, auiSpellSummonPlaguedGuardian[urand(0, 3)], CAST_TRIGGERED);
 
                         break;
                     }

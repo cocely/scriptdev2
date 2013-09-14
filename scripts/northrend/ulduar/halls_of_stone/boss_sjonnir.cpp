@@ -97,18 +97,18 @@ struct MANGOS_DLL_DECL boss_sjonnirAI : public ScriptedAI
 
     uint8 m_uiHpCheck;
 
-    void Reset()
+    void Reset() override
     {
-        m_uiChainLightningTimer     = urand(3000, 8000);        // TODO timers weak
+        m_uiChainLightningTimer     = urand(3000, 8000);    // TODO timers weak
         m_uiLightningShieldTimer    = urand(20000, 25000);
         m_uiStaticChargeTimer       = urand(20000, 25000);
         m_uiLightningRingTimer      = urand(30000, 35000);
-        m_uiFrenzyTimer             = 4*MINUTE*IN_MILLISECONDS; // TODO no proper source for this "long"
+        m_uiFrenzyTimer             = 4 * MINUTE * IN_MILLISECONDS; // TODO no proper source for this "long"
 
         m_uiHpCheck                 = 75;
     }
 
-    void Aggro(Unit* pWho)
+    void Aggro(Unit* /*pWho*/) override
     {
         DoScriptText(SAY_AGGRO, m_creature);
 
@@ -119,7 +119,7 @@ struct MANGOS_DLL_DECL boss_sjonnirAI : public ScriptedAI
             m_pInstance->SetData(TYPE_SJONNIR, IN_PROGRESS);
     }
 
-    void JustDied(Unit* pKiller)
+    void JustDied(Unit* /*pKiller*/) override
     {
         DoScriptText(SAY_DEATH, m_creature);
 
@@ -127,13 +127,13 @@ struct MANGOS_DLL_DECL boss_sjonnirAI : public ScriptedAI
             m_pInstance->SetData(TYPE_SJONNIR, DONE);
     }
 
-    void JustReachedHome()
+    void JustReachedHome() override
     {
         if (m_pInstance)
             m_pInstance->SetData(TYPE_SJONNIR, FAIL);
     }
 
-    void JustSummoned(Creature* pSummoned)
+    void JustSummoned(Creature* pSummoned) override
     {
         switch (pSummoned->GetEntry())
         {
@@ -174,9 +174,9 @@ struct MANGOS_DLL_DECL boss_sjonnirAI : public ScriptedAI
         pSummoned->GetMotionMaster()->MoveRandomAroundPoint(pSummoned->GetPositionX(), pSummoned->GetPositionY(), pSummoned->GetPositionZ(), 10.0f);
     }
 
-    void KilledUnit(Unit* pVictim)
+    void KilledUnit(Unit* /*pVictim*/) override
     {
-        switch(urand(0, 2))
+        switch (urand(0, 2))
         {
             case 0: DoScriptText(SAY_SLAY_1, m_creature); break;
             case 1: DoScriptText(SAY_SLAY_2, m_creature); break;
@@ -200,14 +200,14 @@ struct MANGOS_DLL_DECL boss_sjonnirAI : public ScriptedAI
         return false;
     }
 
-    void UpdateAI(const uint32 uiDiff)
+    void UpdateAI(const uint32 uiDiff) override
     {
         if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
             return;
 
         if (m_creature->GetHealthPercent() <= (float)m_uiHpCheck)
         {
-            switch(m_uiHpCheck)
+            switch (m_uiHpCheck)
             {
                 case 75:
                     if (DoCastSpellIfCan(m_creature, m_bIsRegularMode ? SPELL_SUMMON_IRON_TROGG : SPELL_SUMMON_IRON_TROGG_H, CAST_TRIGGERED) == CAST_OK)

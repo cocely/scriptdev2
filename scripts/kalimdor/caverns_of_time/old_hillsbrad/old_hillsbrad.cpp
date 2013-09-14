@@ -63,7 +63,7 @@ bool GossipHello_npc_erozion(Player* pPlayer, Creature* pCreature)
     return true;
 }
 
-bool GossipSelect_npc_erozion(Player* pPlayer, Creature* pCreature, uint32 uiSender, uint32 uiAction)
+bool GossipSelect_npc_erozion(Player* pPlayer, Creature* pCreature, uint32 /*uiSender*/, uint32 uiAction)
 {
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
     {
@@ -286,7 +286,7 @@ struct MANGOS_DLL_DECL npc_thrall_old_hillsbradAI : public npc_escortAI, private
         }
     }
 
-    void Aggro(Unit* pWho)
+    void Aggro(Unit* /*pWho*/) override
     {
         switch (urand(0, 3))
         {
@@ -303,7 +303,7 @@ struct MANGOS_DLL_DECL npc_thrall_old_hillsbradAI : public npc_escortAI, private
         }
     }
 
-    void KilledUnit(Unit* pVictim)
+    void KilledUnit(Unit* /*pVictim*/) override
     {
         switch (urand(0, 2))
         {
@@ -313,7 +313,7 @@ struct MANGOS_DLL_DECL npc_thrall_old_hillsbradAI : public npc_escortAI, private
         }
     }
 
-    void JustDied(Unit* pKiller)
+    void JustDied(Unit* /*pKiller*/) override
     {
         // fail, and relocation handled in instance script
         if (m_pInstance)
@@ -335,7 +335,7 @@ struct MANGOS_DLL_DECL npc_thrall_old_hillsbradAI : public npc_escortAI, private
         }
     }
 
-    void CorpseRemoved(uint32& uiRespawnDelay)
+    void CorpseRemoved(uint32& uiRespawnDelay) override
     {
         uiRespawnDelay = 0;
 
@@ -344,7 +344,7 @@ struct MANGOS_DLL_DECL npc_thrall_old_hillsbradAI : public npc_escortAI, private
             uiRespawnDelay = 12 * HOUR;
     }
 
-    void JustRespawned()
+    void JustRespawned() override
     {
         npc_escortAI::JustRespawned();
 
@@ -417,7 +417,7 @@ struct MANGOS_DLL_DECL npc_thrall_old_hillsbradAI : public npc_escortAI, private
         }
     }
 
-    void EnterEvadeMode()
+    void EnterEvadeMode() override
     {
         if (HasEscortState(STATE_ESCORT_ESCORTING))
         {
@@ -432,7 +432,7 @@ struct MANGOS_DLL_DECL npc_thrall_old_hillsbradAI : public npc_escortAI, private
         npc_escortAI::EnterEvadeMode();
     }
 
-    void JustSummoned(Creature* pSummoned)
+    void JustSummoned(Creature* pSummoned) override
     {
         switch (pSummoned->GetEntry())
         {
@@ -526,7 +526,7 @@ struct MANGOS_DLL_DECL npc_thrall_old_hillsbradAI : public npc_escortAI, private
         }
     }
 
-    void SummonedCreatureJustDied(Creature* pSummoned)
+    void SummonedCreatureJustDied(Creature* pSummoned) override
     {
         switch (pSummoned->GetEntry())
         {
@@ -589,7 +589,7 @@ struct MANGOS_DLL_DECL npc_thrall_old_hillsbradAI : public npc_escortAI, private
         }
     }
 
-    void SummonedMovementInform(Creature* pSummoned, uint32 uiType, uint32 uiPointId)
+    void SummonedMovementInform(Creature* pSummoned, uint32 uiType, uint32 uiPointId) override
     {
         if (uiType != POINT_MOTION_TYPE)
             return;
@@ -639,7 +639,7 @@ struct MANGOS_DLL_DECL npc_thrall_old_hillsbradAI : public npc_escortAI, private
         }
     }
 
-    void JustDidDialogueStep(int32 iEntry)
+    void JustDidDialogueStep(int32 iEntry) override
     {
         if (!m_pInstance)
             return;
@@ -689,7 +689,7 @@ struct MANGOS_DLL_DECL npc_thrall_old_hillsbradAI : public npc_escortAI, private
         }
     }
 
-    void WaypointReached(uint32 uiPoint)
+    void WaypointReached(uint32 uiPoint) override
     {
         if (!m_pInstance)
             return;
@@ -730,28 +730,28 @@ struct MANGOS_DLL_DECL npc_thrall_old_hillsbradAI : public npc_escortAI, private
                 break;
                 // *** Escort event - Part I - outside the keep ***
             case 17:
-                m_creature->SummonCreature(NPC_MAGE,    2186.909f, 139.8108f, 88.21628f, 5.75f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 5000);
-                m_creature->SummonCreature(NPC_WARDEN,  2187.943f, 141.6124f, 88.21628f, 5.73f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 5000);
-                m_creature->SummonCreature(NPC_VETERAN, 2190.508f, 140.4597f, 88.21628f, 6.04f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 5000);
-                m_creature->SummonCreature(NPC_VETERAN, 2189.543f, 139.0996f, 88.23965f, 0.21f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 5000);
+                m_creature->SummonCreature(NPC_MAGE,    2186.909f, 139.8108f, 88.21628f, 5.75f, TEMPSUMMON_TIMED_OOC_DESPAWN, 5000);
+                m_creature->SummonCreature(NPC_WARDEN,  2187.943f, 141.6124f, 88.21628f, 5.73f, TEMPSUMMON_TIMED_OOC_DESPAWN, 5000);
+                m_creature->SummonCreature(NPC_VETERAN, 2190.508f, 140.4597f, 88.21628f, 6.04f, TEMPSUMMON_TIMED_OOC_DESPAWN, 5000);
+                m_creature->SummonCreature(NPC_VETERAN, 2189.543f, 139.0996f, 88.23965f, 0.21f, TEMPSUMMON_TIMED_OOC_DESPAWN, 5000);
                 break;
             case 20:
-                m_creature->SummonCreature(NPC_MAGE,    2149.463f, 104.9756f, 73.63239f, 1.71f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 5000);
-                m_creature->SummonCreature(NPC_SENTRY,  2147.642f, 105.0251f, 73.99422f, 1.52f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 5000);
-                m_creature->SummonCreature(NPC_VETERAN, 2149.212f, 107.2005f, 74.15676f, 1.71f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 5000);
-                m_creature->SummonCreature(NPC_WARDEN,  2147.328f, 106.7235f, 74.34447f, 1.69f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 5000);
+                m_creature->SummonCreature(NPC_MAGE,    2149.463f, 104.9756f, 73.63239f, 1.71f, TEMPSUMMON_TIMED_OOC_DESPAWN, 5000);
+                m_creature->SummonCreature(NPC_SENTRY,  2147.642f, 105.0251f, 73.99422f, 1.52f, TEMPSUMMON_TIMED_OOC_DESPAWN, 5000);
+                m_creature->SummonCreature(NPC_VETERAN, 2149.212f, 107.2005f, 74.15676f, 1.71f, TEMPSUMMON_TIMED_OOC_DESPAWN, 5000);
+                m_creature->SummonCreature(NPC_WARDEN,  2147.328f, 106.7235f, 74.34447f, 1.69f, TEMPSUMMON_TIMED_OOC_DESPAWN, 5000);
                 break;
             case 23:
-                m_creature->SummonCreature(NPC_MAGE,    2142.363f, 172.4260f, 66.30494f, 2.54f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 5000);
-                m_creature->SummonCreature(NPC_SENTRY,  2138.177f, 168.6046f, 66.30494f, 2.47f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 5000);
-                m_creature->SummonCreature(NPC_SENTRY,  2142.372f, 174.2907f, 66.30494f, 2.56f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 5000);
-                m_creature->SummonCreature(NPC_VETERAN, 2140.146f, 169.2364f, 66.30494f, 2.49f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 5000);
+                m_creature->SummonCreature(NPC_MAGE,    2142.363f, 172.4260f, 66.30494f, 2.54f, TEMPSUMMON_TIMED_OOC_DESPAWN, 5000);
+                m_creature->SummonCreature(NPC_SENTRY,  2138.177f, 168.6046f, 66.30494f, 2.47f, TEMPSUMMON_TIMED_OOC_DESPAWN, 5000);
+                m_creature->SummonCreature(NPC_SENTRY,  2142.372f, 174.2907f, 66.30494f, 2.56f, TEMPSUMMON_TIMED_OOC_DESPAWN, 5000);
+                m_creature->SummonCreature(NPC_VETERAN, 2140.146f, 169.2364f, 66.30494f, 2.49f, TEMPSUMMON_TIMED_OOC_DESPAWN, 5000);
                 break;
             case 25:
-                m_creature->SummonCreature(NPC_MAGE,    2107.938f, 192.0753f, 66.30494f, 2.54f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 5000);
-                m_creature->SummonCreature(NPC_MAGE,    2109.852f, 195.1403f, 66.30493f, 2.42f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 5000);
-                m_creature->SummonCreature(NPC_VETERAN, 2108.486f, 189.9346f, 66.30494f, 2.68f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 5000);
-                m_creature->SummonCreature(NPC_VETERAN, 2112.387f, 195.4947f, 66.30494f, 2.39f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 5000);
+                m_creature->SummonCreature(NPC_MAGE,    2107.938f, 192.0753f, 66.30494f, 2.54f, TEMPSUMMON_TIMED_OOC_DESPAWN, 5000);
+                m_creature->SummonCreature(NPC_MAGE,    2109.852f, 195.1403f, 66.30493f, 2.42f, TEMPSUMMON_TIMED_OOC_DESPAWN, 5000);
+                m_creature->SummonCreature(NPC_VETERAN, 2108.486f, 189.9346f, 66.30494f, 2.68f, TEMPSUMMON_TIMED_OOC_DESPAWN, 5000);
+                m_creature->SummonCreature(NPC_VETERAN, 2112.387f, 195.4947f, 66.30494f, 2.39f, TEMPSUMMON_TIMED_OOC_DESPAWN, 5000);
                 break;
                 // *** Escort event - Part I - meet Skarloc ***
             case 31:
@@ -857,10 +857,10 @@ struct MANGOS_DLL_DECL npc_thrall_old_hillsbradAI : public npc_escortAI, private
                 break;
                 // *** Escort event - Part III - inside the inn ***
             case 105:
-                m_creature->SummonCreature(NPC_INN_PROTECTOR, 2652.71f, 660.31f, 61.93f, 1.67f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 5000);
-                m_creature->SummonCreature(NPC_INN_LOOKOUT,   2648.96f, 662.59f, 61.93f, 0.79f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 5000);
-                m_creature->SummonCreature(NPC_INN_LOOKOUT,   2657.36f, 662.34f, 61.93f, 2.68f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 5000);
-                m_creature->SummonCreature(NPC_INN_GUARDSMAN, 2656.39f, 659.77f, 61.93f, 2.61f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 5000);
+                m_creature->SummonCreature(NPC_INN_PROTECTOR, 2652.71f, 660.31f, 61.93f, 1.67f, TEMPSUMMON_TIMED_OOC_DESPAWN, 5000);
+                m_creature->SummonCreature(NPC_INN_LOOKOUT,   2648.96f, 662.59f, 61.93f, 0.79f, TEMPSUMMON_TIMED_OOC_DESPAWN, 5000);
+                m_creature->SummonCreature(NPC_INN_LOOKOUT,   2657.36f, 662.34f, 61.93f, 2.68f, TEMPSUMMON_TIMED_OOC_DESPAWN, 5000);
+                m_creature->SummonCreature(NPC_INN_GUARDSMAN, 2656.39f, 659.77f, 61.93f, 2.61f, TEMPSUMMON_TIMED_OOC_DESPAWN, 5000);
                 SetRun(false);
                 break;
                 // *** Escort event - Part III - meet Taretha ***
@@ -960,7 +960,7 @@ struct MANGOS_DLL_DECL npc_thrall_old_hillsbradAI : public npc_escortAI, private
         }
     }
 
-    void UpdateEscortAI(const uint32 uiDiff)
+    void UpdateEscortAI(const uint32 uiDiff) override
     {
         DialogueUpdate(uiDiff);
 
@@ -1045,7 +1045,7 @@ bool GossipHello_npc_thrall_old_hillsbrad(Player* pPlayer, Creature* pCreature)
     return true;
 }
 
-bool GossipSelect_npc_thrall_old_hillsbrad(Player* pPlayer, Creature* pCreature, uint32 uiSender, uint32 uiAction)
+bool GossipSelect_npc_thrall_old_hillsbrad(Player* pPlayer, Creature* pCreature, uint32 /*uiSender*/, uint32 uiAction)
 {
     instance_old_hillsbrad* pInstance = (instance_old_hillsbrad*)pCreature->GetInstanceData();
 
@@ -1175,7 +1175,7 @@ struct MANGOS_DLL_DECL npc_tarethaAI : public npc_escortAI, private DialogueHelp
         m_bHasStartedEpilogue = false;
     }
 
-    void JustSummoned(Creature* pSummoned)
+    void JustSummoned(Creature* pSummoned) override
     {
         // Remove flags from the npc - the quest will be handled by the entrance version
         if (pSummoned->GetEntry() == NPC_EROZION)
@@ -1186,7 +1186,7 @@ struct MANGOS_DLL_DECL npc_tarethaAI : public npc_escortAI, private DialogueHelp
         }
     }
 
-    void WaypointReached(uint32 uiPoint)
+    void WaypointReached(uint32 uiPoint) override
     {
         if (uiPoint == 7)
         {
@@ -1204,7 +1204,7 @@ struct MANGOS_DLL_DECL npc_tarethaAI : public npc_escortAI, private DialogueHelp
         }
     }
 
-    void JustDidDialogueStep(int32 iEntry)
+    void JustDidDialogueStep(int32 iEntry) override
     {
         if (!m_pInstance)
             return;
@@ -1246,7 +1246,7 @@ struct MANGOS_DLL_DECL npc_tarethaAI : public npc_escortAI, private DialogueHelp
         }
     }
 
-    void UpdateEscortAI(const uint32 uiDiff)
+    void UpdateEscortAI(const uint32 uiDiff) override
     {
         DialogueUpdate(uiDiff);
 
@@ -1284,7 +1284,7 @@ bool GossipHello_npc_taretha(Player* pPlayer, Creature* pCreature)
     return true;
 }
 
-bool GossipSelect_npc_taretha(Player* pPlayer, Creature* pCreature, uint32 uiSender, uint32 uiAction)
+bool GossipSelect_npc_taretha(Player* pPlayer, Creature* pCreature, uint32 /*uiSender*/, uint32 uiAction)
 {
     instance_old_hillsbrad* pInstance = (instance_old_hillsbrad*)pCreature->GetInstanceData();
 

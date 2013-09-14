@@ -100,7 +100,7 @@ struct MANGOS_DLL_DECL boss_ormorokAI : public ScriptedAI
         DoScriptText(SAY_AGGRO, m_creature);
     }
 
-    void JustDied(Unit* pKiller)
+    void JustDied(Unit* pKiller) override
     {
         DoScriptText(SAY_DEATH, m_creature);
 
@@ -108,12 +108,12 @@ struct MANGOS_DLL_DECL boss_ormorokAI : public ScriptedAI
             m_pInstance->SetData(TYPE_ORMOROK, DONE);
     }
 
-    void KilledUnit(Unit* pVictim)
+    void KilledUnit(Unit* pVictim) override
     {
         DoScriptText(SAY_KILL, m_creature);
     }
 
-    void UpdateAI(const uint32 uiDiff)
+    void UpdateAI(const uint32 uiDiff) override
     {
         if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
             return;
@@ -183,7 +183,7 @@ struct MANGOS_DLL_DECL boss_ormorokAI : public ScriptedAI
 
         if (!m_bIsRegularMode && (m_uiSummonTanglerTimer < uiDiff))
         {
-            Creature* CrystallineTangler = m_creature->SummonCreature(MOB_CRYSTALLINE_TANGLER, m_creature->GetPositionX(), m_creature->GetPositionY(), m_creature->GetPositionZ(), m_creature->GetOrientation(), TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 10000);
+            Creature* CrystallineTangler = m_creature->SummonCreature(MOB_CRYSTALLINE_TANGLER, m_creature->GetPositionX(), m_creature->GetPositionY(), m_creature->GetPositionZ(), m_creature->GetOrientation(), TEMPSUMMON_TIMED_OOC_DESPAWN, 10000);
             if (CrystallineTangler)
                 if(Unit* target = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0))
                     CrystallineTangler->AI()->AttackStart(target);
@@ -225,7 +225,7 @@ struct MANGOS_DLL_DECL mob_crystal_spikeAI : public Scripted_NoMovementAI
         m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE); //
     }
 
-    void UpdateAI(const uint32 uiDiff)
+    void UpdateAI(const uint32 uiDiff) override
     {
         if (m_uiCrystalSpikePreVisualTimer < uiDiff)
         {
@@ -261,7 +261,7 @@ struct MANGOS_DLL_DECL mob_crystalline_tanglerAI : public ScriptedAI
         m_uiRootsTimer = 1*IN_MILLISECONDS;
     }
 
-    void UpdateAI(const uint32 uiDiff)
+    void UpdateAI(const uint32 uiDiff) override
     {
         if (m_uiRootsTimer < uiDiff)
         {

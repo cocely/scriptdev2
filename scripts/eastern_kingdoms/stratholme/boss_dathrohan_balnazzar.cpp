@@ -103,12 +103,12 @@ struct MANGOS_DLL_DECL boss_dathrohan_balnazzarAI : public ScriptedAI
             m_creature->UpdateEntry(NPC_DATHROHAN);
     }
 
-    void Aggro(Unit* pWho)
+    void Aggro(Unit* /*pWho*/) override
     {
         DoScriptText(SAY_AGGRO, m_creature);
     }
 
-    void JustDied(Unit* Victim)
+    void JustDied(Unit* /*Victim*/) override
     {
         DoScriptText(SAY_DEATH, m_creature);
 
@@ -118,7 +118,7 @@ struct MANGOS_DLL_DECL boss_dathrohan_balnazzarAI : public ScriptedAI
                                        TEMPSUMMON_TIMED_DESPAWN, HOUR * IN_MILLISECONDS);
     }
 
-    void UpdateAI(const uint32 uiDiff)
+    void UpdateAI(const uint32 uiDiff) override
     {
         if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
             return;

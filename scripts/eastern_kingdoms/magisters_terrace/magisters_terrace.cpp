@@ -37,6 +37,8 @@ enum
     SPELL_TRANSFORM_TO_KAEL     = 44670,
     SPELL_ORB_KILL_CREDIT       = 46307,
     NPC_KALECGOS                = 24848,                    // human form entry
+
+    MAP_ID_MAGISTER             = 585,
 };
 
 static const float afKaelLandPoint[4] = {200.36f, -270.77f, -8.73f, 0.01f};
@@ -51,13 +53,17 @@ struct MANGOS_DLL_DECL npc_kalecgosAI : public ScriptedAI
 
     void Reset()
     {
+        // Check the map id because the same creature entry is involved in other scripted event in other instance
+        if (m_creature->GetMapId() != MAP_ID_MAGISTER)
+            return;
+
         m_uiTransformTimer = 0;
 
         // Move the dragon to landing point
         m_creature->GetMotionMaster()->MovePoint(1, afKaelLandPoint[0], afKaelLandPoint[1], afKaelLandPoint[2]);
     }
 
-    void MovementInform(uint32 uiType, uint32 uiPointId)
+    void MovementInform(uint32 uiType, uint32 uiPointId) override
     {
         if (uiType != POINT_MOTION_TYPE)
             return;
@@ -70,7 +76,7 @@ struct MANGOS_DLL_DECL npc_kalecgosAI : public ScriptedAI
         }
     }
 
-    void UpdateAI(const uint32 uiDiff)
+    void UpdateAI(const uint32 uiDiff) override
     {
         if (m_uiTransformTimer)
         {
@@ -96,7 +102,7 @@ CreatureAI* GetAI_npc_kalecgos(Creature* pCreature)
     return new npc_kalecgosAI(pCreature);
 }
 
-bool ProcessEventId_event_go_scrying_orb(uint32 uiEventId, Object* pSource, Object* pTarget, bool bIsStart)
+bool ProcessEventId_event_go_scrying_orb(uint32 /*uiEventId*/, Object* pSource, Object* /*pTarget*/, bool bIsStart)
 {
     if (bIsStart && pSource->GetTypeId() == TYPEID_PLAYER)
     {

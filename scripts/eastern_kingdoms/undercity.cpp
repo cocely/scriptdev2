@@ -54,7 +54,7 @@ enum
     MAX_LAMENTERS               = 4,
 };
 
-static const float aHighborneLoc[MAX_LAMENTERS][4]=
+static const float aHighborneLoc[MAX_LAMENTERS][4] =
 {
     {1285.41f, 312.47f, -61.0f, 0.51f},
     {1286.96f, 310.40f, -61.0f, 1.00f},
@@ -81,7 +81,7 @@ struct MANGOS_DLL_DECL npc_lady_sylvanas_windrunnerAI : public ScriptedAI
         m_uiSummonTimer = 0;
     }
 
-    void JustSummoned(Creature* pSummoned)
+    void JustSummoned(Creature* pSummoned) override
     {
         if (pSummoned->GetEntry() == NPC_HIGHBORNE_BUNNY)
             pSummoned->CastSpell(pSummoned, SPELL_RIBBON_OF_SOULS, false);
@@ -101,7 +101,7 @@ struct MANGOS_DLL_DECL npc_lady_sylvanas_windrunnerAI : public ScriptedAI
         m_uiSummonTimer = 13000;
     }
 
-    void UpdateAI(const uint32 uiDiff)
+    void UpdateAI(const uint32 uiDiff) override
     {
         if (m_uiLamentEventTimer)
         {
@@ -192,7 +192,7 @@ CreatureAI* GetAI_npc_lady_sylvanas_windrunner(Creature* pCreature)
     return new npc_lady_sylvanas_windrunnerAI(pCreature);
 }
 
-bool QuestRewarded_npc_lady_sylvanas_windrunner(Player* pPlayer, Creature* pCreature, Quest const* pQuest)
+bool QuestRewarded_npc_lady_sylvanas_windrunner(Player* /*pPlayer*/, Creature* pCreature, Quest const* pQuest)
 {
     if (pQuest->GetQuestId() == QUEST_ID_JOURNEY_UNDERCITY)
     {

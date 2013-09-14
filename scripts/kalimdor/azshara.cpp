@@ -86,7 +86,7 @@ struct MANGOS_DLL_DECL npc_rizzle_sprysprocketAI : public npc_escortAI
     uint32 m_uiIntroTimer;
     uint32 m_uiDepthChargeTimer;
 
-    void MoveInLineOfSight(Unit* pUnit)
+    void MoveInLineOfSight(Unit* pUnit) override
     {
         if (HasEscortState(STATE_ESCORT_ESCORTING) && pUnit->GetTypeId() == TYPEID_PLAYER)
         {
@@ -100,7 +100,7 @@ struct MANGOS_DLL_DECL npc_rizzle_sprysprocketAI : public npc_escortAI
         npc_escortAI::MoveInLineOfSight(pUnit);
     }
 
-    void WaypointReached(uint32 uiPointId)
+    void WaypointReached(uint32 uiPointId) override
     {
         switch (uiPointId)
         {
@@ -112,7 +112,7 @@ struct MANGOS_DLL_DECL npc_rizzle_sprysprocketAI : public npc_escortAI
 
     void Reset() { }
 
-    void SpellHit(Unit* pCaster, const SpellEntry* pSpell)
+    void SpellHit(Unit* /*pCaster*/, const SpellEntry* pSpell) override
     {
         if (pSpell->Id == SPELL_SURRENDER)
         {
@@ -123,19 +123,19 @@ struct MANGOS_DLL_DECL npc_rizzle_sprysprocketAI : public npc_escortAI
     }
 
     // this may be wrong (and doesn't work)
-    void SpellHitTarget(Unit* pTarget, const SpellEntry* pSpell)
+    void SpellHitTarget(Unit* pTarget, const SpellEntry* pSpell) override
     {
         if (pTarget->GetTypeId() == TYPEID_PLAYER && pSpell->Id == SPELL_FROST_GRENADE)
             DoScriptText(SAY_WHISPER_CHILL, m_creature, pTarget);
     }
 
     // this may be wrong
-    void JustSummoned(Creature* pSummoned)
+    void JustSummoned(Creature* /*pSummoned*/) override
     {
         // pSummoned->CastSpell(pSummoned,SPELL_PERIODIC_GRENADE,false,NULL,NULL,m_creature->GetObjectGuid());
     }
 
-    void UpdateEscortAI(const uint32 uiDiff)
+    void UpdateEscortAI(const uint32 uiDiff) override
     {
         if (m_bIsIntro)
         {
@@ -194,7 +194,7 @@ bool GossipHello_npc_rizzle_sprysprocket(Player* pPlayer, Creature* pCreature)
     return true;
 }
 
-bool GossipSelect_npc_rizzle_sprysprocket(Player* pPlayer, Creature* pCreature, uint32 uiSender, uint32 uiAction)
+bool GossipSelect_npc_rizzle_sprysprocket(Player* pPlayer, Creature* /*pCreature*/, uint32 /*uiSender*/, uint32 uiAction)
 {
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
     {
@@ -209,7 +209,7 @@ struct MANGOS_DLL_DECL npc_depth_chargeAI : public ScriptedAI
 {
     npc_depth_chargeAI(Creature* pCreature) : ScriptedAI(pCreature) { Reset(); }
 
-    void MoveInLineOfSight(Unit* pUnit)
+    void MoveInLineOfSight(Unit* pUnit) override
     {
         if (pUnit->GetTypeId() != TYPEID_PLAYER)
             return;
@@ -230,7 +230,7 @@ CreatureAI* GetAI_npc_depth_charge(Creature* pCreature)
 ## go_southfury_moonstone
 ######*/
 
-bool GOUse_go_southfury_moonstone(Player* pPlayer, GameObject* pGo)
+bool GOUse_go_southfury_moonstone(Player* pPlayer, GameObject* /*pGo*/)
 {
     // implicitTarget=48 not implemented as of writing this code, and manual summon may be just ok for our purpose
     // pPlayer->CastSpell(pPlayer,SPELL_SUMMON_RIZZLE,false);
@@ -316,7 +316,7 @@ struct MANGOS_DLL_DECL mobs_spitelashesAI : public ScriptedAI
             itr->second = m_aSpitelashAbility[itr->first].m_uiInitialTimer;
     }
 
-    void SpellHit(Unit* pCaster, const SpellEntry* pSpell)
+    void SpellHit(Unit* pCaster, const SpellEntry* pSpell) override
     {
         // If already hit by the polymorph return
         if (m_uiMorphTimer)
@@ -357,7 +357,7 @@ struct MANGOS_DLL_DECL mobs_spitelashesAI : public ScriptedAI
         return false;
     }
 
-    void UpdateAI(const uint32 uiDiff)
+    void UpdateAI(const uint32 uiDiff) override
     {
         if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
             return;
@@ -419,7 +419,7 @@ bool GossipHello_npc_loramus_thalipedes(Player* pPlayer, Creature* pCreature)
     return true;
 }
 
-bool GossipSelect_npc_loramus_thalipedes(Player* pPlayer, Creature* pCreature, uint32 uiSender, uint32 uiAction)
+bool GossipSelect_npc_loramus_thalipedes(Player* pPlayer, Creature* pCreature, uint32 /*uiSender*/, uint32 uiAction)
 {
     switch (uiAction)
     {

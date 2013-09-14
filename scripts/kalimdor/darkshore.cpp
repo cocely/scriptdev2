@@ -17,7 +17,7 @@
 /* ScriptData
 SDName: Darkshore
 SD%Complete: 100
-SDComment: Quest support: 731, 945, 994, 995, 2078, 5321
+SDComment: Quest support: 731, 945, 994, 995, 2078, 2118, 5321
 SDCategory: Darkshore
 EndScriptData */
 
@@ -27,6 +27,7 @@ npc_prospector_remtravel
 npc_threshwackonator
 npc_volcor
 npc_therylune
+npc_rabid_bear
 EndContentData */
 
 #include "precompiled.h"
@@ -75,7 +76,7 @@ struct MANGOS_DLL_DECL npc_kerlonianAI : public FollowerAI
         m_uiFallAsleepTimer = urand(10000, 45000);
     }
 
-    void MoveInLineOfSight(Unit* pWho)
+    void MoveInLineOfSight(Unit* pWho) override
     {
         FollowerAI::MoveInLineOfSight(pWho);
 
@@ -96,7 +97,7 @@ struct MANGOS_DLL_DECL npc_kerlonianAI : public FollowerAI
         }
     }
 
-    void SpellHit(Unit* pCaster, const SpellEntry* pSpell)
+    void SpellHit(Unit* /*pCaster*/, const SpellEntry* pSpell) override
     {
         if (HasFollowState(STATE_FOLLOW_INPROGRESS | STATE_FOLLOW_PAUSED) && pSpell->Id == SPELL_AWAKEN)
             ClearSleeping();
@@ -135,7 +136,7 @@ struct MANGOS_DLL_DECL npc_kerlonianAI : public FollowerAI
         SetFollowPaused(false);
     }
 
-    void UpdateFollowerAI(const uint32 uiDiff)
+    void UpdateFollowerAI(const uint32 uiDiff) override
     {
         if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
         {
@@ -210,7 +211,7 @@ struct MANGOS_DLL_DECL npc_prospector_remtravelAI : public npc_escortAI
 {
     npc_prospector_remtravelAI(Creature* pCreature) : npc_escortAI(pCreature) { Reset(); }
 
-    void WaypointReached(uint32 uiPointId)
+    void WaypointReached(uint32 uiPointId) override
     {
         Player* pPlayer = GetPlayerForEscort();
 
@@ -226,8 +227,8 @@ struct MANGOS_DLL_DECL npc_prospector_remtravelAI : public npc_escortAI
                 DoScriptText(SAY_REM_RAMP1_1, m_creature, pPlayer);
                 break;
             case 6:
-                DoSpawnCreature(NPC_GRAVEL_SCOUT, -10.0f, 5.0f, 0.0f, 0.0f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 30000);
-                DoSpawnCreature(NPC_GRAVEL_BONE, -10.0f, 7.0f, 0.0f, 0.0f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 30000);
+                DoSpawnCreature(NPC_GRAVEL_SCOUT, -10.0f, 5.0f, 0.0f, 0.0f, TEMPSUMMON_TIMED_OOC_DESPAWN, 30000);
+                DoSpawnCreature(NPC_GRAVEL_BONE, -10.0f, 7.0f, 0.0f, 0.0f, TEMPSUMMON_TIMED_OOC_DESPAWN, 30000);
                 break;
             case 9:
                 DoScriptText(SAY_REM_RAMP1_2, m_creature, pPlayer);
@@ -240,8 +241,8 @@ struct MANGOS_DLL_DECL npc_prospector_remtravelAI : public npc_escortAI
                 DoScriptText(SAY_REM_TENT1_1, m_creature, pPlayer);
                 break;
             case 16:
-                DoSpawnCreature(NPC_GRAVEL_SCOUT, -10.0f, 5.0f, 0.0f, 0.0f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 30000);
-                DoSpawnCreature(NPC_GRAVEL_BONE, -10.0f, 7.0f, 0.0f, 0.0f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 30000);
+                DoSpawnCreature(NPC_GRAVEL_SCOUT, -10.0f, 5.0f, 0.0f, 0.0f, TEMPSUMMON_TIMED_OOC_DESPAWN, 30000);
+                DoSpawnCreature(NPC_GRAVEL_BONE, -10.0f, 7.0f, 0.0f, 0.0f, TEMPSUMMON_TIMED_OOC_DESPAWN, 30000);
                 break;
             case 17:
                 DoScriptText(SAY_REM_TENT1_2, m_creature, pPlayer);
@@ -256,9 +257,9 @@ struct MANGOS_DLL_DECL npc_prospector_remtravelAI : public npc_escortAI
                 DoScriptText(SAY_REM_MOSS_PROGRESS, m_creature, pPlayer);
                 break;
             case 29:
-                DoSpawnCreature(NPC_GRAVEL_SCOUT, -15.0f, 3.0f, 0.0f, 0.0f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 30000);
-                DoSpawnCreature(NPC_GRAVEL_BONE, -15.0f, 5.0f, 0.0f, 0.0f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 30000);
-                DoSpawnCreature(NPC_GRAVEL_GEO, -15.0f, 7.0f, 0.0f, 0.0f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 30000);
+                DoSpawnCreature(NPC_GRAVEL_SCOUT, -15.0f, 3.0f, 0.0f, 0.0f, TEMPSUMMON_TIMED_OOC_DESPAWN, 30000);
+                DoSpawnCreature(NPC_GRAVEL_BONE, -15.0f, 5.0f, 0.0f, 0.0f, TEMPSUMMON_TIMED_OOC_DESPAWN, 30000);
+                DoSpawnCreature(NPC_GRAVEL_GEO, -15.0f, 7.0f, 0.0f, 0.0f, TEMPSUMMON_TIMED_OOC_DESPAWN, 30000);
                 break;
             case 31:
                 DoScriptText(SAY_REM_PROGRESS, m_creature, pPlayer);
@@ -275,13 +276,13 @@ struct MANGOS_DLL_DECL npc_prospector_remtravelAI : public npc_escortAI
 
     void Reset() { }
 
-    void Aggro(Unit* pWho)
+    void Aggro(Unit* pWho) override
     {
         if (urand(0, 1))
             DoScriptText(SAY_REM_AGGRO, m_creature, pWho);
     }
 
-    void JustSummoned(Creature* pSummoned)
+    void JustSummoned(Creature* /*pSummoned*/) override
     {
         // unsure if it should be any
         // pSummoned->AI()->AttackStart(m_creature);
@@ -327,7 +328,7 @@ struct MANGOS_DLL_DECL npc_threshwackonatorAI : public FollowerAI
 
     void Reset() {}
 
-    void MoveInLineOfSight(Unit* pWho)
+    void MoveInLineOfSight(Unit* pWho) override
     {
         FollowerAI::MoveInLineOfSight(pWho);
 
@@ -366,7 +367,7 @@ bool GossipHello_npc_threshwackonator(Player* pPlayer, Creature* pCreature)
     return true;
 }
 
-bool GossipSelect_npc_threshwackonator(Player* pPlayer, Creature* pCreature, uint32 uiSender, uint32 uiAction)
+bool GossipSelect_npc_threshwackonator(Player* pPlayer, Creature* pCreature, uint32 /*uiSender*/, uint32 uiAction)
 {
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
     {
@@ -432,7 +433,7 @@ struct MANGOS_DLL_DECL npc_volcorAI : public npc_escortAI
             m_uiQuestId = 0;
     }
 
-    void Aggro(Unit* pWho)
+    void Aggro(Unit* /*pWho*/) override
     {
         // shouldn't always use text on agro
         switch (urand(0, 4))
@@ -443,7 +444,7 @@ struct MANGOS_DLL_DECL npc_volcorAI : public npc_escortAI
         }
     }
 
-    void MoveInLineOfSight(Unit* pWho)
+    void MoveInLineOfSight(Unit* pWho) override
     {
         // No combat for this quest
         if (m_uiQuestId == QUEST_ESCAPE_THROUGH_STEALTH)
@@ -452,7 +453,7 @@ struct MANGOS_DLL_DECL npc_volcorAI : public npc_escortAI
         npc_escortAI::MoveInLineOfSight(pWho);
     }
 
-    void JustSummoned(Creature* pSummoned)
+    void JustSummoned(Creature* pSummoned) override
     {
         pSummoned->AI()->AttackStart(m_creature);
     }
@@ -478,7 +479,7 @@ struct MANGOS_DLL_DECL npc_volcorAI : public npc_escortAI
             Start(false, pPlayer, pQuest);
     }
 
-    void WaypointReached(uint32 uiPointId)
+    void WaypointReached(uint32 uiPointId) override
     {
         switch (uiPointId)
         {
@@ -486,18 +487,18 @@ struct MANGOS_DLL_DECL npc_volcorAI : public npc_escortAI
                 DoScriptText(SAY_START, m_creature);
                 break;
             case 5:
-                m_creature->SummonCreature(NPC_BLACKWOOD_SHAMAN, aVolcorSpawnLocs[0].m_fX, aVolcorSpawnLocs[0].m_fY, aVolcorSpawnLocs[0].m_fZ, aVolcorSpawnLocs[0].m_fO, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 20000);
-                m_creature->SummonCreature(NPC_BLACKWOOD_URSA, aVolcorSpawnLocs[1].m_fX, aVolcorSpawnLocs[1].m_fY, aVolcorSpawnLocs[1].m_fZ, aVolcorSpawnLocs[1].m_fO, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 20000);
+                m_creature->SummonCreature(NPC_BLACKWOOD_SHAMAN, aVolcorSpawnLocs[0].m_fX, aVolcorSpawnLocs[0].m_fY, aVolcorSpawnLocs[0].m_fZ, aVolcorSpawnLocs[0].m_fO, TEMPSUMMON_TIMED_OOC_DESPAWN, 20000);
+                m_creature->SummonCreature(NPC_BLACKWOOD_URSA, aVolcorSpawnLocs[1].m_fX, aVolcorSpawnLocs[1].m_fY, aVolcorSpawnLocs[1].m_fZ, aVolcorSpawnLocs[1].m_fO, TEMPSUMMON_TIMED_OOC_DESPAWN, 20000);
                 break;
             case 6:
                 DoScriptText(SAY_FIRST_AMBUSH, m_creature);
                 break;
             case 11:
-                m_creature->SummonCreature(NPC_BLACKWOOD_SHAMAN, aVolcorSpawnLocs[2].m_fX, aVolcorSpawnLocs[2].m_fY, aVolcorSpawnLocs[2].m_fZ, aVolcorSpawnLocs[2].m_fO, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 20000);
-                m_creature->SummonCreature(NPC_BLACKWOOD_URSA, aVolcorSpawnLocs[3].m_fX, aVolcorSpawnLocs[3].m_fY, aVolcorSpawnLocs[3].m_fZ, aVolcorSpawnLocs[3].m_fO, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 20000);
+                m_creature->SummonCreature(NPC_BLACKWOOD_SHAMAN, aVolcorSpawnLocs[2].m_fX, aVolcorSpawnLocs[2].m_fY, aVolcorSpawnLocs[2].m_fZ, aVolcorSpawnLocs[2].m_fO, TEMPSUMMON_TIMED_OOC_DESPAWN, 20000);
+                m_creature->SummonCreature(NPC_BLACKWOOD_URSA, aVolcorSpawnLocs[3].m_fX, aVolcorSpawnLocs[3].m_fY, aVolcorSpawnLocs[3].m_fZ, aVolcorSpawnLocs[3].m_fO, TEMPSUMMON_TIMED_OOC_DESPAWN, 20000);
             case 13:
-                m_creature->SummonCreature(NPC_BLACKWOOD_URSA, aVolcorSpawnLocs[4].m_fX, aVolcorSpawnLocs[4].m_fY, aVolcorSpawnLocs[4].m_fZ, aVolcorSpawnLocs[4].m_fO, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 20000);
-                m_creature->SummonCreature(NPC_BLACKWOOD_URSA, aVolcorSpawnLocs[5].m_fX, aVolcorSpawnLocs[5].m_fY, aVolcorSpawnLocs[5].m_fZ, aVolcorSpawnLocs[5].m_fO, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 20000);
+                m_creature->SummonCreature(NPC_BLACKWOOD_URSA, aVolcorSpawnLocs[4].m_fX, aVolcorSpawnLocs[4].m_fY, aVolcorSpawnLocs[4].m_fZ, aVolcorSpawnLocs[4].m_fO, TEMPSUMMON_TIMED_OOC_DESPAWN, 20000);
+                m_creature->SummonCreature(NPC_BLACKWOOD_URSA, aVolcorSpawnLocs[5].m_fX, aVolcorSpawnLocs[5].m_fY, aVolcorSpawnLocs[5].m_fZ, aVolcorSpawnLocs[5].m_fO, TEMPSUMMON_TIMED_OOC_DESPAWN, 20000);
                 break;
             case 15:
                 DoScriptText(SAY_END, m_creature);
@@ -560,11 +561,11 @@ struct MANGOS_DLL_DECL npc_theryluneAI : public npc_escortAI
     npc_theryluneAI(Creature* pCreature) : npc_escortAI(pCreature) { Reset(); }
 
 
-    void Reset() override {}
+    void Reset() {}
 
     void WaypointReached(uint32 uiPointId) override
     {
-        switch(uiPointId)
+        switch (uiPointId)
         {
             case 17:
                 if (Player* pPlayer = GetPlayerForEscort())
@@ -596,6 +597,135 @@ bool QuestAccept_npc_therylune(Player* pPlayer, Creature* pCreature, const Quest
     }
 
     return true;
+}
+
+/*######
+## npc_rabid_bear
+######*/
+
+enum
+{
+    QUEST_PLAGUED_LANDS             = 2118,
+
+    NPC_CAPTURED_RABID_THISTLE_BEAR = 11836,
+    NPC_THARNARIUN_TREETENDER       = 3701,                 // Npc related to quest-outro
+    GO_NIGHT_ELVEN_BEAR_TRAP        = 111148,               // This is actually the (visual) spell-focus GO
+
+    SPELL_RABIES                    = 3150,                 // Spell used in comabt
+};
+
+struct MANGOS_DLL_DECL npc_rabid_bearAI : public ScriptedAI
+{
+    npc_rabid_bearAI(Creature* pCreature) : ScriptedAI(pCreature)
+    {
+        Reset();
+        JustRespawned();
+    }
+
+    uint32 m_uiCheckTimer;
+    uint32 m_uiRabiesTimer;
+    uint32 m_uiDespawnTimer;
+
+    void Reset() override
+    {
+        m_uiRabiesTimer = urand(12000, 18000);
+    }
+
+    void JustRespawned() override
+    {
+        m_uiCheckTimer = 1000;
+        m_uiDespawnTimer = 0;
+    }
+
+    void MoveInLineOfSight(Unit* pWho) override
+    {
+        if (!m_uiCheckTimer && pWho->GetTypeId() == TYPEID_UNIT && pWho->GetEntry() == NPC_THARNARIUN_TREETENDER &&
+              pWho->IsWithinDist(m_creature, 2 * INTERACTION_DISTANCE, false))
+        {
+            // Possible related spell: 9455 9372
+            m_creature->ForcedDespawn(1000);
+            m_creature->GetMotionMaster()->MoveIdle();
+
+            return;
+        }
+
+        ScriptedAI::MoveInLineOfSight(pWho);
+    }
+
+    void UpdateAI(const uint32 uiDiff) override
+    {
+        if (m_uiCheckTimer && m_creature->isInCombat())
+        {
+            if (m_uiCheckTimer <= uiDiff)
+            {
+                // Trap nearby?
+                if (GameObject* pTrap = GetClosestGameObjectWithEntry(m_creature, GO_NIGHT_ELVEN_BEAR_TRAP, 0.5f))
+                {
+                    // Despawn trap
+                    pTrap->Use(m_creature);
+                    // "Evade"
+                    m_creature->RemoveAllAuras();
+                    m_creature->DeleteThreatList();
+                    m_creature->CombatStop(true);
+                    m_creature->SetLootRecipient(NULL);
+                    Reset();
+                    // Update Entry and start following player
+                    m_creature->UpdateEntry(NPC_CAPTURED_RABID_THISTLE_BEAR);
+                    // get player
+                    Unit* pTrapOwner = pTrap->GetOwner();
+                    if (pTrapOwner && pTrapOwner->GetTypeId() == TYPEID_PLAYER &&
+                            ((Player*)pTrapOwner)->GetQuestStatus(QUEST_PLAGUED_LANDS) == QUEST_STATUS_INCOMPLETE)
+                    {
+                        ((Player*)pTrapOwner)->KilledMonsterCredit(m_creature->GetEntry(), m_creature->GetObjectGuid());
+                        m_creature->GetMotionMaster()->MoveFollow(pTrapOwner, PET_FOLLOW_DIST, PET_FOLLOW_ANGLE);
+                    }
+                    else                                // Something unexpected happened
+                        m_creature->ForcedDespawn(1000);
+
+                    // No need to check any more
+                    m_uiCheckTimer = 0;
+                    // Despawn after a while (delay guesswork)
+                    m_uiDespawnTimer = 3 * MINUTE * IN_MILLISECONDS;
+
+                    return;
+                }
+                else
+                    m_uiCheckTimer = 1000;
+            }
+            else
+                m_uiCheckTimer -= uiDiff;
+        }
+
+        if (m_uiDespawnTimer && !m_creature->isInCombat())
+        {
+            if (m_uiDespawnTimer <= uiDiff)
+            {
+                m_creature->ForcedDespawn();
+                return;
+            }
+            else
+                m_uiDespawnTimer -= uiDiff;
+        }
+
+        if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
+            return;
+
+        if (m_uiRabiesTimer < uiDiff)
+        {
+            if (Unit* pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_TOPAGGRO, 0, SPELL_RABIES))
+                DoCastSpellIfCan(pTarget, SPELL_RABIES);
+            m_uiRabiesTimer = urand(12000, 18000);
+        }
+        else
+            m_uiRabiesTimer -= uiDiff;
+
+        DoMeleeAttackIfReady();
+    }
+};
+
+CreatureAI* GetAI_npc_rabid_bear(Creature* pCreature)
+{
+    return new npc_rabid_bearAI(pCreature);
 }
 
 void AddSC_darkshore()
@@ -631,5 +761,10 @@ void AddSC_darkshore()
     pNewScript->Name = "npc_therylune";
     pNewScript->GetAI = &GetAI_npc_therylune;
     pNewScript->pQuestAcceptNPC = &QuestAccept_npc_therylune;
+    pNewScript->RegisterSelf();
+
+    pNewScript = new Script;
+    pNewScript->Name = "npc_rabid_bear";
+    pNewScript->GetAI = &GetAI_npc_rabid_bear;
     pNewScript->RegisterSelf();
 }

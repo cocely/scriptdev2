@@ -44,14 +44,14 @@ enum
     NPC_DAL_GHOST                       = 27389,
     NPC_SKA_GHOST                       = 27390,
 
-    NPC_SKELETAL                        = 28878,            //summoned guardian in heroic
+    NPC_SKELETAL                        = 28878,            // summoned guardian in heroic
 
-    //skarvald
+    // skarvald
     SPELL_CHARGE                        = 43651,
     SPELL_STONE_STRIKE                  = 48583,
     SPELL_ENRAGE                        = 48193,
 
-    //dalronn
+    // dalronn
     SPELL_SHADOW_BOLT                   = 43649,
     SPELL_SHADOW_BOLT_H                 = 59575,
 
@@ -95,9 +95,9 @@ struct MANGOS_DLL_DECL boss_s_and_d_dummyAI : public ScriptedAI
         return m_pInstance->GetSingleCreatureFromStorage(m_creature->GetEntry() == NPC_DALRONN ? NPC_SKARVALD : NPC_DALRONN);
     }
 
-    void Reset() { }
+    void Reset() override { }
 
-    void JustReachedHome()
+    void JustReachedHome() override
     {
         if (Creature* pBuddy = GetBuddy())
         {
@@ -112,7 +112,7 @@ struct MANGOS_DLL_DECL boss_s_and_d_dummyAI : public ScriptedAI
         }
     }
 
-    void EnterCombat(Unit* pWho)
+    void EnterCombat(Unit* pWho) override
     {
         if (!pWho)
             return;
@@ -126,13 +126,13 @@ struct MANGOS_DLL_DECL boss_s_and_d_dummyAI : public ScriptedAI
         Aggro(pWho);
     }
 
-    void JustSummoned(Creature* pSummoned)
+    void JustSummoned(Creature* pSummoned) override
     {
         // EventAI can probably handle ghosts
         if (pSummoned->GetEntry() == NPC_DAL_GHOST || pSummoned->GetEntry() == NPC_SKA_GHOST)
             m_ghostGuid = pSummoned->GetObjectGuid();
 
-        Unit* pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_TOPAGGRO,1);
+        Unit* pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_TOPAGGRO, 1);
 
         if (m_creature->getVictim())
             pSummoned->AI()->AttackStart(pTarget ? pTarget : m_creature->getVictim());
@@ -140,7 +140,7 @@ struct MANGOS_DLL_DECL boss_s_and_d_dummyAI : public ScriptedAI
         pSummoned->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
     }
 
-    void JustDied(Unit* pKiller)
+    void JustDied(Unit* /*pKiller*/) override
     {
         if (Creature* pBuddy = GetBuddy())
         {
@@ -177,7 +177,7 @@ struct MANGOS_DLL_DECL boss_skarvaldAI : public boss_s_and_d_dummyAI
     uint32 m_uiEnrageTimer;
     uint32 m_uiStoneStrikeTimer;
 
-    void Reset()
+    void Reset() override
     {
         m_uiYellDelayTimer = 0;
         m_uiChargeTimer = urand(2000, 6000);
@@ -185,18 +185,18 @@ struct MANGOS_DLL_DECL boss_skarvaldAI : public boss_s_and_d_dummyAI
         m_uiStoneStrikeTimer = 8000;
     }
 
-    void Aggro(Unit* pWho)
+    void Aggro(Unit* /*pWho*/) override
     {
         DoScriptText(m_aYell[0].m_iTextId, m_creature);
         m_uiYellDelayTimer = 5000;
     }
 
-    void KilledUnit(Unit* pVictim)
+    void KilledUnit(Unit* /*pVictim*/) override
     {
         DoScriptText(SAY_SKA_KILL, m_creature);
     }
 
-    void UpdateAI(const uint32 uiDiff)
+    void UpdateAI(const uint32 uiDiff) override
     {
         if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
             return;
@@ -261,19 +261,19 @@ struct MANGOS_DLL_DECL boss_dalronnAI : public boss_s_and_d_dummyAI
     uint32 m_uiShadowBoltTimer;
     uint32 m_uiSkeletonTimer;
 
-    void Reset()
+    void Reset() override
     {
         m_uiDebilitateTimer = urand(5000, 10000);
         m_uiShadowBoltTimer = urand(2500, 6000);
         m_uiSkeletonTimer = urand(25000, 35000);
     }
 
-    void KilledUnit(Unit* pVictim)
+    void KilledUnit(Unit* /*pVictim*/) override
     {
         DoScriptText(SAY_DAL_KILL, m_creature);
     }
 
-    void UpdateAI(const uint32 uiDiff)
+    void UpdateAI(const uint32 uiDiff) override
     {
         if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
             return;

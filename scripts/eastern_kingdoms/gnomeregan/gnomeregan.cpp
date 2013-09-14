@@ -16,18 +16,20 @@
 
 /* ScriptData
 SDName: gnomeregan
-SD%Complete: 100
-SDComment:  Grubbis Encounter
+SD%Complete: 90
+SDComment:  Grubbis Encounter, quest 2904 (A fine mess)
 SDCategory: Gnomeregan
 EndScriptData */
 
 /* ContentData
 npc_blastmaster_emi_shortfuse
+npc_kernobee
 EndContentData */
 
 #include "precompiled.h"
 #include "gnomeregan.h"
 #include "escort_ai.h"
+#include "follower_ai.h"
 
 /*######
 ## npc_blastmaster_emi_shortfuse
@@ -170,7 +172,7 @@ struct MANGOS_DLL_DECL npc_blastmaster_emi_shortfuseAI : public npc_escortAI
         }
     }
 
-    void JustSummoned(Creature* pSummoned)
+    void JustSummoned(Creature* pSummoned) override
     {
         switch (pSummoned->GetEntry())
         {
@@ -193,7 +195,7 @@ struct MANGOS_DLL_DECL npc_blastmaster_emi_shortfuseAI : public npc_escortAI
         m_luiSummonedMobGUIDs.push_back(pSummoned->GetObjectGuid());
     }
 
-    void SummonedCreatureJustDied(Creature* pSummoned)
+    void SummonedCreatureJustDied(Creature* pSummoned) override
     {
         if (pSummoned->GetEntry() == NPC_GRUBBIS)
         {
@@ -209,7 +211,7 @@ struct MANGOS_DLL_DECL npc_blastmaster_emi_shortfuseAI : public npc_escortAI
         return m_uiPhase == 11 || m_uiPhase == 13 || m_uiPhase == 26 || m_uiPhase == 28;
     }
 
-    void MoveInLineOfSight(Unit* pWho)
+    void MoveInLineOfSight(Unit* pWho) override
     {
         // In case we are preparing the explosive charges, we won't start attacking mobs
         if (IsPreparingExplosiveCharge())
@@ -218,7 +220,7 @@ struct MANGOS_DLL_DECL npc_blastmaster_emi_shortfuseAI : public npc_escortAI
         npc_escortAI::MoveInLineOfSight(pWho);
     }
 
-    void AttackStart(Unit* pWho)
+    void AttackStart(Unit* pWho) override
     {
         // In case we are preparing the explosive charges, we won't start attacking mobs
         if (IsPreparingExplosiveCharge())
@@ -227,7 +229,7 @@ struct MANGOS_DLL_DECL npc_blastmaster_emi_shortfuseAI : public npc_escortAI
         npc_escortAI::AttackStart(pWho);
     }
 
-    void AttackedBy(Unit* pAttacker)
+    void AttackedBy(Unit* pAttacker) override
     {
         // Possibility for Aggro-Text only once per combat
         if (m_bDidAggroText)
@@ -239,7 +241,7 @@ struct MANGOS_DLL_DECL npc_blastmaster_emi_shortfuseAI : public npc_escortAI
             DoScriptText(urand(0, 1) ? SAY_AGGRO_1 : SAY_AGGRO_2, m_creature, pAttacker);
     }
 
-    void JustDied(Unit* pKiller)
+    void JustDied(Unit* /*pKiller*/) override
     {
         if (!m_pInstance)
             return;
@@ -270,7 +272,7 @@ struct MANGOS_DLL_DECL npc_blastmaster_emi_shortfuseAI : public npc_escortAI
         m_playerGuid = pPlayer->GetObjectGuid();
     }
 
-    void WaypointStart(uint32 uiPointId)
+    void WaypointStart(uint32 uiPointId) override
     {
         switch (uiPointId)
         {
@@ -293,7 +295,7 @@ struct MANGOS_DLL_DECL npc_blastmaster_emi_shortfuseAI : public npc_escortAI
         }
     }
 
-    void WaypointReached(uint32 uiPointId)
+    void WaypointReached(uint32 uiPointId) override
     {
         switch (uiPointId)
         {
@@ -336,7 +338,7 @@ struct MANGOS_DLL_DECL npc_blastmaster_emi_shortfuseAI : public npc_escortAI
         }
     }
 
-    void UpdateEscortAI(uint32 const uiDiff)
+    void UpdateEscortAI(uint32 const uiDiff) override
     {
         // the phases are handled OOC (keeps them in sync with the waypoints)
         if (m_uiPhaseTimer && !m_creature->getVictim())
@@ -607,7 +609,7 @@ bool GossipHello_npc_blastmaster_emi_shortfuse(Player* pPlayer, Creature* pCreat
     return true;
 }
 
-bool GossipSelect_npc_blastmaster_emi_shortfuse(Player* pPlayer, Creature* pCreature, uint32 uiSender, uint32 uiAction)
+bool GossipSelect_npc_blastmaster_emi_shortfuse(Player* pPlayer, Creature* pCreature, uint32 /*uiSender*/, uint32 uiAction)
 {
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
     {
@@ -625,6 +627,82 @@ bool GossipSelect_npc_blastmaster_emi_shortfuse(Player* pPlayer, Creature* pCrea
     return true;
 }
 
+/*######
+## npc_kernobee
+## TODO: It appears there are some things missing, including his? alarm-bot
+######*/
+
+enum
+{
+    QUEST_A_FINE_MESS           = 2904,
+    TRIGGER_GNOME_EXIT          = 324,                      // Add scriptlib support for it, atm simply use hardcoded values
+};
+
+static const float aKernobeePositions[2][3] =
+{
+    {-330.92f, -3.03f, -152.85f},                           // End position
+    {-297.32f, -7.32f, -152.85f}                            // Walk out of the door
+};
+
+struct MANGOS_DLL_DECL npc_kernobeeAI : public FollowerAI
+{
+    npc_kernobeeAI(Creature* pCreature) : FollowerAI(pCreature)
+    {
+        m_uiCheckEndposTimer = 10000;
+        Reset();
+    }
+
+    uint32 m_uiCheckEndposTimer;
+
+    void Reset() override {}
+
+    void ReceiveAIEvent(AIEventType eventType, Creature* /*pSender*/, Unit* pInvoker, uint32 uiMiscValue) override
+    {
+        if (eventType == AI_EVENT_START_EVENT && pInvoker->GetTypeId() == TYPEID_PLAYER)
+        {
+            // No idea why he has UNIT_STAND_STATE_DEAD in UDB ..
+            m_creature->SetStandState(UNIT_STAND_STATE_STAND);
+            StartFollow((Player*)pInvoker, 0, GetQuestTemplateStore(uiMiscValue));
+        }
+    }
+
+    void UpdateFollowerAI(const uint32 uiDiff)
+    {
+        FollowerAI::UpdateFollowerAI(uiDiff);               // Do combat handling
+
+        if (m_creature->isInCombat() || !HasFollowState(STATE_FOLLOW_INPROGRESS) || HasFollowState(STATE_FOLLOW_COMPLETE))
+            return;
+
+        if (m_uiCheckEndposTimer < uiDiff)
+        {
+            m_uiCheckEndposTimer = 500;
+            if (m_creature->IsWithinDist3d(aKernobeePositions[0][0], aKernobeePositions[0][1], aKernobeePositions[0][2], 2 * INTERACTION_DISTANCE))
+            {
+                SetFollowComplete(true);
+                if (Player* pPlayer = GetLeaderForFollower())
+                    pPlayer->GroupEventHappens(QUEST_A_FINE_MESS, m_creature);
+                m_creature->GetMotionMaster()->MovePoint(1, aKernobeePositions[1][0], aKernobeePositions[1][1], aKernobeePositions[1][2], false);
+                m_creature->ForcedDespawn(2000);
+            }
+        }
+        else
+            m_uiCheckEndposTimer -= uiDiff;
+    }
+};
+
+CreatureAI* GetAI_npc_kernobee(Creature* pCreature)
+{
+    return new npc_kernobeeAI(pCreature);
+}
+
+bool QuestAccept_npc_kernobee(Player* pPlayer, Creature* pCreature, const Quest* pQuest)
+{
+    if (pQuest->GetQuestId() == QUEST_A_FINE_MESS)
+        pCreature->AI()->SendAIEvent(AI_EVENT_START_EVENT, pPlayer, pCreature, pQuest->GetQuestId());
+
+    return true;
+}
+
 void AddSC_gnomeregan()
 {
     Script* pNewScript;
@@ -634,5 +712,11 @@ void AddSC_gnomeregan()
     pNewScript->GetAI = &GetAI_npc_blastmaster_emi_shortfuse;
     pNewScript->pGossipHello = &GossipHello_npc_blastmaster_emi_shortfuse;
     pNewScript->pGossipSelect = &GossipSelect_npc_blastmaster_emi_shortfuse;
+    pNewScript->RegisterSelf();
+
+    pNewScript = new Script;
+    pNewScript->Name = "npc_kernobee";
+    pNewScript->GetAI = &GetAI_npc_kernobee;
+    pNewScript->pQuestAcceptNPC = &QuestAccept_npc_kernobee;
     pNewScript->RegisterSelf();
 }

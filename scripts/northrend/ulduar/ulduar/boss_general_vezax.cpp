@@ -16,8 +16,8 @@
 
 /* ScriptData
 SDName: boss_general_vezax
-SD%Complete: 80%
-SDComment: TODO Achievments: Shadowdodger
+SD%Complete: 90%
+SDComment: Some details may need some small adjustments
 SDCategory: Ulduar
 EndScriptData */
 
@@ -58,6 +58,10 @@ enum
     NPC_SARONITE_ANIMUS                 = 33524,
     SPELL_PROFOUND_DARKNESS             = 63420,
 };
+
+/*######
+## boss_general_vezax
+######*/
 
 struct MANGOS_DLL_DECL boss_general_vezaxAI : public ScriptedAI
 {
@@ -106,13 +110,13 @@ struct MANGOS_DLL_DECL boss_general_vezaxAI : public ScriptedAI
         DoScriptText(SAY_AGGRO, m_creature);
     }
 
-    void JustReachedHome()
+    void JustReachedHome() override
     {
         if (m_pInstance)
             m_pInstance->SetData(TYPE_VEZAX, FAIL);
     }
 
-    void JustDied(Unit* pKiller)
+    void JustDied(Unit* pKiller) override
     {
         if (m_pInstance)
             m_pInstance->SetData(TYPE_VEZAX, DONE);
@@ -120,12 +124,12 @@ struct MANGOS_DLL_DECL boss_general_vezaxAI : public ScriptedAI
         DoScriptText(SAY_DEATH, m_creature);
     }
 
-    void KilledUnit(Unit* pVictim)
+    void KilledUnit(Unit* pVictim) override
     {
         DoScriptText(urand(0, 1) ? SAY_SLAY_1 : SAY_SLAY_2, m_creature);
     }
 
-    void JustSummoned(Creature* pSummoned)
+    void JustSummoned(Creature* pSummoned) override
     {
         if (pSummoned->GetEntry() == NPC_SARONITE_VAPOR)
         {
@@ -138,9 +142,8 @@ struct MANGOS_DLL_DECL boss_general_vezaxAI : public ScriptedAI
             if (m_lVaporsGuids.size() == MAX_HARD_MODE_VAPORS)
                 DoPrepareAnimusIfCan();
         }
-        // ToDo: faction should be set in DB
         else if (pSummoned->GetEntry() == NPC_SARONITE_ANIMUS)
-            pSummoned->setFaction(14);
+            pSummoned->SetInCombatWithZone();
     }
 
     void SummonedCreatureJustDied(Creature* pSummoned)
@@ -161,7 +164,7 @@ struct MANGOS_DLL_DECL boss_general_vezaxAI : public ScriptedAI
         }
     }
 
-    void SummonedMovementInform(Creature* pSummoned, uint32 uiMoveType, uint32 uiPointId)
+    void SummonedMovementInform(Creature* pSummoned, uint32 uiMoveType, uint32 uiPointId) override
     {
         if (uiMoveType != POINT_MOTION_TYPE || uiPointId != 0 || pSummoned->GetEntry() != NPC_SARONITE_VAPOR)
             return;
@@ -197,7 +200,7 @@ struct MANGOS_DLL_DECL boss_general_vezaxAI : public ScriptedAI
         }
     }
 
-    void UpdateAI(const uint32 uiDiff)
+    void UpdateAI(const uint32 uiDiff) override
     {
         if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
             return;
@@ -331,7 +334,7 @@ struct MANGOS_DLL_DECL mob_saronite_animusAI : public ScriptedAI
         m_creature->SetRespawnDelay(DAY);
     }
 
-    void UpdateAI(const uint32 uiDiff)
+    void UpdateAI(const uint32 uiDiff) override
     {
         if (m_pInstance && m_pInstance->GetData(TYPE_VEZAX) != IN_PROGRESS) 
             m_creature->ForcedDespawn();

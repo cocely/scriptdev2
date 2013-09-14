@@ -63,13 +63,13 @@ struct MANGOS_DLL_DECL boss_moamAI : public ScriptedAI
         m_creature->SetMaxPower(POWER_MANA, 0);
     }
 
-    void Aggro(Unit* pWho)
+    void Aggro(Unit* /*pWho*/) override
     {
         DoScriptText(EMOTE_AGGRO, m_creature);
         m_creature->SetMaxPower(POWER_MANA, m_creature->GetCreatureInfo()->maxmana);
     }
 
-    void UpdateAI(const uint32 uiDiff)
+    void UpdateAI(const uint32 uiDiff) override
     {
         if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
             return;

@@ -52,7 +52,7 @@ struct MANGOS_DLL_DECL npc_kanatiAI : public npc_escortAI
 
     void Reset() { }
 
-    void WaypointReached(uint32 uiPointId)
+    void WaypointReached(uint32 uiPointId) override
     {
         switch (uiPointId)
         {
@@ -72,10 +72,10 @@ struct MANGOS_DLL_DECL npc_kanatiAI : public npc_escortAI
         for (int i = 0; i < 3; ++i)
             m_creature->SummonCreature(NPC_GALAK_ASS,
                                        m_afGalakLoc[0], m_afGalakLoc[1], m_afGalakLoc[2], 0.0f,
-                                       TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 25000);
+                                       TEMPSUMMON_TIMED_OOC_DESPAWN, 25000);
     }
 
-    void JustSummoned(Creature* pSummoned)
+    void JustSummoned(Creature* pSummoned) override
     {
         pSummoned->AI()->AttackStart(m_creature);
     }
@@ -132,7 +132,7 @@ struct MANGOS_DLL_DECL npc_lakota_windsongAI : public npc_escortAI
 
     void Reset() { }
 
-    void WaypointReached(uint32 uiPointId)
+    void WaypointReached(uint32 uiPointId) override
     {
         switch (uiPointId)
         {
@@ -160,7 +160,7 @@ struct MANGOS_DLL_DECL npc_lakota_windsongAI : public npc_escortAI
         for (int i = 0; i < 2; ++i)
             m_creature->SummonCreature(NPC_GRIM_BANDIT,
                                        m_afBanditLoc[i + uiAmbushId][0], m_afBanditLoc[i + uiAmbushId][1], m_afBanditLoc[i + uiAmbushId][2], 0.0f,
-                                       TEMPSUMMON_TIMED_OR_DEAD_DESPAWN, 60000);
+                                       TEMPSUMMON_TIMED_OOC_OR_DEAD_DESPAWN, 60000);
     }
 };
 
@@ -209,7 +209,7 @@ struct MANGOS_DLL_DECL npc_paoka_swiftmountainAI : public npc_escortAI
 
     void Reset() { }
 
-    void WaypointReached(uint32 uiPointId)
+    void WaypointReached(uint32 uiPointId) override
     {
         switch (uiPointId)
         {
@@ -232,7 +232,7 @@ struct MANGOS_DLL_DECL npc_paoka_swiftmountainAI : public npc_escortAI
         for (int i = 0; i < 3; ++i)
             m_creature->SummonCreature(NPC_WYVERN,
                                        m_afWyvernLoc[i][0], m_afWyvernLoc[i][1], m_afWyvernLoc[i][2], 0.0f,
-                                       TEMPSUMMON_TIMED_OR_DEAD_DESPAWN, 60000);
+                                       TEMPSUMMON_TIMED_OOC_OR_DEAD_DESPAWN, 60000);
     }
 };
 
@@ -287,7 +287,7 @@ struct MANGOS_DLL_DECL npc_plucky_johnsonAI : public ScriptedAI
         m_creature->CastSpell(m_creature, SPELL_PLUCKY_CHICKEN, false);
     }
 
-    void ReceiveEmote(Player* pPlayer, uint32 uiTextEmote)
+    void ReceiveEmote(Player* pPlayer, uint32 uiTextEmote) override
     {
         if (pPlayer->GetQuestStatus(QUEST_SCOOP) == QUEST_STATUS_INCOMPLETE)
         {
@@ -313,7 +313,7 @@ struct MANGOS_DLL_DECL npc_plucky_johnsonAI : public ScriptedAI
         }
     }
 
-    void UpdateAI(const uint32 uiDiff)
+    void UpdateAI(const uint32 uiDiff) override
     {
         if (m_creature->HasFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP))
         {
@@ -351,7 +351,7 @@ bool GossipHello_npc_plucky_johnson(Player* pPlayer, Creature* pCreature)
     return true;
 }
 
-bool GossipSelect_npc_plucky_johnson(Player* pPlayer, Creature* pCreature, uint32 uiSender, uint32 uiAction)
+bool GossipSelect_npc_plucky_johnson(Player* pPlayer, Creature* pCreature, uint32 /*uiSender*/, uint32 uiAction)
 {
     if (uiAction == GOSSIP_ACTION_INFO_DEF)
     {

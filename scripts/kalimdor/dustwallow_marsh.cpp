@@ -67,13 +67,13 @@ struct MANGOS_DLL_DECL mobs_risen_husk_spiritAI : public ScriptedAI
         m_pCreditPlayer = NULL;
     }
 
-    void JustSummoned(Creature* pSummoned)
+    void JustSummoned(Creature* pSummoned) override
     {
         if (m_pCreditPlayer)
             m_pCreditPlayer->KilledMonsterCredit(pSummoned->GetEntry(), pSummoned->GetObjectGuid());
     }
 
-    void DamageTaken(Unit* pDoneBy, uint32& uiDamage)
+    void DamageTaken(Unit* pDoneBy, uint32& uiDamage) override
     {
         if (uiDamage < m_creature->GetHealth())
             return;
@@ -88,7 +88,7 @@ struct MANGOS_DLL_DECL mobs_risen_husk_spiritAI : public ScriptedAI
         }
     }
 
-    void UpdateAI(const uint32 uiDiff)
+    void UpdateAI(const uint32 uiDiff) override
     {
         if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
             return;
@@ -149,7 +149,7 @@ struct MANGOS_DLL_DECL npc_restless_apparitionAI : public ScriptedAI
         m_uiTalk_Timer = 1000;
     }
 
-    void UpdateAI(const uint32 uiDiff)
+    void UpdateAI(const uint32 uiDiff) override
     {
         if (!m_uiTalk_Timer)
             return;
@@ -245,7 +245,7 @@ struct MANGOS_DLL_DECL npc_morokkAI : public npc_escortAI
 
     void Reset() {}
 
-    void WaypointReached(uint32 uiPointId)
+    void WaypointReached(uint32 uiPointId) override
     {
         switch (uiPointId)
         {
@@ -264,7 +264,7 @@ struct MANGOS_DLL_DECL npc_morokkAI : public npc_escortAI
         }
     }
 
-    void AttackedBy(Unit* pAttacker)
+    void AttackedBy(Unit* pAttacker) override
     {
         if (m_creature->getVictim())
             return;
@@ -275,7 +275,7 @@ struct MANGOS_DLL_DECL npc_morokkAI : public npc_escortAI
         AttackStart(pAttacker);
     }
 
-    void DamageTaken(Unit* pDoneBy, uint32& uiDamage)
+    void DamageTaken(Unit* /*pDoneBy*/, uint32& uiDamage) override
     {
         if (HasEscortState(STATE_ESCORT_ESCORTING))
         {
@@ -294,7 +294,7 @@ struct MANGOS_DLL_DECL npc_morokkAI : public npc_escortAI
         }
     }
 
-    void UpdateEscortAI(const uint32 uiDiff)
+    void UpdateEscortAI(const uint32 /*uiDiff*/) override
     {
         if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
         {
@@ -415,7 +415,7 @@ struct MANGOS_DLL_DECL npc_ogronAI : public npc_escortAI
         }
     }
 
-    void MoveInLineOfSight(Unit* pWho)
+    void MoveInLineOfSight(Unit* pWho) override
     {
         if (HasEscortState(STATE_ESCORT_ESCORTING) && pWho->GetEntry() == NPC_REETHE && lCreatureList.empty())
             lCreatureList.push_back((Creature*)pWho);
@@ -437,7 +437,7 @@ struct MANGOS_DLL_DECL npc_ogronAI : public npc_escortAI
         return NULL;
     }
 
-    void WaypointReached(uint32 uiPointId)
+    void WaypointReached(uint32 uiPointId) override
     {
         switch (uiPointId)
         {
@@ -454,7 +454,7 @@ struct MANGOS_DLL_DECL npc_ogronAI : public npc_escortAI
         }
     }
 
-    void JustSummoned(Creature* pSummoned)
+    void JustSummoned(Creature* pSummoned) override
     {
         lCreatureList.push_back(pSummoned);
 
@@ -491,7 +491,7 @@ struct MANGOS_DLL_DECL npc_ogronAI : public npc_escortAI
         }
     }
 
-    void UpdateEscortAI(const uint32 uiDiff)
+    void UpdateEscortAI(const uint32 uiDiff) override
     {
         if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
         {
@@ -531,10 +531,10 @@ struct MANGOS_DLL_DECL npc_ogronAI : public npc_escortAI
                                     if (Creature* pReethe = GetCreature(NPC_REETHE))
                                         DoScriptText(SAY_OGR_RET_HEAR, pReethe);
 
-                                    m_creature->SummonCreature(NPC_CALDWELL, m_afSpawn[0], m_afSpawn[1], m_afSpawn[2], 0.0f, TEMPSUMMON_TIMED_OR_DEAD_DESPAWN, 300000);
-                                    m_creature->SummonCreature(NPC_HALLAN, m_afSpawn[0], m_afSpawn[1], m_afSpawn[2], 0.0f, TEMPSUMMON_TIMED_OR_DEAD_DESPAWN, 300000);
-                                    m_creature->SummonCreature(NPC_SKIRMISHER, m_afSpawn[0], m_afSpawn[1], m_afSpawn[2], 0.0f, TEMPSUMMON_TIMED_OR_DEAD_DESPAWN, 300000);
-                                    m_creature->SummonCreature(NPC_SKIRMISHER, m_afSpawn[0], m_afSpawn[1], m_afSpawn[2], 0.0f, TEMPSUMMON_TIMED_OR_DEAD_DESPAWN, 300000);
+                                    m_creature->SummonCreature(NPC_CALDWELL, m_afSpawn[0], m_afSpawn[1], m_afSpawn[2], 0.0f, TEMPSUMMON_TIMED_OOC_OR_DEAD_DESPAWN, 300000);
+                                    m_creature->SummonCreature(NPC_HALLAN, m_afSpawn[0], m_afSpawn[1], m_afSpawn[2], 0.0f, TEMPSUMMON_TIMED_OOC_OR_DEAD_DESPAWN, 300000);
+                                    m_creature->SummonCreature(NPC_SKIRMISHER, m_afSpawn[0], m_afSpawn[1], m_afSpawn[2], 0.0f, TEMPSUMMON_TIMED_OOC_OR_DEAD_DESPAWN, 300000);
+                                    m_creature->SummonCreature(NPC_SKIRMISHER, m_afSpawn[0], m_afSpawn[1], m_afSpawn[2], 0.0f, TEMPSUMMON_TIMED_OOC_OR_DEAD_DESPAWN, 300000);
 
                                     m_uiPhase = PHASE_GUESTS;
                                     break;
@@ -665,9 +665,9 @@ struct MANGOS_DLL_DECL npc_private_hendelAI : public ScriptedAI
 {
     npc_private_hendelAI(Creature* pCreature) : ScriptedAI(pCreature) { Reset(); }
 
-    void Reset() override {}
+    void Reset() {}
 
-    void AttackedBy(Unit* pAttacker)
+    void AttackedBy(Unit* pAttacker) override
     {
         if (m_creature->getVictim())
             return;
@@ -678,7 +678,7 @@ struct MANGOS_DLL_DECL npc_private_hendelAI : public ScriptedAI
         AttackStart(pAttacker);
     }
 
-    void DamageTaken(Unit* pDoneBy, uint32& uiDamage)
+    void DamageTaken(Unit* pDoneBy, uint32& uiDamage) override
     {
         if (uiDamage > m_creature->GetHealth() || m_creature->GetHealthPercent() < 20.0f)
         {
@@ -693,7 +693,7 @@ struct MANGOS_DLL_DECL npc_private_hendelAI : public ScriptedAI
     }
 };
 
-bool QuestAccept_npc_private_hendel(Player* pPlayer, Creature* pCreature, const Quest* pQuest)
+bool QuestAccept_npc_private_hendel(Player* /*pPlayer*/, Creature* pCreature, const Quest* pQuest)
 {
     if (pQuest->GetQuestId() == QUEST_MISSING_DIPLO_PT16)
         pCreature->SetFactionTemporary(FACTION_HOSTILE, TEMPFACTION_RESTORE_COMBAT_STOP | TEMPFACTION_RESTORE_RESPAWN);
@@ -734,7 +734,7 @@ struct MANGOS_DLL_DECL npc_stinky_ignatzAI : public npc_escortAI
 
     ObjectGuid m_bogbeanPlantGuid;
 
-    void Reset() override {}
+    void Reset() {}
 
     void ReceiveAIEvent(AIEventType eventType, Creature* /*pSender*/, Unit* pInvoker, uint32 uiMiscValue) override
     {
@@ -812,14 +812,14 @@ enum
     NPC_LURKING_SHARK  = 23928
 };
 
-bool AreaTrigger_at_nats_landing(Player* pPlayer, const AreaTriggerEntry* pAt)
+bool AreaTrigger_at_nats_landing(Player* pPlayer, const AreaTriggerEntry* /*pAt*/)
 {
     if (pPlayer->GetQuestStatus(QUEST_NATS_BARGAIN) == QUEST_STATUS_INCOMPLETE && pPlayer->HasAura(SPELL_FISH_PASTE))
     {
         Creature* pShark = GetClosestCreatureWithEntry(pPlayer, NPC_LURKING_SHARK, 20.0f);
 
         if (!pShark)
-            pShark = pPlayer->SummonCreature(NPC_LURKING_SHARK, -4246.243f, -3922.356f, -7.488f, 5.0f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 100000);
+            pShark = pPlayer->SummonCreature(NPC_LURKING_SHARK, -4246.243f, -3922.356f, -7.488f, 5.0f, TEMPSUMMON_TIMED_OOC_DESPAWN, 100000);
 
         pShark->AI()->AttackStart(pPlayer);
         return false;
@@ -862,7 +862,7 @@ struct MANGOS_DLL_DECL boss_lady_jaina_proudmooreAI : public ScriptedAI
         m_uiWaterElementTimer = 20000;
     }
 
-    void UpdateAI(const uint32 uiDiff)
+    void UpdateAI(const uint32 uiDiff) override
     {
         if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
             return;

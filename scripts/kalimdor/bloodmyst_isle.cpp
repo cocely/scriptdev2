@@ -44,10 +44,10 @@ struct MANGOS_DLL_DECL mob_webbed_creatureAI : public Scripted_NoMovementAI
     mob_webbed_creatureAI(Creature* pCreature) : Scripted_NoMovementAI(pCreature) { Reset(); }
 
     void Reset() { }
-    void AttackStart(Unit* pWho) { }
-    void MoveInLineOfSight(Unit* pWho) { }
+    void AttackStart(Unit* /*pWho*/) override { }
+    void MoveInLineOfSight(Unit* /*pWho*/) override { }
 
-    void JustDied(Unit* pKiller)
+    void JustDied(Unit* pKiller) override
     {
         uint32 uiSpawnCreatureEntry = 0;
 
@@ -65,7 +65,7 @@ struct MANGOS_DLL_DECL mob_webbed_creatureAI : public Scripted_NoMovementAI
         }
 
         if (uiSpawnCreatureEntry)
-            m_creature->SummonCreature(uiSpawnCreatureEntry, 0.0f, 0.0f, 0.0f, m_creature->GetOrientation(), TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 25000);
+            m_creature->SummonCreature(uiSpawnCreatureEntry, 0.0f, 0.0f, 0.0f, m_creature->GetOrientation(), TEMPSUMMON_TIMED_OOC_DESPAWN, 25000);
     }
 };
 

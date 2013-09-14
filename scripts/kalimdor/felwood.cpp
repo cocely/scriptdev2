@@ -72,7 +72,7 @@ struct MANGOS_DLL_DECL npc_kittenAI : public FollowerAI
 
     void Reset() { }
 
-    void MoveInLineOfSight(Unit* pWho)
+    void MoveInLineOfSight(Unit* pWho) override
     {
         // should not have npcflag by default, so set when expected
         if (!m_creature->getVictim() && !m_creature->HasFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP) && HasFollowState(STATE_FOLLOW_INPROGRESS) && pWho->GetEntry() == NPC_WINNA)
@@ -82,7 +82,7 @@ struct MANGOS_DLL_DECL npc_kittenAI : public FollowerAI
         }
     }
 
-    void UpdateFollowerAI(const uint32 uiDiff)
+    void UpdateFollowerAI(const uint32 uiDiff) override
     {
         if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
         {
@@ -144,7 +144,7 @@ bool GossipHello_npc_corrupt_saber(Player* pPlayer, Creature* pCreature)
     return true;
 }
 
-bool GossipSelect_npc_corrupt_saber(Player* pPlayer, Creature* pCreature, uint32 uiSender, uint32 uiAction)
+bool GossipSelect_npc_corrupt_saber(Player* pPlayer, Creature* pCreature, uint32 /*uiSender*/, uint32 uiAction)
 {
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
     {
@@ -202,7 +202,7 @@ struct MANGOS_DLL_DECL npc_niby_the_almightyAI : public ScriptedAI
         m_creature->RemoveFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_QUESTGIVER);
     }
 
-    void UpdateAI(const uint32 uiDiff)
+    void UpdateAI(const uint32 uiDiff) override
     {
         if (m_bEventStarted)
         {
@@ -262,7 +262,7 @@ CreatureAI* GetAI_npc_niby_the_almighty(Creature* pCreature)
     return new npc_niby_the_almightyAI(pCreature);
 }
 
-bool QuestRewarded_npc_niby_the_almighty(Player* pPlayer, Creature* pCreature, Quest const* pQuest)
+bool QuestRewarded_npc_niby_the_almighty(Player* /*pPlayer*/, Creature* pCreature, Quest const* pQuest)
 {
     if (pQuest->GetQuestId() == QUEST_KROSHIUS)
     {
@@ -322,12 +322,12 @@ struct MANGOS_DLL_DECL npc_kroshiusAI : public ScriptedAI
         // TODO: A visual Flame Circle around the mob still missing
     }
 
-    void JustDied(Unit* pKiller)
+    void JustDied(Unit* /*pKiller*/) override
     {
         m_uiPhase = 0;
     }
 
-    void UpdateAI(const uint32 uiDiff)
+    void UpdateAI(const uint32 uiDiff) override
     {
         if (!m_uiPhase)
             return;
@@ -383,7 +383,7 @@ CreatureAI* GetAI_npc_kroshius(Creature* pCreature)
     return new npc_kroshiusAI(pCreature);
 }
 
-bool ProcessEventId_npc_kroshius(uint32 uiEventId, Object* pSource, Object* pTarget, bool bIsStart)
+bool ProcessEventId_npc_kroshius(uint32 uiEventId, Object* pSource, Object* /*pTarget*/, bool /*bIsStart*/)
 {
     if (uiEventId == EVENT_KROSHIUS_REVIVE)
     {

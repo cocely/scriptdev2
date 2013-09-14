@@ -65,13 +65,13 @@ struct MANGOS_DLL_DECL example_escortAI : public npc_escortAI
         m_uiChatTimer = 4000;
     }
 
-    void JustSummoned(Creature* pSummoned)
+    void JustSummoned(Creature* pSummoned) override
     {
         pSummoned->AI()->AttackStart(m_creature);
     }
 
     // Pure Virtual Functions (Have to be implemented)
-    void WaypointReached(uint32 uiWP)
+    void WaypointReached(uint32 uiWP) override
     {
         switch (uiWP)
         {
@@ -80,7 +80,7 @@ struct MANGOS_DLL_DECL example_escortAI : public npc_escortAI
                 break;
             case 3:
                 DoScriptText(SAY_WP_2, m_creature);
-                m_creature->SummonCreature(NPC_FELBOAR, m_creature->GetPositionX() + 5.0f, m_creature->GetPositionY() + 7.0f, m_creature->GetPositionZ(), 0.0f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 3000);
+                m_creature->SummonCreature(NPC_FELBOAR, m_creature->GetPositionX() + 5.0f, m_creature->GetPositionY() + 7.0f, m_creature->GetPositionZ(), 0.0f, TEMPSUMMON_TIMED_OOC_DESPAWN, 3000);
                 break;
             case 4:
                 if (Player* pTmpPlayer = GetPlayerForEscort())
@@ -94,7 +94,7 @@ struct MANGOS_DLL_DECL example_escortAI : public npc_escortAI
         }
     }
 
-    void Aggro(Unit* pWho)
+    void Aggro(Unit* /*pWho*/) override
     {
         if (HasEscortState(STATE_ESCORT_ESCORTING))
         {
@@ -106,7 +106,7 @@ struct MANGOS_DLL_DECL example_escortAI : public npc_escortAI
     }
 
     // Only overwrite if there is something special
-    void JustDied(Unit* pKiller)
+    void JustDied(Unit* pKiller) override
     {
         if (HasEscortState(STATE_ESCORT_ESCORTING))
         {
@@ -129,7 +129,7 @@ struct MANGOS_DLL_DECL example_escortAI : public npc_escortAI
         npc_escortAI::JustDied(pKiller);
     }
 
-    void UpdateEscortAI(const uint32 uiDiff)
+    void UpdateEscortAI(const uint32 uiDiff) override
     {
         // Combat check
         if (m_creature->SelectHostileTarget() && m_creature->getVictim())
@@ -191,7 +191,7 @@ bool GossipHello_example_escort(Player* pPlayer, Creature* pCreature)
     return true;
 }
 
-bool GossipSelect_example_escort(Player* pPlayer, Creature* pCreature, uint32 uiSender, uint32 uiAction)
+bool GossipSelect_example_escort(Player* pPlayer, Creature* pCreature, uint32 /*uiSender*/, uint32 uiAction)
 {
     example_escortAI* pEscortAI = dynamic_cast<example_escortAI*>(pCreature->AI());
 
