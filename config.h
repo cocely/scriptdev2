@@ -19,6 +19,7 @@
 #ifndef SC_CONFIG_H
 #define SC_CONFIG_H
 
+#include "../../../config.h"
 #include "Platform/CompilerDefs.h"
 #include "revision.h"
 #include "sd2_revision_nr.h"
@@ -62,9 +63,6 @@
   #define _SCRIPTDEV2_CONFIG  SYSCONFDIR"scriptdev2.conf"
 #endif
 
-#define VERSION       "0.17"
-#define CLIENT_VERSION 12340
-
 #if CLIENT_VERSION >= 16057
     #define MAX_EXPANSION 4
     #define SD2_WORLD_MOP 1
@@ -103,13 +101,13 @@
 #endif
 
 #if (COMPILER == COMPILER_MICROSOFT)
-    #define LOCATION StaticLocation
-    #define EVENTLOCATION EventLocations
-    #define SPAWNLOCATION SpawnLocation
+#  define LOCATION StaticLocation
+#  define EVENTLOCATION EventLocations
+#  define SPAWNLOCATION SpawnLocation
 #else
-    #define LOCATION Location
-    #define EVENTLOCATION EventLocations
-    #define SPAWNLOCATION SpawnLocation
+#  define LOCATION Location
+#  define EVENTLOCATION EventLocations
+#  define SPAWNLOCATION SpawnLocation
 #endif
 
 #endif
