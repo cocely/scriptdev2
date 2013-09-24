@@ -36,10 +36,12 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v110</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v110</PlatformToolset>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -111,7 +113,7 @@
     </ClCompile>
     <Link>
       <AdditionalDependencies>mangosd.lib;ACEd.lib;framework.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>..\..\..\..\win\VC100\mangosd__Win32_Debug;..\..\..\..\win\VC100\framework__Win32_Debug;..\..\..\..\dep\lib\win32_debug\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>..\..\..\..\win\mangosd__Win32_Debug;..\..\..\..\win\framework__Win32_Debug;..\..\..\..\dep\lib\win32_debug\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
       <RandomizedBaseAddress>false</RandomizedBaseAddress>
@@ -139,11 +141,11 @@
       <StringPooling>true</StringPooling>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
-      <AdditionalOptions>/MP /Zm135 %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalOptions>/MP /Zm256 %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <AdditionalDependencies>mangosd.lib;ACEd.lib;framework.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>..\..\..\..\win\VC100\mangosd__x64_Debug;..\..\..\..\win\VC100\framework__x64_Debug;..\..\..\..\dep\lib\x64_Debug\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>..\..\..\..\win\mangosd__x64_Debug;..\..\..\..\win\framework__x64_Debug;..\..\..\..\dep\lib\x64_Debug\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
       <RandomizedBaseAddress>false</RandomizedBaseAddress>
@@ -170,7 +172,7 @@
     </ClCompile>
     <Link>
       <AdditionalDependencies>mangosd.lib;ACE.lib;framework.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>..\..\..\..\win\VC100\mangosd__Win32_Release;..\..\..\..\win\VC100\framework__Win32_Release;..\..\..\..\dep\lib\win32_release\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>..\..\..\..\win\mangosd__Win32_Release;..\..\..\..\win\framework__Win32_Release;..\..\..\..\dep\lib\win32_release\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
       <OptimizeReferences>true</OptimizeReferences>
@@ -186,7 +188,7 @@
       <TargetEnvironment>X64</TargetEnvironment>
     </Midl>
     <ClCompile>
-      <AdditionalOptions>/MP /Zm135 %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalOptions>/MP /Zm256 %(AdditionalOptions)</AdditionalOptions>
       <AdditionalIncludeDirectories>..\..\..\..\dep\include\;..\..\..\shared\;..\..\..\framework\;..\..\..\game\;..\include\;..\base\;..\..\..\..\dep\ACE_wrappers\;..\..\..\..\dep\include\g3dlite;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;SCRIPT;_SECURE_SCL=0;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
@@ -200,7 +202,7 @@
     </ClCompile>
     <Link>
       <AdditionalDependencies>mangosd.lib;ACE.lib;framework.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>..\..\..\..\win\VC100\mangosd__x64_Release;..\..\..\..\win\VC100\framework__x64_Release;..\..\..\..\dep\lib\x64_release\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>..\..\..\..\win\mangosd__x64_Release;..\..\..\..\win\framework__x64_Release;..\..\..\..\dep\lib\x64_release\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
       <OptimizeReferences>true</OptimizeReferences>
@@ -889,25 +891,25 @@
     <CustomBuild Include="..\revision.h">
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Extracting revision</Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">cd "$(SolutionDir)"
-"$(SolutionDir)..\..\..\win\VC100\genrevision__Win32_$(Configuration)\genrevision.exe"
+"$(SolutionDir)..\..\..\win\genrevision__Win32_$(Configuration)\genrevision.exe"
 </Command>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">.svn/entries;%(AdditionalInputs)</AdditionalInputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">revision.h;%(Outputs)</Outputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Extracting revision</Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">cd "$(SolutionDir)"
-"$(SolutionDir)..\..\..\win\VC100\genrevision__Win32_$(Configuration)\genrevision.exe"
+"$(SolutionDir)..\..\..\win\genrevision__Win32_$(Configuration)\genrevision.exe"
 </Command>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">.svn/entries;%(AdditionalInputs)</AdditionalInputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">revision.h;%(Outputs)</Outputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Extracting revision</Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">cd "$(SolutionDir)"
-"$(SolutionDir)..\..\..\win\VC100\genrevision__Win32_$(Configuration)\genrevision.exe"
+"$(SolutionDir)..\..\..\win\genrevision__Win32_$(Configuration)\genrevision.exe"
 </Command>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">.svn/entries;%(AdditionalInputs)</AdditionalInputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">revision.h;%(Outputs)</Outputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Extracting revision</Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">cd "$(SolutionDir)"
-"$(SolutionDir)..\..\..\win\VC100\genrevision__Win32_$(Configuration)\genrevision.exe"
+"$(SolutionDir)..\..\..\win\genrevision__Win32_$(Configuration)\genrevision.exe"
 </Command>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">.svn/entries;%(AdditionalInputs)</AdditionalInputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">revision.h;%(Outputs)</Outputs>
