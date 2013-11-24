@@ -608,6 +608,8 @@
       <Filter>include</Filter>
     </ClCompile>
     <ClCompile Include="..\scripts\eastern_kingdoms\scarlet_enclave\world_map_ebon_hold.cpp" />
+    <ClCompile Include="..\scripts\northrend\icecrown_citadel\icecrown_citadel\icecrown_lights_hammer.cpp" />
+    <ClCompile Include="..\include\sc_timer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\base\escort_ai.h">
@@ -738,6 +740,7 @@
       <Filter>include</Filter>
     </ClInclude>
     <ClInclude Include="..\scripts\eastern_kingdoms\scarlet_enclave\world_map_ebon_hold.h" />
+    <ClInclude Include="..\include\sc_timer.h" />
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="..\revision.h" />
