@@ -56,11 +56,11 @@ REPLACE INTO `creature` (`guid`, `id`, `map`, `spawnMask`, `phaseMask`, `modelid
 REPLACE INTO `gameobject` (`guid`, `id`, `map`, `spawnMask`, `phaseMask`, `position_x`, `position_y`, `position_z`, `orientation`, `rotation0`, `rotation1`, `rotation2`, `rotation3`, `spawntimesecs`, `animprogress`, `state`) VALUES
 (14531739, 201596, 668, 1, 128, 5275.28, 1694.23, 786.147, 0.981225, 0, 0, 0.471166, 0.882044, 25, 0, 1);
 
-DELETE from `creature` WHERE `id`=36955;
+DELETE FROM `creature` WHERE `id`=36955;
 INSERT INTO `creature` (`guid`, `id`, `map`, `spawnMask`, `phaseMask`, `modelid`, `equipment_id`, `position_x`, `position_y`, `position_z`, `orientation`, `spawntimesecs`, `spawndist`, `currentwaypoint`, `curhealth`, `curmana`, `DeathState`, `MovementType`) VALUES
 (151040, 36955, 668, 3, 128, 0, 0, 5547.27, 2256.95, 733.011, 0.835987, 7200, 0, 0, 252000, 881400, 0, 0);
 
-DELETE from `creature` WHERE `id`=37554;
+DELETE FROM `creature` WHERE `id`=37554;
 INSERT INTO `creature` (`guid`, `id`, `map`, `spawnMask`, `phaseMask`, `modelid`, `equipment_id`, `position_x`, `position_y`, `position_z`, `orientation`, `spawntimesecs`, `spawndist`, `currentwaypoint`, `curhealth`, `curmana`, `DeathState`, `MovementType`) VALUES
 (151041, 37554, 668, 3, 64, 0, 0, 5547.27, 2256.95, 733.011, 0.835987, 7200, 0, 0, 252000, 881400, 0, 0);
 
@@ -74,9 +74,9 @@ UPDATE `gameobject_template` SET `faction` = '114',`data0` = '0' WHERE `gameobje
 UPDATE `gameobject` SET `state` = 1 WHERE `id` IN (197342,197343);
 
 -- offlike way for icewalls operation
-DELETE from `creature` WHERE `id`=37014;
-UPDATE `creature_template` SET `AIName`='', `Scriptname`='npc_queldelar_hor' where `entry` IN (37158);
-DELETE from `creature` WHERE `map` = 668 AND `id` IN (37221,37223,37554,36955);
+DELETE FROM `creature` WHERE `id`=37014;
+UPDATE `creature_template` SET `AIName`='', `Scriptname`='npc_queldelar_hor' WHERE `entry` IN (37158);
+DELETE FROM `creature` WHERE `map` = 668 AND `id` IN (37221,37223,37554,36955);
 
 -- Captains chest (override)
 DELETE FROM `gameobject` WHERE `id` IN (202212,201710,202337,202336);
@@ -118,11 +118,13 @@ INSERT INTO `creature_ai_scripts` (`id`,`creature_id`,`event_type`,`event_invers
 (3672503,36725,14,0,100,31,50,30,8000,13000,11,36725,6,0,0,0,0,0,0,0,0,0, 'Nerubar broodkeeper - dark mending'),
 (3672504,36725,0,0,100,31,7000,11000,7000,11000,11,70980,4,0,0,0,0,0,0,0,0,0, 'Nerubar broodkeeper - web wrap');
 -- Deathbound Ward (need compare with YTDB)
-DELETE FROM `creature_ai_scripts` WHERE `id` IN (3700701, 3700702, 3700703);
-INSERT INTO `creature_ai_scripts` (`id`,`creature_id`,`event_type`,`event_inverse_phase_mask`,`event_chance`,`event_flags`,`event_param1`,`event_param2`,`event_param3`,`event_param4`,`action1_type`,`action1_param1`,`action1_param2`,`action1_param3`,`action2_type`,`action2_param1`,`action2_param2`,`action2_param3`,`action3_type`,`action3_param1`,`action3_param2`,`action3_param3`,`comment`) VALUES 
-(3700701,37007,10,0,100,31,1,80,0,0,38,0,0,0,0,0,0,0,0,0,0,0, 'Deathbound ward - set aggressive'),
-(3700702,37007,0,0,100,31,5000,7000,5000,7000,11,71021,1,0,0,0,0,0,0,0,0,0, 'Deathbound ward - saber lash'),
-(3700703,37007,0,0,100,31,15000,20000,20000,30000,11,71022,0,0,0,0,0,0,0,0,0,0, 'Deathbound ward - disrupting shout');
+-- Creature id: 37007
+DELETE FROM creature_ai_scripts WHERE creature_id=37007;
+INSERT INTO creature_ai_scripts VALUES 
+('3700701','37007','0','0','100','31','15000','20000','20000','30000','11','71022','0','0','0','0','0','0','0','0','0','0','Deathbound ward - Disrupting Shout'),
+('3700702','37007','0','0','100','31','5000','7000','5000','7000','11','71021','1','0','0','0','0','0','0','0','0','0','Deathbound Ward - Saber Lash'),
+('3700703','37007','7','0','100','30','0','0','0','0','28','0','70733','0','0','0','0','0','0','0','0','0','Deathbound Ward - Remove Aura Stone Form at Evade.'),
+('3700704','37007','21','0','100','30','0','0','0','0','28','0','70733','0','0','0','0','0','0','0','0','0','Deathbound Ward - Remove Aura Stone Form at Just Reached Home.');
 
 -- #####################
 -- ORATORY OF THE DAMMED
@@ -416,3 +418,220 @@ INSERT INTO `creature_ai_scripts` (`id`,`creature_id`,`event_type`,`event_invers
 (3712602,37126,0,0,100,11,15000,20000,20000,25000,11,71468,0,0,0,0,0,0,0,0,0,0, 'Sister Svalna - aether burst 10'),
 (3712603,37126,0,0,100,21,15000,20000,20000,25000,11,71469,0,0,0,0,0,0,0,0,0,0, 'Sister Svalna - aether burst 25'),
 (3712604,37126,0,0,100,31,25000,30000,60000,70000,11,70196,5,0,11,71463,0,0,0,0,0,0, 'Sister Svalna - sprear');
+
+-- from Ulduar
+-- PreSindragosa_Event.
+DELETE FROM `spell_template` WHERE id=75001;
+INSERT INTO `spell_template` (`id`, `attr`, `attr_ex`, `attr_ex2`, `attr_ex3`, `proc_flags`, `proc_chance`, `duration_index`, `effect0`, `effect0_implicit_target_a`, `effect0_implicit_target_b`, `effect0_radius_idx`, `effect0_apply_aura_name`, `effect0_misc_value`, `effect0_misc_value_b`, `effect0_trigger_spell`, `comments`) VALUES('75001','0','0','0','0','0','101','21','28','42','0','13','0','132001','64','0','Summon Dark Matter');
+
+DELETE FROM `creature_template` WHERE (`entry`=132001);
+INSERT INTO `creature_template` (`entry`, `difficulty_entry_1`, `difficulty_entry_2`, `difficulty_entry_3`, `KillCredit1`, `KillCredit2`, `modelid_1`, `modelid_2`, `modelid_3`, `modelid_4`, `name`, `subname`, `IconName`, `gossip_menu_id`, `minlevel`, `maxlevel`, `minhealth`, `maxhealth`, `minmana`, `maxmana`, `armor`, `faction_A`, `faction_H`, `npcflag`, `speed_walk`, `speed_run`, `scale`, `rank`, `mindmg`, `maxdmg`, `dmgschool`, `attackpower`, `dmg_multiplier`, `baseattacktime`, `rangeattacktime`, `unit_class`, `unit_flags`, `dynamicflags`, `family`, `trainer_type`, `trainer_spell`, `trainer_class`, `trainer_race`, `minrangedmg`, `maxrangedmg`, `rangedattackpower`, `type`, `type_flags`, `lootid`, `pickpocketloot`, `skinloot`, `resistance1`, `resistance2`, `resistance3`, `resistance4`, `resistance5`, `resistance6`, `PetSpellDataId`, `mingold`, `maxgold`, `AIName`, `MovementType`, `InhabitType`, `unk16`, `unk17`, `RacialLeader`, `questItem1`, `questItem2`, `questItem3`, `questItem4`, `questItem5`, `questItem6`, `movementId`, `RegenHealth`, `vehicle_id`, `equipment_id`, `trainer_id`, `vendor_id`, `mechanic_immune_mask`, `flags_extra`, `ScriptName`) VALUES (132001, 0, 0, 0, 0, 0, 18050, 0, 0, 0, 'Unleashed Dark Matter', '', '', 0, 81, 81, 290000, 290000, 0, 0, 10029, 4, 6, 0, 1, 1.14286, 1, 1, 436, 654, 0, 163, 3, 2000, 2000, 1, 32768, 0, 0, 0, 0, 0, 0, 349, 523, 130, 10, 4160, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 10, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 8193, 0, '');
+
+-- Creature id: 132001
+UPDATE `creature_template` SET `AIName` = 'EventAI', `ScriptName` = '' WHERE `entry` = '132001';
+DELETE FROM `creature_ai_scripts` WHERE creature_id=132001;
+INSERT INTO `creature_ai_scripts` VALUES 
+('13200101','132001','11','0','100','30','0','0','0','0','17','32','292000','0','17','33','30000','0','17','24','292000','0','Set Max Health and Mana and Current Health at Spawn.'),
+('13200102','132001','10','0','100','30','0','1000','0','0','38','0','0','0','13','100','6','0','0','0','0','0','Set Combat and Threat at OOC LOS 1000 yards.'),
+('13200103','132001','12','0','100','30','5','5','0','0','41','0','0','0','0','0','0','0','0','0','0','0','Force Despawn at target hp <5 Percent.'),
+('13200104','132001','0','0','100','31','10000','10000','10000','10000','11','4507','1','2','0','0','0','0','0','0','0','0','Cast Taunt.'),
+('13200105','132001','10','0','100','30','0','100','0','0','13','100','6','0','11','4507','6','10','39','20','0','0','Set Combat and Threat at OOC LOS 100 yards and Cast Taunt.'),
+('13200106','132001','1','0','100','30','30000','30000','0','0','41','0','0','0','0','0','0','0','0','0','0','0','Force Despawn in OOC Timer.'),
+('13200107','132001','11','0','100','30','0','0','0','0','17','25','30000','0','0','0','0','0','0','0','0','0','Set Mana 30000 at spawn.'),
+('13200108','132001','6','0','100','30','0','0','0','0','41','0','0','0','0','0','0','0','0','0','0','0','Despawn at death.'),
+('13200109','132001','0','0','100','31','3000','3000','7000','9000','11','75384','1','14','0','0','0','0','0','0','0','0','Cast Shadow Bolt.'),
+('13200110','132001','0','0','100','31','2600','14700','16500','22400','11','73805','0','14','0','0','0','0','0','0','0','0','Cast Explosion.'),
+('13200111','132001','11','0','100','30','0','0','0','0','2','6','0','0','0','0','0','0','0','0','0','0','Set Faction 6 at spawn.'),
+('13200112','132001','2','0','100','30','50','0','0','0','17','24','292000','0','0','0','0','0','0','0','0','0','Get Health Full at 50% HP.'),
+('13200113','132001','21','0','100','30','0','0','0','0','41','0','0','0','0','0','0','0','0','0','0','0','Force despawn Just Reached Home.');
+
+
+-- Summon id: 1571
+DELETE FROM `creature_ai_summons` WHERE id=1571;
+INSERT INTO `creature_ai_summons` VALUES 
+('1571','4167.64','2521.1','211.033','5.20468','300000','Spider Sindragosa Ward.');
+-- Summon id: 1572
+DELETE FROM `creature_ai_summons` WHERE id=1572;
+INSERT INTO `creature_ai_summons` VALUES 
+('1572','4153.39','2509.87','211.033','5.1698','300000','Spider Sindragosa Ward.');
+-- Summon id: 1573
+DELETE FROM `creature_ai_summons` WHERE id=1573;
+INSERT INTO `creature_ai_summons` VALUES 
+('1573','4195.66','2519.99','211.033','4.44643','300000','Spider Sindragosa Ward.');
+-- Summon id: 1574
+DELETE FROM `creature_ai_summons` WHERE id=1574;
+INSERT INTO `creature_ai_summons` VALUES 
+('1574','4214.11','2501.91','211.033','3.91093','300000','Spider Sindragosa Ward.');
+-- Summon id: 1575
+DELETE FROM `creature_ai_summons` WHERE id=1575;
+INSERT INTO `creature_ai_summons` VALUES 
+('1575','4186.58','2403.26','211.033','1.63162','300000','Frostwarden Sindragosa Ward');
+-- Summon id: 1576
+DELETE FROM `creature_ai_summons` WHERE id=1576;
+INSERT INTO `creature_ai_summons` VALUES 
+('1576','4182.35','2403.33','211.033','1.71824','300000','Frostwarden Sindragosa Ward');
+-- Summon id: 1577
+DELETE FROM `creature_ai_summons` WHERE id=1577;
+INSERT INTO `creature_ai_summons` VALUES 
+('1577','4173.8','2402.91','211.033','1.64624','300000','Frostwarden Sindragosa Ward');
+-- Summon id: 1578
+DELETE FROM `creature_ai_summons` WHERE id=1578;
+INSERT INTO `creature_ai_summons` VALUES 
+('1578','4173.62','2564.28','211.033','4.77937','300000','Frostwarden Sindragosa Ward');
+-- Summon id: 1579
+DELETE FROM `creature_ai_summons` WHERE id=1579;
+INSERT INTO `creature_ai_summons` VALUES 
+('1579','4182.44','2565.95','211.033','4.47787','300000','Frostwarden Sindragosa Ward');
+-- Summon id: 1580
+DELETE FROM `creature_ai_summons` WHERE id=1580;
+INSERT INTO `creature_ai_summons` VALUES 
+('1580','4189.71','2565.48','211.033','4.59937','300000','Frostwarden Sindragosa Ward');
+
+-- Creature id: 37503
+UPDATE `creature_template` SET `AIName` = 'EventAI', `ScriptName` = '' WHERE `entry` = '37503';
+DELETE FROM `creature_ai_scripts` WHERE creature_id=37503;
+INSERT INTO `creature_ai_scripts` VALUES 
+('3750301','37503','11','0','100','30','0','0','0','0','2','14','1','0','18','33554432','0','0','0','0','0','0','Spider Event Controller - Set Faction 14 and Set Unit_Flag Not Selectable.'),
+('3750302','37503','0','0','100','31','180000','180000','180000','180000','34','10','2','0','41','2000','0','0','0','0','0','0','Spider Event Controller - Force Despawn and Stop Event.'),
+('3750303','37503','17','0','100','30','0','1000','1000','0','38','0','0','0','0','0','0','0','0','0','0','0','Summoned all - Set In Combat.'),
+('3750304','37503','0','0','100','31','60000','60000','60000','60000','32','37228','1','1578','32','37229','1','1579','32','37228','1','1580','Spider Event Controller - Summon Frostwarden Warrior and Sorceress'),
+('3750305','37503','0','0','100','31','60000','60000','60000','60000','32','37228','1','1575','32','37229','1','1576','32','37228','1','1577','Spider Event Controller - Summon Frostwarden Warrior and Sorceress'),
+('3750306','37503','0','0','100','31','3000','3000','20000','20000','32','37501','1','1754','0','0','0','0','0','0','0','0','Spider Event Controller - Summon Nerub Champion.'),
+('3750307','37503','4','0','100','30','0','0','0','0','21','0','0','0','20','0','0','0','4','17167','0','0','Spider Event Controller - Preevent Stop Combat Movement and False Auto Attack and Play sound.'),
+('3750308','37503','10','0','100','31','0','500','1000','1000','38','0','0','0','0','0','0','0','0','0','0','0','Spider Event Controller - Start Event'),
+('3750309','37503','0','0','100','31','3000','3000','20000','20000','32','37501','1','1571','32','37502','1','1573','32','37501','1','1572','Spider Event Controller - Summon Nerub Champion and Webweaver.');
+
+-- Creature id: 37502
+UPDATE `creature_template` SET `AIName` = 'EventAI', `ScriptName` = '' WHERE `entry` = '37502';
+DELETE FROM `creature_ai_scripts` WHERE creature_id=37502;
+INSERT INTO `creature_ai_scripts` VALUES 
+('3750201','37502','0','0','100','31','0','0','2500','3000','11','71326','1','8','29','10','0','0','20','0','0','0','Nerub Webweaver - Cast Crypt Scarabs and Ranged Movement and False Auto Attack.');
+
+-- Creature id: 37501
+UPDATE `creature_template` SET `AIName` = 'EventAI', `ScriptName` = '' WHERE `entry` = '37501';
+DELETE FROM `creature_ai_scripts` WHERE creature_id=37501;
+INSERT INTO `creature_ai_scripts` VALUES 
+('3750101','37501','0','0','100','31','1000','1000','10000','10000','11','71801','1','10','0','0','0','0','0','0','0','0','Nerub Champion - Cast Rush.');
+
+-- Creature id: 38199
+UPDATE `creature_template` SET `AIName` = 'EventAI', `ScriptName` = '' WHERE `entry` = '38199';
+DELETE FROM `creature_ai_scripts` WHERE creature_id=38199;
+INSERT INTO `creature_ai_scripts` VALUES 
+('3819901','38199','11','0','100','30','0','0','0','0','18','33555078','0','0','11','71324','0','2','41','7000','0','0','Frost Blade - Cast Frost Blade and Set Unit_Flags and Force Despawn 7 seconds at Spawn.');
+
+-- Creature id: 37228
+UPDATE `creature_template` SET `AIName` = 'EventAI', `ScriptName` = '' WHERE `entry` = '37228';
+DELETE FROM `creature_ai_scripts` WHERE creature_id=37228;
+INSERT INTO `creature_ai_scripts` VALUES 
+('3722801','37228','0','0','100','31','3000','3000','15000','17000','11','71325','1','10','0','0','0','0','0','0','0','0','Frostwarden Warrior - Cast FrostBlade.'),
+('3722802','37228','0','0','100','31','9000','9000','20000','20000','11','71317','1','2','0','0','0','0','0','0','0','0','Frostwarden Warrior - Cast Glacial Strike.');
+
+-- Creature id: 37229
+UPDATE `creature_template` SET `AIName` = 'EventAI', `ScriptName` = '' WHERE `entry` = '37229';
+DELETE FROM `creature_ai_scripts` WHERE creature_id=37229;
+INSERT INTO `creature_ai_scripts` VALUES 
+('3722901','37229','0','0','100','31','4000','4000','11000','13000','11','71320','1','2','0','0','0','0','0','0','0','0','Frostwarden Sorceress - Cast Frost Nova.'),
+('3722902','37229','0','0','100','31','7000','7000','16000','21000','11','71318','1','9','0','0','0','0','0','0','0','0','Frostwarden Sorceress - Cast Frostbolt.'),
+('3722903','37229','0','0','100','31','9000','9000','23000','27000','11','71331','1','10','0','0','0','0','0','0','0','0','Frostwarden Sorceress - Cast Ice Tomb.');
+
+DELETE FROM `creature_template_addon` WHERE (`entry`=37501);
+INSERT INTO `creature_template_addon` (`entry`, `mount`, `bytes1`, `b2_0_sheath`, `b2_1_pvp_state`, `emote`, `moveflags`, `auras`) VALUES 
+(37501, 0, 0, 0, 0, 0, 0, '');
+
+DELETE FROM `creature_template_addon` WHERE (`entry`=38197);
+INSERT INTO `creature_template_addon` (`entry`, `mount`, `bytes1`, `b2_0_sheath`, `b2_1_pvp_state`, `emote`, `moveflags`, `auras`) VALUES 
+(38197, 0, 0, 0, 0, 0, 0, '');
+
+DELETE FROM `creature_template_addon` WHERE (`entry`=37502);
+INSERT INTO `creature_template_addon` (`entry`, `mount`, `bytes1`, `b2_0_sheath`, `b2_1_pvp_state`, `emote`, `moveflags`, `auras`) VALUES 
+(37502, 0, 0, 0, 0, 0, 0, '');
+
+DELETE FROM `creature_template_addon` WHERE (`entry`=38198);
+INSERT INTO `creature_template_addon` (`entry`, `mount`, `bytes1`, `b2_0_sheath`, `b2_1_pvp_state`, `emote`, `moveflags`, `auras`) VALUES 
+(38198, 0, 0, 0, 0, 0, 0, '');
+
+DELETE FROM db_script_string WHERE entry BETWEEN 2000009996 AND 2000009998;
+INSERT INTO `db_script_string` (`entry`, `content_default`, `content_loc1`, `content_loc2`, `content_loc3`, `content_loc4`, `content_loc5`, `content_loc6`, `content_loc7`, `content_loc8`, `sound`, `type`, `language`, `emote`, `comment`) VALUES('2000009996','I... awaken!',NULL,NULL,NULL,NULL,NULL,NULL,NULL,'Я пробудился...','16866','1','0','0','Deathbound Ward - Random Yell 1 at activate.');
+INSERT INTO `db_script_string` (`entry`, `content_default`, `content_loc1`, `content_loc2`, `content_loc3`, `content_loc4`, `content_loc5`, `content_loc6`, `content_loc7`, `content_loc8`, `sound`, `type`, `language`, `emote`, `comment`) VALUES('2000009997','The master\'s sanctum has been disturbed!',NULL,NULL,NULL,NULL,NULL,NULL,NULL,'В покои господина проникли!','16865','1','0','0','Deathbound Ward - Random Yell 2 at activate.');
+INSERT INTO `db_script_string` (`entry`, `content_default`, `content_loc1`, `content_loc2`, `content_loc3`, `content_loc4`, `content_loc5`, `content_loc6`, `content_loc7`, `content_loc8`, `sound`, `type`, `language`, `emote`, `comment`) VALUES('2000009998','Who... goes there...?',NULL,NULL,NULL,NULL,NULL,NULL,NULL,'Кто... идет?','16867','1','0','0','Deathbound Ward - Random Yell 3 at activate.');
+
+DELETE FROM dbscripts_on_event WHERE id=22908;
+INSERT INTO `dbscripts_on_event` (`id`, `delay`, `command`, `datalong`, `datalong2`, `buddy_entry`, `search_radius`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `comments`) VALUES('22908','0','14','70733','0','37007','136458','20','0','0','0','0','0','0','0','0','Remove Stone Form');
+INSERT INTO `dbscripts_on_event` (`id`, `delay`, `command`, `datalong`, `datalong2`, `buddy_entry`, `search_radius`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `comments`) VALUES('22908','0','0','1','0','37007','136458','20','2000009996','2000009997','2000009998','0','0','0','0','0','Random Yell at Activate.');
+INSERT INTO `dbscripts_on_event` (`id`, `delay`, `command`, `datalong`, `datalong2`, `buddy_entry`, `search_radius`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `comments`) VALUES('22908','0','20','2','0','37007','136458','20','0','0','0','0','0','0','0','0','Set Movement Type on Waypoint.');
+
+DELETE FROM dbscripts_on_event WHERE id=22909;
+INSERT INTO `dbscripts_on_event` (`id`, `delay`, `command`, `datalong`, `datalong2`, `buddy_entry`, `search_radius`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `comments`) VALUES('22909','0','14','70733','0','37007','136627','20','0','0','0','0','0','0','0','0','Remove Stone Form');
+INSERT INTO `dbscripts_on_event` (`id`, `delay`, `command`, `datalong`, `datalong2`, `buddy_entry`, `search_radius`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `comments`) VALUES('22909','0','0','1','0','37007','136627','20','2000009996','2000009997','2000009998','0','0','0','0','0','Random Yell at Activate.');
+INSERT INTO `dbscripts_on_event` (`id`, `delay`, `command`, `datalong`, `datalong2`, `buddy_entry`, `search_radius`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `comments`) VALUES('22909','0','20','2','0','37007','136627','20','0','0','0','0','0','0','0','0','Set Movement Type on Waypoint.');
+
+DELETE FROM dbscripts_on_event WHERE id=22907;
+INSERT INTO `dbscripts_on_event` (`id`, `delay`, `command`, `datalong`, `datalong2`, `buddy_entry`, `search_radius`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `comments`) VALUES('22907','0','14','70733','0','37007','136393','20','0','0','0','0','0','0','0','0','Remove Stone Form');
+INSERT INTO `dbscripts_on_event` (`id`, `delay`, `command`, `datalong`, `datalong2`, `buddy_entry`, `search_radius`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `comments`) VALUES('22907','0','0','1','0','37007','136393','20','2000009996','2000009997','2000009998','0','0','0','0','0','Random Yell at Activate.');
+INSERT INTO `dbscripts_on_event` (`id`, `delay`, `command`, `datalong`, `datalong2`, `buddy_entry`, `search_radius`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `comments`) VALUES('22907','0','20','2','0','37007','136393','20','0','0','0','0','0','0','0','0','Set Movement Type on Waypoint.');
+
+DELETE FROM dbscripts_on_event WHERE id=22900;
+INSERT INTO `dbscripts_on_event` (`id`, `delay`, `command`, `datalong`, `datalong2`, `buddy_entry`, `search_radius`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `comments`) VALUES('22900','0','14','70733','0','37007','136112','20','0','0','0','0','0','0','0','0','Remove Stone Form');
+INSERT INTO `dbscripts_on_event` (`id`, `delay`, `command`, `datalong`, `datalong2`, `buddy_entry`, `search_radius`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `comments`) VALUES('22900','0','0','1','0','37007','136112','20','2000009996','2000009997','2000009998','0','0','0','0','0','Random Yell at Activate.');
+INSERT INTO `dbscripts_on_event` (`id`, `delay`, `command`, `datalong`, `datalong2`, `buddy_entry`, `search_radius`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `comments`) VALUES('22900','0','20','2','0','37007','136112','20','0','0','0','0','0','0','0','0','Set Movement Type on Waypoint.');
+
+DELETE FROM `creature_movement` WHERE `id`=136458;
+
+INSERT INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `waittime`, `script_id`, `textid1`, `textid2`, `textid3`, `textid4`, `textid5`, `emote`, `spell`, `wpguid`, `orientation`, `model1`, `model2`) VALUES
+('136458','1','-195.556','2159.72','37.9852','0','0','0','0','0','0','0','0','0','0','4.84768','0','0'),
+('136458','2','-177.204','2175.84','37.9853','0','0','0','0','0','0','0','0','0','0','0.9251','0','0'),
+('136458','3','-173.591','2189.46','35.2335','0','0','0','0','0','0','0','0','0','0','1.51839','0','0'),
+('136458','4','-174.655','2209.46','35.2335','0','0','0','0','0','0','0','0','0','0','1.74222','0','0'),
+('136458','5','-177.094','2235.97','35.2338','0','0','0','0','0','0','0','0','0','0','1.58671','0','0'),
+('136458','6','-177.294','2248.54','37.9852','0','0','0','0','0','0','0','0','0','0','1.58671','0','0'),
+('136458','7','-194.825','2260.38','37.9852','0','0','0','0','0','0','0','0','0','0','3.03342','0','0'),
+('136458','8','-212.611','2250.77','37.9852','0','0','0','0','0','0','0','0','0','0','3.54236','0','0'),
+('136458','9','-230.955','2237.9','37.9852','0','0','0','0','0','0','0','0','0','0','3.88872','0','0'),
+('136458','10','-229.738','2212.02','40.0204','0','0','0','0','0','0','0','0','0','0','4.74245','0','0'),
+('136458','11','-228.991','2187.19','37.9851','0','0','0','0','0','0','0','0','0','0','4.74245','0','0'),
+('136458','12','-200.224','2163.78','37.9851','0','0','0','0','0','0','0','0','0','0','5.77682','0','0');
+
+DELETE FROM `creature_movement` WHERE `id`=136627;
+
+INSERT INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `waittime`, `script_id`, `textid1`, `textid2`, `textid3`, `textid4`, `textid5`, `emote`, `spell`, `wpguid`, `orientation`, `model1`, `model2`) VALUES
+('136627','1','-193.596','2271.73','37.9852','0','0','0','0','0','0','0','0','0','0','4.62621','0','0'),
+('136627','2','-215.129','2248.31','37.9852','0','0','0','0','0','0','0','0','0','0','3.64289','0','0'),
+('136627','3','-234.258','2234.39','37.9852','0','0','0','0','0','0','0','0','0','0','3.86202','0','0'),
+('136627','4','-243.419','2223.15','42.5645','0','0','0','0','0','0','0','0','0','0','4.0835','0','0'),
+('136627','5','-251.311','2213.3','42.5645','0','0','0','0','0','0','0','0','0','0','3.56749','0','0'),
+('136627','6','-284.737','2211.21','42.5645','0','0','0','0','0','0','0','0','0','0','3.15516','0','0'),
+('136627','7','-262.889','2211.46','42.5645','0','0','0','0','0','0','0','0','0','0','0.175363','0','0'),
+('136627','8','-246.708','2211.03','42.5645','0','0','0','0','0','0','0','0','0','0','0.03242','0','0'),
+('136627','9','-241.257','2222.37','42.5645','0','0','0','0','0','0','0','0','0','0','1.12255','0','0'),
+('136627','10','-234.768','2235.86','37.9852','0','0','0','0','0','0','0','0','0','0','1.12255','0','0'),
+('136627','11','-228.336','2242.9','37.9852','0','0','0','0','0','0','0','0','0','0','0.582199','0','0'),
+('136627','12','-197.483','2254.77','37.9852','0','0','0','0','0','0','0','0','0','0','0.268825','0','0');
+
+DELETE FROM `creature_movement` WHERE `id`=136112;
+
+INSERT INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `waittime`, `script_id`, `textid1`, `textid2`, `textid3`, `textid4`, `textid5`, `emote`, `spell`, `wpguid`, `orientation`, `model1`, `model2`) VALUES
+('136112','1','-301.039','2197.79','41.9719','0','0','0','0','0','0','0','0','0','0','4.82806','0','0'),
+('136112','2','-300.855','2213.11','42.0115','0','0','0','0','0','0','0','0','0','0','6.24885','0','0'),
+('136112','3','-277.915','2212.32','42.5645','0','0','0','0','0','0','0','0','0','0','6.24885','0','0'),
+('136112','4','-254.976','2211.53','42.5645','0','0','0','0','0','0','0','0','0','0','6.24885','0','0'),
+('136112','5','-241.46','2211.07','42.5645','0','0','0','0','0','0','0','0','0','0','6.24885','0','0'),
+('136112','6','-278.073','2211.25','42.5645','0','0','0','0','0','0','0','0','0','0','3.22271','0','0'),
+('136112','7','-301.564','2211.86','42.0141','0','0','0','0','0','0','0','0','0','0','3.09783','0','0'),
+('136112','8','-321.138','2212.72','42.5647','0','0','0','0','0','0','0','0','0','0','3.09783','0','0'),
+('136112','9','-346.401','2210.41','42.4983','0','0','0','0','0','0','0','0','0','0','3.06171','0','0');
+
+DELETE FROM `creature_movement` WHERE `id`=136393;
+
+INSERT INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `waittime`, `script_id`, `textid1`, `textid2`, `textid3`, `textid4`, `textid5`, `emote`, `spell`, `wpguid`, `orientation`, `model1`, `model2`) VALUES
+('136393','1','-300.993','2235.42','44.1816','0','0','0','0','0','0','0','0','0','0','1.46499','0','0'),
+('136393','2','-299.781','2224.62','41.9728','0','0','0','0','0','0','0','0','0','0','1.63228','0','0'),
+('136393','3','-298.953','2211.19','42.0133','0','0','0','0','0','0','0','0','0','0','1.63228','0','0'),
+('136393','4','-310.497','2211.32','42.2247','0','0','0','0','0','0','0','0','0','0','3.16224','0','0'),
+('136393','5','-329.218','2210.93','42.5644','0','0','0','0','0','0','0','0','0','0','3.16224','0','0'),
+('136393','6','-352.145','2210.46','42.4098','0','0','0','0','0','0','0','0','0','0','3.16224','0','0'),
+('136393','7','-313.843','2212.41','42.5646','0','0','0','0','0','0','0','0','0','0','6.2143','0','0'),
+('136393','8','-291.802','2212.29','42.0142','0','0','0','0','0','0','0','0','0','0','6.27792','0','0'),
+('136393','9','-244.783','2212.04','42.5645','0','0','0','0','0','0','0','0','0','0','6.27792','0','0'),
+('136393','10','-298.511','2211.16','42.0141','0','0','0','0','0','0','0','0','0','0','3.11669','0','0'),
+('136393','11','-300.285','2226.74','42.2408','0','0','0','0','0','0','0','0','0','0','1.68412','0','0'),
+('136393','12','-300.82','2242.31','44.1815','0','0','0','0','0','0','0','0','0','0','1.52861','0','0');
